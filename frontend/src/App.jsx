@@ -1,8 +1,15 @@
+import {Outlet} from 'react-router-dom'
 import './App.css'
+import Header from './components/client/Header/Header'
+import Footer from './components/client/Footer/Footer'
 
 function App() {
 	return (
-		<h1 className='text-3xl font-bold underline text-red-500'>Hello world!</h1>
+		<>
+			<Header />
+			<Outlet />
+			<Footer />
+		</>
 	)
 }
 
