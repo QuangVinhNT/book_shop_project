@@ -1,33 +1,8 @@
 import {IoCartOutline} from 'react-icons/io5'
-import {FaStar} from 'react-icons/fa'
-import {FaStarHalf} from 'react-icons/fa'
+import rating from '~/utils/rating'
 
 export default function FlashSaleCard({book}) {
-	const stars = []
-	const ratingSeparates = (book.rating + '').split('.')
-	const decimalRating = +ratingSeparates[1]
-	let coloredStar = 0
-	let intRating = 0
-	if (decimalRating <= 5) {
-		intRating = +ratingSeparates[0]
-		coloredStar += 1
-		stars.push(
-			<div className='relative'>
-				<FaStarHalf key={'haft'} className='text-star absolute' />
-				<FaStar key={'backStar'} className='text-uncoloredStar' />
-			</div>
-		)
-	} else {
-		intRating = +ratingSeparates[0] + 1
-	}
-	coloredStar += intRating
-	for (let i = 0; i < intRating; i++) {
-		stars.unshift(<FaStar key={i} className='text-star' />)
-	}
-	let uncoloredStar = 5 - coloredStar
-	for (let i = 0; i < uncoloredStar; i++) {
-		stars.push(<FaStar key={'uncolored'} className='text-uncoloredStar' />)
-	}
+	const stars = rating(book.rating)
 	return (
 		<div className='w-fit flex rounded-2xl bg-dark p-5 gap-1'>
 			<img src={book.image} alt='' className='lg:w-[125px] 2xl:w-[140px]' />
