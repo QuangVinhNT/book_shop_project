@@ -55,7 +55,7 @@ const customerAreas = [
 
 export default function Footer() {
 	return (
-		<div className='px-[70px] flex justify-between gap-10'>
+		<div className='px-[70px] pb-[146px] pt-[50px] flex justify-between gap-10'>
 			{/* intro */}
 			<div className='w-1/3'>
 				<div className='flex items-center'>
