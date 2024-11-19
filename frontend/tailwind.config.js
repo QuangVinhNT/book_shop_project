@@ -16,6 +16,9 @@ export default {
 				darkGray: '#03030e66',
 				inactiveBar: '#cbcbcb',
 				customYellow: '#FFD782'
+			},
+			backgroundImage: {
+				'checked-icon': "url('./assets/checked.svg')"
 			}
 		}
 	},

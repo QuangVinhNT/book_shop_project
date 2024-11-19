@@ -21,3 +21,8 @@ body {
 	height: 6px;
 	background-color: #8d27ae;
 }
+
+.activePagination {
+	background-color: #8d27ae;
+	color: white;
+}
