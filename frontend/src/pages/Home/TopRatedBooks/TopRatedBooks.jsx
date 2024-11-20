@@ -16,7 +16,7 @@ export default function TopRatedBooks() {
 			<h1 className='text-3xl font-semibold pl-20 my-10'>Top Rated Books</h1>
 			<div className='lg:px-[150px] 2xl:px-[200px] flex gap-[80px]'>
 				<img
-					className='lg:w-[400px] 2xl:w-[450px] lg:h-[480px] 2xl:h-[570px] shadow-xl rounded-3xl'
+					className='lg:w-[400px] 2xl:w-[450px] lg:h-[480px] 2xl:h-[570px] shadow-roundShadow shadow-gray-200 rounded-3xl'
 					src={topRatedBook1}
 					alt=''
 				/>

@@ -4,7 +4,7 @@ export default function TestimonialsCard({customer, style}) {
 
 	return (
 		<div
-			className={`flex flex-col items-center gap-2 bg-white shadow-2xl w-[450px] px-10 pt-5 ${style}`}
+			className={`flex flex-col items-center gap-2 bg-white shadow-roundShadow shadow-gray-200 w-[450px] px-10 pt-5 ${style}`}
 		>
 			<img src={customer.image} alt='' className='size-20 rounded-full' />
 			<span className='uppercase text-2xl font-semibold'>{customer.name}</span>
