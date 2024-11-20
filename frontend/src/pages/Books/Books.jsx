@@ -1,7 +1,7 @@
+import Testimonials from '~/components/client/Testimonials/Testimonials'
 import BookList from './BookList/BookList'
 import Filter from './Filter/Filter'
 import Suggest from './Suggest/Suggest'
-import Testimonials from './Testimonials/Testimonials'
 
 export default function Books() {
 	return (

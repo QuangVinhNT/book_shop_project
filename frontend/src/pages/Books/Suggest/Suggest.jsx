@@ -1,4 +1,4 @@
-import FeaturedWeb from './FeaturedWeb/FeaturedWeb'
+import FeaturedWeb from '~/components/client/FeaturedWeb/FeaturedWeb'
 import SuggestBooks from './SuggestBooks/SuggestBooks'
 
 export default function Suggest() {

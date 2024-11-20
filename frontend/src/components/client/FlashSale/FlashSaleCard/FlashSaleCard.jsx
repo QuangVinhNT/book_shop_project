@@ -21,7 +21,9 @@ export default function FlashSaleCard({book}) {
 					</span>
 				</div>
 				<div>
-					<span className='block font-semibold text-white'>{book.name}</span>
+					<span className='block font-semibold text-white cursor-pointer transition-all hover:text-primary'>
+						{book.name}
+					</span>
 					<span className='block text-[10px] leading-[1rem] text-light font-semibold'>
 						{book.author}
 					</span>
