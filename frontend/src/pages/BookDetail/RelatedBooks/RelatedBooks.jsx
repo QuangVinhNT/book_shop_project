@@ -50,7 +50,9 @@ export default function RelatedBooks() {
 									<FaStar />
 									<span>{book.rating}</span>
 								</div>
-								<span className='font-semibold'>{book.name}</span>
+								<span className='font-semibold transition-all hover:text-primary cursor-pointer'>
+									{book.name}
+								</span>
 								<span className='text-xs text-cap font-semibold'>
 									{book.author}
 								</span>

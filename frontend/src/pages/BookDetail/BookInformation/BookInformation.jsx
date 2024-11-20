@@ -41,7 +41,7 @@ export default function BookInformation({book}) {
 				<div className='flex justify-between'>
 					<div className='border-2 border-gray-200 rounded-md flex items-center'>
 						<button
-							className='px-4 py-2'
+							className='px-4 h-full transition-all hover:bg-gray-100'
 							onClick={() => setQuantity(quantity + 1)}
 						>
 							<FaPlus className='text-sm' />
@@ -50,7 +50,7 @@ export default function BookInformation({book}) {
 							{quantity}
 						</span>
 						<button
-							className='px-4 py-2'
+							className='px-4 h-full transition-all hover:bg-gray-100'
 							onClick={() => {
 								quantity > 0 ? setQuantity(quantity - 1) : setQuantity(0)
 							}}
@@ -58,7 +58,7 @@ export default function BookInformation({book}) {
 							<FaMinus className='text-sm' />
 						</button>
 					</div>
-					<button className='flex items-center gap-2 bg-primary text-white px-16 rounded-lg'>
+					<button className='flex items-center gap-2 bg-primary text-white px-16 rounded-lg transition-all hover:brightness-125'>
 						<IoCartOutline className='text-xl' />
 						<span>Buy</span>
 					</button>

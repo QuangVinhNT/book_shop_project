@@ -18,7 +18,9 @@ export default function RelatedItemsCard({book}) {
 					</div>
 				</div>
 				<div>
-					<span className='block font-semibold text'>{book.name}</span>
+					<span className='block font-semibold text transition-all cursor-pointer hover:text-primary'>
+						{book.name}
+					</span>
 					<span className='block text-xs text-cap font-semibold'>
 						{book.author}
 					</span>

@@ -18,7 +18,9 @@ export default function BestSellerCard({book}) {
 					</div>
 				</div>
 				<div>
-					<span className='block font-semibold text'>{book.name}</span>
+					<span className='block font-semibold text cursor-pointer transition-all hover:text-primary'>
+						{book.name}
+					</span>
 					<span className='block text-xs text-cap font-semibold'>
 						{book.author}
 					</span>
