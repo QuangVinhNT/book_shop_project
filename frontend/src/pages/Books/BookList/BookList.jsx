@@ -14,7 +14,8 @@ const books = [
 		rating: 3.5,
 		numOfReviews: 100,
 		image: book1,
-		position: 1
+		position: 1,
+		link: '/books/howlsmoovingcastle'
 	},
 	{
 		name: 'Alev Saçlı Çocuk',
@@ -25,7 +26,8 @@ const books = [
 		rating: 3.5,
 		numOfReviews: 100,
 		image: book1,
-		position: 2
+		position: 2,
+		link: '/books/howlsmoovingcastle'
 	},
 	{
 		name: 'Alev Saçlı Çocuk',
@@ -36,7 +38,8 @@ const books = [
 		rating: 3.5,
 		numOfReviews: 100,
 		image: book1,
-		position: 3
+		position: 3,
+		link: '/books/howlsmoovingcastle'
 	},
 	{
 		name: 'Alev Saçlı Çocuk',
@@ -47,7 +50,8 @@ const books = [
 		rating: 3.5,
 		numOfReviews: 100,
 		image: book1,
-		position: 4
+		position: 4,
+		link: '/books/howlsmoovingcastle'
 	},
 	{
 		name: 'Alev Saçlı Çocuk',
@@ -58,7 +62,8 @@ const books = [
 		rating: 3.5,
 		numOfReviews: 100,
 		image: book1,
-		position: 5
+		position: 5,
+		link: '/books/howlsmoovingcastle'
 	},
 	{
 		name: 'Alev Saçlı Çocuk',
@@ -69,7 +74,8 @@ const books = [
 		rating: 3.5,
 		numOfReviews: 100,
 		image: book1,
-		position: 6
+		position: 6,
+		link: '/books/howlsmoovingcastle'
 	},
 	{
 		name: 'Alev Saçlı Çocuk',
@@ -80,7 +86,8 @@ const books = [
 		rating: 3.5,
 		numOfReviews: 100,
 		image: book1,
-		position: 7
+		position: 7,
+		link: '/books/howlsmoovingcastle'
 	},
 	{
 		name: 'Alev Saçlı Çocuk',
@@ -91,7 +98,8 @@ const books = [
 		rating: 3.5,
 		numOfReviews: 100,
 		image: book1,
-		position: 8
+		position: 8,
+		link: '/books/howlsmoovingcastle'
 	},
 	{
 		name: 'Alev Saçlı Çocuk',
@@ -102,7 +110,8 @@ const books = [
 		rating: 3.5,
 		numOfReviews: 100,
 		image: book1,
-		position: 9
+		position: 9,
+		link: '/books/howlsmoovingcastle'
 	}
 ]
 

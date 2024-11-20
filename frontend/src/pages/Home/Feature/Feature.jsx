@@ -1,5 +1,5 @@
+import FeaturedWeb from '~/components/client/FeaturedWeb/FeaturedWeb'
 import FeaturedBook from './FeaturedBook/FeaturedBook'
-import FeaturedWeb from './FeaturedWeb/FeaturedWeb'
 
 export default function Feature() {
 	return (

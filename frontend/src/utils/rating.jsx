@@ -4,11 +4,11 @@ import {FaStarHalf} from 'react-icons/fa'
 export default function rating(ratingNumber) {
 	const stars = []
 	const ratingSeparates = (ratingNumber + '').split('.')
-	const decimalRating = +ratingSeparates[1]
+	const decimalRating =
+		typeof ratingSeparates[1] === 'undefined' ? 0 : +ratingSeparates[1]
 	let coloredStar = 0
-	let intRating = 0
-	if (decimalRating <= 5) {
-		intRating = +ratingSeparates[0]
+	let intRating = +ratingSeparates[0]
+	if (decimalRating <= 5 && decimalRating > 0) {
 		coloredStar += 1
 		stars.push(
 			<div className='relative'>
@@ -17,7 +17,7 @@ export default function rating(ratingNumber) {
 			</div>
 		)
 	} else {
-		intRating = +ratingSeparates[0] + 1
+		intRating += decimalRating == 0 ? 0 : 1
 	}
 	coloredStar += intRating
 	for (let i = 0; i < intRating; i++) {
