@@ -45,7 +45,7 @@ export default function RelatedBooks() {
 								alt=''
 								className='w-[170px] h-[230px] object-cover rounded-2xl translate-x-3'
 							/>
-							<div className='bg-white shadow-xl py-5 pl-7 pr-5 flex flex-col gap-2 w-64'>
+							<div className='bg-white shadow-roundShadow shadow-gray-200 py-5 pl-7 pr-5 flex flex-col gap-2 w-64'>
 								<div className='flex items-center gap-2 bg-star w-fit px-4 py-1 text-white text-sm rounded-full'>
 									<FaStar />
 									<span>{book.rating}</span>

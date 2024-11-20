@@ -7,6 +7,7 @@ export default {
 				primary: '#8D27AE',
 				light: '#EEDFF4',
 				lighter: '#FDF8FE',
+				lessDark: '#5a1c7a',
 				dark: '#380B46',
 				lightGray: '#f5f5f5',
 				cap: '#09093799',
@@ -17,8 +18,8 @@ export default {
 				inactiveBar: '#cbcbcb',
 				customYellow: '#FFD782'
 			},
-			backgroundImage: {
-				'checked-icon': "url('./assets/checked.svg')"
+			boxShadow: {
+				roundShadow: '0 0 16px 2px'
 			}
 		}
 	},

@@ -74,16 +74,16 @@ export default function Footer() {
 				</p>
 				<span className='text-xl my-7 font-medium inline-block'>Follow Us</span>
 				<div className='text-2xl flex gap-4'>
-					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-sm cursor-pointer transition-all hover:bg-primary hover:text-white'>
+					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-roundShadow shadow-gray-100 cursor-pointer transition-all hover:bg-primary hover:text-white'>
 						<FiFacebook />
 					</div>
-					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-sm cursor-pointer transition-all hover:bg-primary hover:text-white'>
+					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-roundShadow shadow-gray-100 cursor-pointer transition-all hover:bg-primary hover:text-white'>
 						<PiInstagramLogoLight />
 					</div>
-					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-sm cursor-pointer transition-all hover:bg-primary hover:text-white'>
+					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-roundShadow shadow-gray-100 cursor-pointer transition-all hover:bg-primary hover:text-white'>
 						<CiTwitter />
 					</div>
-					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-sm cursor-pointer transition-all hover:bg-primary hover:text-white'>
+					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-roundShadow shadow-gray-100 cursor-pointer transition-all hover:bg-primary hover:text-white'>
 						<CiLinkedin />
 					</div>
 				</div>
