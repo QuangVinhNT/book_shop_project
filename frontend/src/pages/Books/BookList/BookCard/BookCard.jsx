@@ -23,7 +23,7 @@ export default function BookCard({book}) {
 					<img
 						src={book.image}
 						alt=''
-						className='w-[250px] h-[350px] object-cover'
+						className='lg:w-[200px] lg:h-[300px] 2xl:w-[250px] 2xl:h-[350px] object-cover'
 					/>
 				</div>
 				{book.discount !== 0 && (
@@ -43,12 +43,16 @@ export default function BookCard({book}) {
 				</div>
 				<span className='text-primary text-sm font-medium'>{book.genre}</span>
 				<Link to={book.link}>
-					<h6 className='text-2xl font-bold hover:text-primary cursor-pointer transition-all'>
+					<h6 className='lg:text-xl 2xl:text-2xl font-bold hover:text-primary cursor-pointer transition-all'>
 						{book.name}
 					</h6>
 				</Link>
-				<span className='text-xs font-semibold text-cap'>{book.author}</span>
-				<span className='text-xl font-bold'>$ {book.price.toFixed(2)}</span>
+				<span className='text-xs lg:font-medium 2xl:font-semibold text-cap'>
+					{book.author}
+				</span>
+				<span className='lg:text-lg 2xl:text-xl font-bold'>
+					$ {book.price.toFixed(2)}
+				</span>
 			</div>
 		</div>
 	)
