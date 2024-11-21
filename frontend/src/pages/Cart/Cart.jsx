@@ -24,7 +24,7 @@ const items = [
 export default function Cart() {
 	return (
 		<div className='pt-10'>
-			<div className='w-3/4 mx-auto'>
+			<div className='w-3/4 mx-auto mb-10'>
 				<div className='bg-lessDark text-white text-sm font-medium p-5 rounded-xl'>
 					<span className='inline-block w-2/5 text-center'>Item</span>
 					<span className='inline-block w-1/5 text-center'>Quantity</span>
@@ -43,7 +43,7 @@ export default function Cart() {
 						)
 					})}
 				</div>
-				<div className='bg-[#f5ecf7] flex px-16 py-10 gap-36 rounded-t-xl'>
+				<div className='bg-[#f5ecf7] flex px-16 py-10 gap-36 rounded-xl'>
 					<div className='w-1/2 flex flex-col gap-5'>
 						<h2 className='text-3xl font-semibold'>Shopping Summary</h2>
 						<p className='text-cap'>
@@ -81,9 +81,11 @@ export default function Cart() {
 							<span className='text-cap font-bold'>Total</span>
 							<span className='text-lg font-semibold'>$ 56.7</span>
 						</div>
-						<button className='block w-full bg-lessDark text-white uppercase text-sm py-3 mt-3 rounded-md transition-all hover:brightness-125'>
-							Checkout
-						</button>
+						<Link to={'/checkout'}>
+							<button className='block w-full bg-lessDark text-white uppercase text-sm py-3 mt-3 rounded-md transition-all hover:brightness-125'>
+								Checkout
+							</button>
+						</Link>
 						<Link
 							className='block text-center text-sm text-lessDark mt-2 hover:underline'
 							to={'/books'}

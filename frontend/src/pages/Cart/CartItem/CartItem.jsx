@@ -45,7 +45,7 @@ export default function CartItem({item}) {
 				<div className='w-1/5 flex justify-center'>
 					<span>{(item.price * quantity).toFixed(2)}</span>
 				</div>
-				<button className='bg-white border border-light rounded-full size-10 flex justify-center items-center text-primary shadow-md'>
+				<button className='bg-white border border-light rounded-full size-10 flex justify-center items-center text-primary shadow-md transition-all hover:bg-red-400 hover:text-white hover:border-white'>
 					<IoTrashBinOutline />
 				</button>
 			</div>
