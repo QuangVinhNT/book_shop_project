@@ -8,6 +8,7 @@ import BookDetail from './pages/BookDetail/BookDetail'
 import Cart from './pages/Cart/Cart'
 import Checkout from './pages/Checkout/Checkout'
 import Account from './pages/Account/Account'
+import Admin from './Admin'
 
 const router = createBrowserRouter([
 	{
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
 				element: <Account />
 			}
 		]
+	},
+	{
+		path: '/admin',
+		element: <Admin />
 	}
 ])
 
