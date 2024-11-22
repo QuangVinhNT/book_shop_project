@@ -5,11 +5,13 @@ import Sidebar from './components/admin/Sidebar/Sidebar'
 export default function Admin() {
 	return (
 		<div className='max-w-screen-2xl mx-auto'>
-			<div className='flex'>
+			<div className='flex h-screen overflow-hidden'>
 				<Sidebar />
-				<div className='flex flex-col w-[calc(100%-250px)]'>
+				<div className='w-[calc(100%-250px)]'>
 					<Header />
-					<Outlet />
+					<div className='h-[calc(100vh-50px)] overflow-y-auto'>
+						<Outlet />
+					</div>
 				</div>
 			</div>
 		</div>

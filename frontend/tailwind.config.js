@@ -20,7 +20,7 @@ export default {
 				customYellow: '#FFD782'
 			},
 			boxShadow: {
-				roundShadow: '0 0 16px 2px'
+				roundShadow: '0 0 10px 1px'
 			}
 		}
 	},
