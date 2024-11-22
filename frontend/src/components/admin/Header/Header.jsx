@@ -6,7 +6,7 @@ import {FaRegEnvelope} from 'react-icons/fa'
 import {FaAngleDown} from 'react-icons/fa6'
 export default function Header() {
 	return (
-		<div className='flex justify-between items-center pl-5 h-[60px]'>
+		<div className='flex justify-between items-center px-5 h-[60px]'>
 			<FaBars className='text-xl text-cap hover:text-primary transition-all cursor-pointer' />
 			<div className='flex h-full'>
 				<div className='flex items-center text-2xl gap-10 pr-6 text-cap'>
@@ -25,7 +25,7 @@ export default function Header() {
 						</div>
 					</div>
 				</div>
-				<div className='flex items-center gap-3 px-3 ml-3 mr-1 transition-all hover:bg-gray-300 cursor-pointer rounded-xl'>
+				<div className='flex items-center gap-3 px-3 ml-3 -mr-3 transition-all hover:bg-gray-300 cursor-pointer rounded-xl'>
 					<div className='relative'>
 						<img
 							src='./vite.svg'
