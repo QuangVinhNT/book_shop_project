@@ -4,6 +4,7 @@ import {PiExportBold} from 'react-icons/pi'
 import {IoSearch} from 'react-icons/io5'
 import {MdOutlineCalendarToday} from 'react-icons/md'
 import {IoMdOptions} from 'react-icons/io'
+import {Link} from 'react-router-dom'
 
 const products = [
 	{
@@ -98,10 +99,13 @@ export default function ProductList() {
 						<PiExportBold className='text-xl' />
 						<span className='font-medium text-sm'>Export</span>
 					</button>
-					<button className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'>
+					<Link
+						to={'/admin/products/add'}
+						className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'
+					>
 						<GoPlus className='text-2xl' />
 						<span className='font-medium text-sm'>Add Product</span>
-					</button>
+					</Link>
 				</div>
 			</div>
 			<div className='flex items-center justify-between'>
