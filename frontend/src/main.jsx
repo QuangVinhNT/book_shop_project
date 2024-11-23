@@ -11,6 +11,7 @@ import Account from './pages/Account/Account'
 import Admin from './Admin'
 import ProductList from './pages/Admin/ProductList/ProductList'
 import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion'
+import ProductUpdate from './pages/Admin/ProductList/ProductUpdate/ProductUpdate'
 
 const router = createBrowserRouter([
 	{
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
 			{
 				path: '/admin/products/add',
 				element: <ProductAddition />
+			},
+			{
+				path: '/admin/products/update/1',
+				element: <ProductUpdate />
 			}
 		]
 	}

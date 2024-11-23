@@ -1,19 +1,45 @@
-import {GoPlus} from 'react-icons/go'
+import {FaSave} from 'react-icons/fa'
 import {LiaTimesSolid} from 'react-icons/lia'
+import {FiPlus} from 'react-icons/fi'
 import {Link} from 'react-router-dom'
-import {PiImageSquareFill} from 'react-icons/pi'
-
-import {useState} from 'react'
+import book1 from '~/assets/images/book_1.png'
+import bookThumbnails1 from '~/assets/images/book_thumbnails_1.png'
+import bookThumbnails2 from '~/assets/images/book_thumbnails_2.png'
+import bookThumbnails3 from '~/assets/images/book_thumbnails_3.png'
+import bookThumbnails4 from '~/assets/images/book_thumbnails_4.png'
 
 const categories = ['Arts & Photography', 'Travel', 'Novel', 'Fashion']
 
-export default function ProductAddition() {
-	const [cateSelected, setCateSelected] = useState('')
+const product = {
+	name: "Howl's Mooving Castle",
+	author: 'Diana Wynne Jones',
+	price: 20.0,
+	discount: 0.02,
+	categories: 'Literature & Fiction',
+	language: 'English',
+	format: '212 pp (first edition)',
+	datePublished: 'April 1986',
+	publisher: 'Greenwillow Books (US), Methuen (November 1986)',
+	quantity: 1,
+	// image: book1,
+	image: null,
+	thumbnails: [
+		bookThumbnails1,
+		bookThumbnails2,
+		bookThumbnails3
+		// bookThumbnails4
+	],
+	description: `Howl's Mooving Castle is a fantasy novel by British author Diana Wynne Jones, first published in 1986 by Greenwillow Books of New York. It was a runner-up for the annual Boston Globe-Horn Book Award, and won the Phoenix Award twenty years later. It was adapted into an animated film of the same name in 2004, which was nominated for the Academy Award for Best Animated Feature.`,
+	plotSummary: `Sophie Hatter, an 18-year-old girl in the magical kingdom of Ingary, is cursed by the Witch of the Waste and transformed into an old woman. Leaving her mundane life behind, she becomes a cleaning lady for the enigmatic wizard Howl, whose moving castle hides many secrets. Sophie strikes a deal with Howl's fire demon, Calcifer, to break her curse in exchange for freeing Calcifer from his contract with Howl.
+As Sophie unravels the mysteries of Howl's heart and the true nature of the Witch's curse, she discovers her own magical ability to bring objects to life. Facing dangers, unexpected revelations, and the Witch's schemes, Sophie and Howl confront their feelings for each other. In the end, Sophie breaks her curse, restores Howl's heart, and the two confess their love, setting the stage for a “happily ever after.”`
+}
+
+export default function ProductUpdate() {
 	return (
 		<div>
 			<div className='pt-10 pb-5 px-5 bg-lightGray'>
 				<div className='flex items-center justify-between mb-5'>
-					<span className='text-2xl font-medium text-cap'>Add Product</span>
+					<span className='text-2xl font-medium text-cap'>Update Product</span>
 					<div className='flex items-center gap-3'>
 						<button className=' text-cap px-3 py-2 rounded-md flex items-center gap-2 transition border border-cap hover:border-red-500 hover:text-red-500'>
 							<LiaTimesSolid className='text-xl' />
@@ -23,8 +49,8 @@ export default function ProductAddition() {
 							to={'/admin/products'}
 							className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'
 						>
-							<GoPlus className='text-2xl' />
-							<span className='font-medium text-sm'>Add Product</span>
+							<FaSave className='text-2xl mr-1' />
+							<span className='font-medium text-sm'>Save</span>
 						</Link>
 					</div>
 				</div>
@@ -40,7 +66,7 @@ export default function ProductAddition() {
 								<input
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
-									placeholder='Type product name here...'
+									placeholder={product.name}
 								/>
 							</div>
 							<div className='mt-4 text-sm'>
@@ -50,7 +76,7 @@ export default function ProductAddition() {
 								<input
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
-									placeholder='Type author here...'
+									placeholder={product.author}
 								/>
 							</div>
 							<div className='mt-4 text-sm'>
@@ -60,7 +86,7 @@ export default function ProductAddition() {
 								<input
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
-									placeholder='Type language here...'
+									placeholder={product.language}
 								/>
 							</div>
 							<div className='mt-4 text-sm'>
@@ -70,7 +96,7 @@ export default function ProductAddition() {
 								<input
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
-									placeholder='Type format here...'
+									placeholder={product.format}
 								/>
 							</div>
 							<div className='mt-4 text-sm'>
@@ -80,7 +106,7 @@ export default function ProductAddition() {
 								<input
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
-									placeholder='Type date published here...'
+									placeholder={product.datePublished}
 								/>
 							</div>
 							<div className='mt-4 text-sm'>
@@ -90,7 +116,7 @@ export default function ProductAddition() {
 								<input
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
-									placeholder='Type publisher here...'
+									placeholder={product.publisher}
 								/>
 							</div>
 							<div className='mt-4 text-sm'>
@@ -100,7 +126,7 @@ export default function ProductAddition() {
 								<textarea
 									name=''
 									id=''
-									placeholder='Type plot summary here...'
+									placeholder={product.plotSummary}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none h-32'
 								></textarea>
 							</div>
@@ -111,7 +137,7 @@ export default function ProductAddition() {
 								<textarea
 									name=''
 									id=''
-									placeholder='Type product description here...'
+									placeholder={product.description}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none h-32'
 								></textarea>
 							</div>
@@ -122,24 +148,52 @@ export default function ProductAddition() {
 							<h6 className='font-medium text-lg mb-3'>Media</h6>
 							<span className='block font-medium text-cap text-sm'>Photo</span>
 							<div className='bg-lightGray flex flex-col gap-3 items-center p-5 mt-1 rounded-md border-2 boder-gray-300 border-dashed'>
-								<div className='bg-[#efeffd] p-1 rounded-full'>
-									<PiImageSquareFill className='text-primary bg-light size-8 p-1 rounded-full' />
+								{product.image ? (
+									<div className='relative'>
+										<img
+											src={product.image}
+											alt=''
+											className='w-[215px] h-[300px] object-cover'
+										/>
+										<LiaTimesSolid className='absolute right-2 top-2 bg-lightGray rounded-full p-1 size-5 transition-all hover:text-red-500 hover:bg-red-200 cursor-pointer' />
+									</div>
+								) : (
+									<label className='cursor-pointer bg-light text-primary flex flex-col items-center justify-center gap-2 border border-dashed border-primary w-[215px] h-[300px] rounded-md transition-all hover:bg-primary hover:border-solid hover:text-white'>
+										<FiPlus className='text-3xl' />
+										<span className='font-medium'>Add Image</span>
+									</label>
+								)}
+								<div className='flex items-center justify-center gap-2'>
+									{product.thumbnails.map((thumbnail, index) => {
+										return (
+											<div key={index} className='relative'>
+												<img
+													src={thumbnail}
+													alt=''
+													className='w-[150px] h-[150px] object-cover'
+												/>
+												<LiaTimesSolid className='absolute right-2 top-2 bg-lightGray rounded-full p-1 size-5 transition-all hover:text-red-500 hover:bg-red-200 cursor-pointer' />
+											</div>
+										)
+									})}
+									{product.thumbnails.length < 4 && (
+										<>
+											<label
+												htmlFor='thumbnail'
+												className='cursor-pointer bg-light text-primary flex flex-col items-center justify-center gap-2 border border-dashed border-primary w-[150px] h-[150px] rounded-md transition-all hover:bg-primary hover:border-solid hover:text-white'
+											>
+												<FiPlus className='text-3xl' />
+												<span className='font-medium'>Add Image</span>
+											</label>
+											<input
+												type='file'
+												name=''
+												id='thumbnail'
+												className='hidden'
+											/>
+										</>
+									)}
 								</div>
-								<span className='text-sm text-cap'>
-									Drag and drop image here, or click add image
-								</span>
-								<label
-									htmlFor='addImg'
-									className='cursor-pointer bg-light text-primary font-semibold border-2 transition-all hover:border-primary rounded-md px-4 py-1.5'
-								>
-									Add Image
-								</label>
-								<input
-									type='file'
-									accept='image/*'
-									className='hidden'
-									id='addImg'
-								/>
 							</div>
 						</div>
 
@@ -159,7 +213,7 @@ export default function ProductAddition() {
 									</span>
 									<input
 										type='number'
-										placeholder='Type base price here...'
+										placeholder={product.price}
 										className='bg-lightGray w-full pr-3 pl-6 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none text-sm'
 									/>
 								</div>
@@ -171,7 +225,7 @@ export default function ProductAddition() {
 								>{`Discount Percentage (%)`}</label>
 								<input
 									type='number'
-									placeholder='Type discount percentage...'
+									placeholder={product.discount * 100}
 									className='bg-lightGray w-full pr-3 pl-6 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none text-sm'
 								/>
 							</div>
@@ -201,7 +255,7 @@ export default function ProductAddition() {
 								</label>
 								<input
 									type='number'
-									placeholder='Type product quantity here...'
+									placeholder={product.quantity}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 								/>
 							</div>
@@ -218,13 +272,8 @@ export default function ProductAddition() {
 							name=''
 							id=''
 							className='text-sm bg-lightGray w-full px-3 py-2 mt-1 border border-gray-300 rounded-md cursor-pointer focus:outline-none'
-							onChange={(e) => setCateSelected(e.target.value)}
+							defaultValue={product.categories}
 						>
-							{cateSelected === '' && (
-								<option value='' className=''>
-									Select a category
-								</option>
-							)}
 							{categories.map((category, index) => {
 								return (
 									<option value={category} key={index}>
@@ -235,29 +284,6 @@ export default function ProductAddition() {
 							{/*  */}
 						</select>
 					</div>
-				</div>
-			</div>
-
-			{/* Product Completion */}
-			<div className='flex items-center justify-between p-5'>
-				<div className='flex items-center gap-3 font-medium'>
-					<h5>Product Completion</h5>
-					<span className='bg-red-100 text-red-500 px-4 py-1.5 rounded-full text-sm'>
-						0%
-					</span>
-				</div>
-				<div className='flex items-center gap-3'>
-					<button className=' text-cap px-3 py-2 rounded-md flex items-center gap-2 transition border border-cap hover:border-red-500 hover:text-red-500'>
-						<LiaTimesSolid className='text-xl' />
-						<span className='font-medium text-sm'>Cancel</span>
-					</button>
-					<Link
-						to={'/admin/products/add'}
-						className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'
-					>
-						<GoPlus className='text-2xl' />
-						<span className='font-medium text-sm'>Add Product</span>
-					</Link>
 				</div>
 			</div>
 		</div>
