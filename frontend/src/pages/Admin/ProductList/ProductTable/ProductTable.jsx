@@ -4,6 +4,7 @@ import {FaEye} from 'react-icons/fa'
 import {LuPencil} from 'react-icons/lu'
 import {FaRegTrashAlt} from 'react-icons/fa'
 import {useState} from 'react'
+import {Link} from 'react-router-dom'
 
 export default function ProductTable({products}) {
 	// True: asc, False: desc
@@ -74,7 +75,9 @@ export default function ProductTable({products}) {
 							<td className='border-t border-gray-300 pl-2'>
 								<div className='flex items-center gap-3 text-lg'>
 									<FaEye className='text-xl cursor-pointer transition-all hover:text-blue-500' />
-									<LuPencil className='cursor-pointer transition-all hover:text-star' />
+									<Link to={'/admin/products/update/1'}>
+										<LuPencil className='cursor-pointer transition-all hover:text-star' />
+									</Link>
 									<FaRegTrashAlt className='cursor-pointer transition-all hover:text-red-500' />
 								</div>
 							</td>
