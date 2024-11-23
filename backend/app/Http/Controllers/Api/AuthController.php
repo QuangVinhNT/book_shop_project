@@ -73,6 +73,87 @@ class AuthController extends Controller
         ], 201, [], JSON_UNESCAPED_UNICODE)->cookie($cookie);
     }
 
+    public function registerWithGoogle(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            /** @var \Laravel\Socialite\Two\GoogleProvider $driver */
+            $driver = Socialite::driver('google');
+
+            // Sử dụng thư viện Google để xác minh token
+            $googleAccount = $driver->stateless()->userFromToken($request->token_id);
+
+            if (!$googleAccount) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid Google token.',
+                ], 401);
+            }
+
+            $email = $googleAccount->getEmail();
+            $fullName = $googleAccount->getName();
+            $avatar = $googleAccount->getAvatar();
+
+            // Kiểm tra xem người dùng đã tồn tại chưa
+            $account = Account::where('email', $email)->first();
+
+            if ($account) {
+                return response()->json([
+                    'success' => 'false',
+                    'message' => 'This account is already logged in using another method.',
+                ], 400);
+            }
+
+            if (!$account) {
+                $account = Account::create([
+                    'full_name' => $fullName,
+                    'email' => $email,
+                    'password' => Hash::make(Str::random(16)), // Tạo mật khẩu ngẫu nhiên
+                    'is_verified' => true, // Đánh dấu là đã xác thực
+                    'image' => $avatar, // Lưu ảnh đại diện từ Google
+                ]);
+            }
+
+            // Tạo JWT token
+            $token = JWTAuth::fromUser($account);
+
+            // Tạo cookie chứa access_token
+            $cookie = cookie(
+                'access_token',
+                $token,
+                60,          // Thời hạn (phút)
+                '/',         // Đường dẫn
+                null,        // Domain
+                false,       // Secure
+                true,        // HttpOnly
+                false,       // SameSite
+                'Strict'     // SameSite policy
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Login with Google successful.',
+                'account' => $account,
+            ], 200, [], JSON_UNESCAPED_UNICODE)->cookie($cookie);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'Failed to verify Google token.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -173,13 +254,6 @@ class AuthController extends Controller
 
             // Kiểm tra xem người dùng đã tồn tại chưa
             $account = Account::where('email', $email)->first();
-
-            if ($account) {
-                return response()->json([
-                    'success' => 'false',
-                    'message' => 'This account is already logged in using another method.',
-                ], 400);
-            }
 
             if (!$account) {
                 $account = Account::create([

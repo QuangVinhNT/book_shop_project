@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { GoogleOAuthProvider } from '@react-oauth/google'
 import { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 
@@ -27,7 +26,7 @@ import ProductList from './pages/Admin/ProductList/ProductList'
 const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <App />,
+		element: <Client />,
 		children: [
 			{
 				path: '/',
@@ -67,19 +66,17 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/login',
-		element: <GoogleOAuthProvider clientId="496139560764-n7u29ks4p1untriic3l6j9f1sfc23jne.apps.googleusercontent.com">
+		element:
 			<AuthRoute>
 				<Login />
 			</AuthRoute>
-		</GoogleOAuthProvider>
 	},
 	{
 		path: '/register',
-		element: <GoogleOAuthProvider clientId="496139560764-n7u29ks4p1untriic3l6j9f1sfc23jne.apps.googleusercontent.com">
+		element:
 			<AuthRoute>
 				<Register />
 			</AuthRoute>
-		</GoogleOAuthProvider>
 	},
 	{
 		path: '/email-verify',
@@ -126,7 +123,7 @@ function App() {
 	return (
 		<div>
 			<RouterProvider router={router} />
-			<ToastContainer position='top-center'/>
+			<ToastContainer position='top-center' />
 		</div>
 	)
 }

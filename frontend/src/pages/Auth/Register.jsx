@@ -47,7 +47,7 @@ function Register() {
     try {
       const { access_token } = credentialResponse;
 
-      const response = await fetch(`${environment.BACKEND_URL}/auth/login/google`, {
+      const response = await fetch(`${environment.BACKEND_URL}/auth/register/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
