@@ -1,7 +1,7 @@
 import {IoCartOutline} from 'react-icons/io5'
 import {FaStar} from 'react-icons/fa'
 
-export default function BestSellerCard({book}) {
+export default function SuggestBooksCard({book}) {
 	return (
 		<div className='w-fit flex rounded-2xl'>
 			<img src={book.image} alt='' width={160} />
@@ -18,9 +18,7 @@ export default function BestSellerCard({book}) {
 					</div>
 				</div>
 				<div>
-					<span className='block font-semibold text cursor-pointer transition-all hover:text-primary'>
-						{book.name}
-					</span>
+					<span className='block font-semibold text'>{book.name}</span>
 					<span className='block text-xs text-cap font-semibold'>
 						{book.author}
 					</span>

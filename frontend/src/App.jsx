@@ -16,17 +16,54 @@ import Client from './pages/Client'
 
 import { useAuthStore } from './stores/authStore'
 import { environment } from './utils/environment'
+import Books from './pages/Books/Books'
+import BookDetail from './pages/BookDetail/BookDetail'
+import Cart from './pages/Cart/Cart'
+import Checkout from './pages/Checkout/Checkout'
+import Account from './pages/Account/Account'
+import Admin from './Admin'
+import ProductList from './pages/Admin/ProductList/ProductList'
 
 const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <Client />,
+		element: <App />,
 		children: [
 			{
 				path: '/',
 				element: <Home />
+			},
+			{
+				path: '/books',
+				element: <Books />
+			},
+			{
+				path: '/books/howlsmoovingcastle',
+				element: <BookDetail />
+			},
+			{
+				path: '/cart',
+				element: <Cart />
+			},
+			{
+				path: '/checkout',
+				element: <Checkout />
+			},
+			{
+				path: '/account',
+				element: <Account />
 			}
-		],
+		]
+	},
+	{
+		path: '/admin',
+		element: <Admin />,
+		children: [
+			{
+				path: '/admin/products',
+				element: <ProductList />
+			}
+		]
 	},
 	{
 		path: '/login',

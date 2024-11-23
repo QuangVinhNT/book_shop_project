@@ -1,7 +1,7 @@
-import {IoCartOutline} from 'react-icons/io5'
 import {FaStar} from 'react-icons/fa'
+import {IoCartOutline} from 'react-icons/io5'
 
-export default function BestSellerCard({book}) {
+export default function RelatedItemsCard({book}) {
 	return (
 		<div className='w-fit flex rounded-2xl'>
 			<img src={book.image} alt='' width={160} />
@@ -18,7 +18,7 @@ export default function BestSellerCard({book}) {
 					</div>
 				</div>
 				<div>
-					<span className='block font-semibold text cursor-pointer transition-all hover:text-primary'>
+					<span className='block font-semibold text transition-all cursor-pointer hover:text-primary'>
 						{book.name}
 					</span>
 					<span className='block text-xs text-cap font-semibold'>
@@ -26,14 +26,14 @@ export default function BestSellerCard({book}) {
 					</span>
 				</div>
 				<div className='flex lg:gap-1 2xl:gap-5 items-center'>
-					<span className='text-3xl font-semibold tracking-wider text-primary'>
+					<span className='lg:text-2xl 2xl:text-3xl font-semibold tracking-wider text-primary'>
 						${book.discountPrice.toFixed(2)}
 					</span>
-					<span className='text-lg font-semibold tracking-wider line-through text-darkGray decoration-darkGray'>
+					<span className='lg:text-base 2xl:text-lg font-semibold tracking-wider line-through text-darkGray decoration-darkGray'>
 						${book.standardPrice.toFixed(2)}
 					</span>
 				</div>
-				<button className='flex items-center lg:gap-3 2xl:gap-5 bg-primary text-white py-2 px-6 rounded-lg transition-all hover:brightness-125'>
+				<button className='flex items-center lg:gap-3 2xl:gap-5 bg-primary text-white py-2 lg:px-3.5 2xl:px-6 rounded-lg transition-all hover:brightness-125'>
 					<IoCartOutline className='text-2xl' />
 					<span className='text-lg'>Add to cart</span>
 				</button>

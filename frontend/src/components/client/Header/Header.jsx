@@ -56,12 +56,14 @@ export default function Header() {
 			</div>
 
 			{/* cart */}
-			<div className='group size-10 rounded-full relative flex justify-center items-center shadow-sm cursor-pointer transition-all hover:bg-primary'>
-				<IoCartOutline className='text-2xl transition-all group-hover:text-white' />
-				<div className='absolute top-2 right-2 bg-[#CF3A3A] size-[9px] rounded-full flex justify-center items-center'>
-					<span className='text-white text-[6px]'>1</span>
+			<Link to={'/cart'}>
+				<div className='group size-10 rounded-full relative flex justify-center items-center shadow-sm cursor-pointer transition-all hover:bg-primary'>
+					<IoCartOutline className='text-2xl transition-all group-hover:text-white' />
+					<div className='absolute top-2 right-2 bg-[#CF3A3A] size-[9px] rounded-full flex justify-center items-center'>
+						<span className='text-white text-[6px]'>1</span>
+					</div>
 				</div>
-			</div>
+			</Link>
 
 			{
 				account ? <div>

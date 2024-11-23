@@ -1,4 +1,5 @@
 import {FaArrowRight} from 'react-icons/fa'
+import {Link} from 'react-router-dom'
 
 import coverImage from '~/assets/images/cover_image.png'
 
@@ -14,10 +15,12 @@ export default function Cover() {
 					best experiences. There are many exciting things waiting for you to
 					discover in Book Luxana.
 				</p>
-				<button className='relative p-4 rounded-md top-1/4 flex items-center justify-between gap-6 bg-customOrange transition-all hover:brightness-125'>
-					<span>Go to Collections</span>
-					<FaArrowRight />
-				</button>
+				<Link to={'/books'}>
+					<button className='relative p-4 rounded-md top-1/4 flex items-center justify-between gap-6 bg-customOrange transition-all hover:brightness-125'>
+						<span>Go to Collections</span>
+						<FaArrowRight />
+					</button>
+				</Link>
 				<div className='coverClipPath absolute right-0 top-0 translate-x-full z-10 w-[100px] h-full bg-dark'></div>
 			</div>
 			<div className='h-full w-1/2 -z-10 top-0 right-0'>
