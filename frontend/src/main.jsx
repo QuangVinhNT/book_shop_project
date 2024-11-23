@@ -10,6 +10,7 @@ import Checkout from './pages/Checkout/Checkout'
 import Account from './pages/Account/Account'
 import Admin from './Admin'
 import ProductList from './pages/Admin/ProductList/ProductList'
+import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion'
 
 const router = createBrowserRouter([
 	{
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
 			{
 				path: '/admin/products',
 				element: <ProductList />
+			},
+			{
+				path: '/admin/products/add',
+				element: <ProductAddition />
 			}
 		]
 	}
