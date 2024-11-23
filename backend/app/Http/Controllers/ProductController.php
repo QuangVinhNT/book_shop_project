@@ -6,6 +6,7 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Image;
 use App\Models\Product;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -169,8 +170,25 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
+        $images = Image::where('product_id', $id)->get();
+
+        if (!$images) {
+            return response()->json([
+                'message' => 'No images found for this product',
+            ], 404);
+        }
+
+        foreach ($images as $image) {
+            $url = $image->image_name;
+            $filename = basename($url);
+            $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
+            Cloudinary::destroy('book_shop_laravel/' . $filenameWithoutExtension);
+        }
+
+        Image::where('product_id', $id)->delete();
+
+        Product::findOrFail($id)->delete();
+
         return response()->json(['message' => 'Product deleted successfully']);
     }
 }
