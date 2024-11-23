@@ -44,7 +44,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
         
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('users')->plainTextToken;
         
         $user->update(['email_verification_token' => $token]);
         $user->update(['email_verified_at' => null]);
@@ -95,7 +95,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('users')->plainTextToken;
 
         return response()->json([
             'success' => true,
