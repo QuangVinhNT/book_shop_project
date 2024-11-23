@@ -22,6 +22,10 @@ import Checkout from './pages/Checkout/Checkout'
 import Account from './pages/Account/Account'
 import Admin from './Admin'
 import ProductList from './pages/Admin/ProductList/ProductList'
+import NotFound from './pages/NotFound';
+import AddProduct from './pages/Admin/ProductList/AddProduct';
+import EditProduct from './pages/Admin/ProductList/EditProduct';
+import ViewProduct from './pages/Admin/ProductList/ViewProduct';
 
 const router = createBrowserRouter([
 	{
@@ -61,6 +65,18 @@ const router = createBrowserRouter([
 			{
 				path: '/admin/products',
 				element: <ProductList />
+			},
+			{
+				path: '/admin/add-product',
+				element: <AddProduct />
+			},
+			{
+				path: 'edit-product/:id',
+				element: <EditProduct />
+			},
+			{
+				path: 'view-product/:id',
+				element: <ViewProduct />
 			}
 		]
 	},
@@ -83,6 +99,10 @@ const router = createBrowserRouter([
 		element: <EmailVerificationRoute>
 			<EmailVerification />
 		</EmailVerificationRoute>
+	},
+	{
+		path: '*',
+		element: <NotFound />
 	}
 ])
 

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/login', [AuthController::class, 'login']);
@@ -20,3 +22,14 @@ Route::get('/admin/users', [AdminController::class, 'getAllUser']);
 Route::post('/admin/addUser', [AdminController::class, 'addUser']);
 Route::put('/admin/updateUser/{id}', [AdminController::class, 'updateUser']);
 Route::delete('/admin/deleteUser/{id}', [AdminController::class, 'deleteUser']);
+
+
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/product/{id}', [ProductController::class, 'getProductById']);
+Route::post('/add-product', [ProductController::class, 'add']);
+Route::put('/update-product/{id}', [ProductController::class, 'edit']);
+Route::delete('/delete-product/{id}', [ProductController::class, 'destroy']);
+
+Route::post('/uploads', [ImageController::class, 'uploadImages']);
+Route::post('/uploads-with-product-id', [ImageController::class, 'uploadImagesWithProductId']);
+Route::post('/upload', [ImageController::class, 'uploadImage']);

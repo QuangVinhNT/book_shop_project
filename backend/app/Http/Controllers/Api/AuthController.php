@@ -20,9 +20,9 @@ class AuthController extends Controller
 {
     protected $account;
 
-    public function __construct(Account $user)
+    public function __construct(Account $account)
     {
-        $this->user = $user;
+        $this->account = $account;
     }
 
     public function register(Request $request)
