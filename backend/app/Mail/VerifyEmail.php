@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\User;
+use App\Models\Account;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -11,21 +11,22 @@ class VerifyEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
-    public $token;
+    public $account;
+    public $verificationCode;
 
-    public function __construct(User $user, $token)
+    public function __construct($account, $verificationCode)
     {
-        $this->user = $user;
-        $this->token = $token;
+        $this->account = $account;
+        $this->verificationCode = $verificationCode;
     }
 
     public function build()
     {
-        return $this->view('emails.verify')
-                    ->with([
-                        'token' => $this->token,
-                        'name' => $this->user->name,
-                    ]);
+        return $this->subject('Verify Your Email Address')
+            ->view('emails.verify-email')
+            ->with([
+                'fullName' => $this->account->full_name,
+                'verificationCode' => $this->verificationCode,
+            ]);
     }
 }

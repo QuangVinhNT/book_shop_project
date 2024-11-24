@@ -4,7 +4,11 @@ import {MdOutlineCalendarToday} from 'react-icons/md'
 import {FaRegBell} from 'react-icons/fa'
 import {FaRegEnvelope} from 'react-icons/fa'
 import {FaAngleDown} from 'react-icons/fa6'
+import { useAuthStore } from '~/stores/authStore'
 export default function Header() {
+
+	const account = useAuthStore(state => state.account)
+
 	return (
 		<div className='flex justify-between items-center px-5 h-[60px]'>
 			<FaBars className='text-xl text-cap hover:text-primary transition-all cursor-pointer' />
@@ -28,15 +32,15 @@ export default function Header() {
 				<div className='flex items-center gap-3 px-3 ml-3 -mr-3 transition-all hover:bg-gray-300 cursor-pointer rounded-xl'>
 					<div className='relative'>
 						<img
-							src='./vite.svg'
+							src={account.image ? account.image : './vite.svg'}
 							alt=''
 							className='size-8 rounded-full bg-gray-300'
 						/>
 						<div className='absolute -right-1 -bottom-0.5 size-3 bg-green-500 rounded-full border-2 border-white'></div>
 					</div>
 					<div className='flex flex-col'>
-						<span className='text-sm font-semibold'>Jay Hargudson</span>
-						<span className='text-xs font-medium text-cap'>Manager</span>
+						<span className='text-sm font-semibold'>{account.full_name}</span>
+						<span className='text-xs font-medium text-cap'>{account.role}</span>
 					</div>
 					<FaAngleDown className='text-cap' />
 				</div>

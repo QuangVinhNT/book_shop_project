@@ -181,6 +181,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
         /*
          * Package Service Providers...
@@ -196,6 +198,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
     ],
+
+    'charset' => 'UTF-8',
 
     /*
     |--------------------------------------------------------------------------

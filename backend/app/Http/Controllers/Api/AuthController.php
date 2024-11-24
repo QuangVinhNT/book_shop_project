@@ -4,30 +4,32 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
-use App\Mail\SendMailApi;
 use App\Mail\VerifyEmail;
-use App\Models\User;
+use App\Models\Account;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    protected $user;
+    protected $account;
 
-    public function __construct(User $user)
+    public function __construct(Account $account)
     {
-        $this->user = $user;
+        $this->account = $account;
     }
 
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'fullName' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:account',
             'password' => 'required|min:6',
         ]);
 
@@ -37,39 +39,119 @@ class AuthController extends Controller
                 'errors' => $validator->errors()
             ], 404);
         }
-        
-        $user = User::create([
-            'name' => $request->name,
+
+        $verificationCode = Str::random(6);
+        $expirationTime = Carbon::now()->addMinutes(3);
+        $account = Account::create([
+            'full_name' => $request->fullName,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'verify_code' => $verificationCode,
+            'expiration_time' => $expirationTime
         ]);
-        
-        $token = $user->createToken('users')->plainTextToken;
-        
-        $user->update(['email_verification_token' => $token]);
-        $user->update(['email_verified_at' => null]);
 
-        Mail::to($user->email)->send(new VerifyEmail($user, $token));
+        Mail::to($account->email)->send(new VerifyEmail($account, $verificationCode));
+
+        $token = JWTAuth::fromUser($account);
+
+        $cookie = cookie(
+            'access_token',        // Tên cookie
+            $token,                // Giá trị JWT
+            60,                    // Thời hạn (phút)
+            '/',                   // Đường dẫn (root của domain)
+            null,                  // Domain (mặc định: null)
+            false,                  // Secure (chỉ gửi qua HTTPS)
+            true,                  // HttpOnly (chỉ truy cập qua HTTP, không thể đọc qua JavaScript)
+            false,                 // SameSite (false: không bật, "strict", hoặc "lax")
+            'Strict'               // SameSite policy
+        );
 
         return response()->json([
-            'access_token' => $token,
+            'success' => true,
             'message' => 'User registered successfully. Please check your email for verification.',
-        ], 201);
+            'account' => $account,
+        ], 201, [], JSON_UNESCAPED_UNICODE)->cookie($cookie);
     }
 
-    public function verifyEmail($token)
+    public function registerWithGoogle(Request $request)
     {
-        $user = User::where('email_verification_token', $token)->first();
+        $validator = Validator::make($request->all(), [
+            'token_id' => 'required',
+        ]);
 
-        if (!$user) {
-            return response()->json(['message' => 'Invalid token.'], 400);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 400);
         }
 
-        $user->email_verification_token = null;
-        $user->email_verified_at = now(); 
-        $user->save();
+        try {
+            /** @var \Laravel\Socialite\Two\GoogleProvider $driver */
+            $driver = Socialite::driver('google');
 
-        return response()->json(['message' => 'Email verified successfully.'], 200);
+            // Sử dụng thư viện Google để xác minh token
+            $googleAccount = $driver->stateless()->userFromToken($request->token_id);
+
+            if (!$googleAccount) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid Google token.',
+                ], 401);
+            }
+
+            $email = $googleAccount->getEmail();
+            $fullName = $googleAccount->getName();
+            $avatar = $googleAccount->getAvatar();
+
+            // Kiểm tra xem người dùng đã tồn tại chưa
+            $account = Account::where('email', $email)->first();
+
+            if ($account) {
+                return response()->json([
+                    'success' => 'false',
+                    'message' => 'This account is already logged in using another method.',
+                ], 400);
+            }
+
+            if (!$account) {
+                $account = Account::create([
+                    'full_name' => $fullName,
+                    'email' => $email,
+                    'password' => Hash::make(Str::random(16)), // Tạo mật khẩu ngẫu nhiên
+                    'is_verified' => true, // Đánh dấu là đã xác thực
+                    'image' => $avatar, // Lưu ảnh đại diện từ Google
+                ]);
+            }
+
+            // Tạo JWT token
+            $token = JWTAuth::fromUser($account);
+
+            // Tạo cookie chứa access_token
+            $cookie = cookie(
+                'access_token',
+                $token,
+                60,          // Thời hạn (phút)
+                '/',         // Đường dẫn
+                null,        // Domain
+                false,       // Secure
+                true,        // HttpOnly
+                false,       // SameSite
+                'Strict'     // SameSite policy
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Login with Google successful.',
+                'account' => $account,
+            ], 200, [], JSON_UNESCAPED_UNICODE)->cookie($cookie);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'Failed to verify Google token.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function login(Request $request)
@@ -83,26 +165,239 @@ class AuthController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ], 422);
+            ], 400);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $account = Account::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$account) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid email or password'
+                'message' => 'Invalid email or password.'
+            ], 404);
+        }
+
+        if (!Hash::check($request->password, $account->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid email or password.'
             ], 401);
         }
 
-        $token = $user->createToken('users')->plainTextToken;
+        if (!$account->is_verified) {
+            // Tạo mã xác thực mới
+            $verificationCode = Str::random(6);
+            $expirationTime = Carbon::now()->addMinutes(3);
+
+            $account->verify_code = $verificationCode;
+            $account->expiration_time = $expirationTime;
+            $account->save();
+
+            // Gửi email xác thực
+            Mail::to($account->email)->send(new VerifyEmail($account, $verificationCode));
+        }
+
+        // Tạo JWT token
+        $token = JWTAuth::fromUser($account);
+
+        // Tạo cookie chứa access_token
+        $cookie = cookie(
+            'access_token',
+            $token,
+            60,          // Thời hạn (phút)
+            '/',         // Đường dẫn
+            null,        // Domain
+            false,       // Secure
+            true,        // HttpOnly
+            false,       // SameSite
+            'Strict'     // SameSite policy
+        );
 
         return response()->json([
             'success' => true,
-            'message' => 'Login successful!',
-            'access_token' => $token,
-            'user' => $user
-        ], 200);
+            'message' => 'Login successful.',
+            'account' => $account,
+        ], 200, [], JSON_UNESCAPED_UNICODE)->cookie($cookie);
+    }
+
+    public function loginWithGoogle(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            /** @var \Laravel\Socialite\Two\GoogleProvider $driver */
+            $driver = Socialite::driver('google');
+
+            // Sử dụng thư viện Google để xác minh token
+            $googleAccount = $driver->stateless()->userFromToken($request->token_id);
+
+            if (!$googleAccount) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid Google token.',
+                ], 401);
+            }
+
+
+            $email = $googleAccount->getEmail();
+            $fullName = $googleAccount->getName();
+            $avatar = $googleAccount->getAvatar();
+
+            // Kiểm tra xem người dùng đã tồn tại chưa
+            $account = Account::where('email', $email)->first();
+
+            if (!$account) {
+                $account = Account::create([
+                    'full_name' => $fullName,
+                    'email' => $email,
+                    'password' => Hash::make(Str::random(16)), // Tạo mật khẩu ngẫu nhiên
+                    'is_verified' => true, // Đánh dấu là đã xác thực
+                    'image' => $avatar, // Lưu ảnh đại diện từ Google
+                ]);
+            }
+
+            // Tạo JWT token
+            $token = JWTAuth::fromUser($account);
+
+            // Tạo cookie chứa access_token
+            $cookie = cookie(
+                'access_token',
+                $token,
+                60,          // Thời hạn (phút)
+                '/',         // Đường dẫn
+                null,        // Domain
+                false,       // Secure
+                true,        // HttpOnly
+                false,       // SameSite
+                'Strict'     // SameSite policy
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Login with Google successful.',
+                'account' => $account,
+            ], 200, [], JSON_UNESCAPED_UNICODE)->cookie($cookie);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'Failed to verify Google token.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function emailVerify(Request $request)
+    {
+        // 1. Validate input
+        $request->validate([
+            'code' => 'required|string',
+        ]);
+
+        $token = $request->cookie('access_token');
+
+        if (!$token) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Access token is missing.',
+            ], 401);
+        }
+
+        $payload = JWTAuth::setToken($token)->getPayload();
+        $accountId = $payload->get('accountId');
+
+        $account = Account::find($accountId);
+
+        if (!$account) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Account not found.',
+            ], 404);
+        }
+
+        if ($account->verify_code !== $request->code) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid verification code.',
+            ], 400);
+        }
+
+        if (Carbon::now()->greaterThan($account->expiration_time)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Verification code has expired.',
+            ], 400);
+        }
+
+        $account->update([
+            'is_verified' => 1,
+            'verify_code' => null,
+            'expiration_time' => null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Email verified successfully.',
+            'account' => $account
+        ]);
+    }
+
+    public function getAccount(Request $request)
+    {
+        // Lấy token từ cookie
+        $token = $request->cookie('access_token');
+
+        if (!$token) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Access token is missing.',
+            ], 401);
+        }
+
+        try {
+            // Giải mã token để lấy thông tin account ID
+            $payload = JWTAuth::setToken($token)->getPayload();
+            $accountId = $payload->get('accountId');
+
+            // Lấy thông tin người dùng từ cơ sở dữ liệu
+            $account = Account::find($accountId);
+
+            if (!$account) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Account not found.',
+                ], 404);
+            }
+
+            // Trả về thông tin tài khoản
+            return response()->json([
+                'success' => true,
+                'account' => $account,
+            ]);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token has expired.',
+            ], 401);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is invalid.',
+            ], 401);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred.',
+            ], 500);
+        }
     }
 
     public function forgotPassword(Request $request)
@@ -156,7 +451,7 @@ class AuthController extends Controller
             ], 400);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = Account::where('email', $request->email)->first();
         $user->password = Hash::make($request->password);
         $user->save();
 
@@ -182,7 +477,7 @@ class AuthController extends Controller
             ], 400);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = Account::where('email', $request->email)->first();
 
         if (!Hash::check($request->current_password, $user->password)) {
             return response()->json([
@@ -198,13 +493,36 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function profile(Request $request) {
-        return response()->json($request->user());
-    }
+    public function logout(Request $request)
+    {
+        $token = $request->cookie('access_token');
 
-    public function logout(Request $request) {
-        $request->user()->currentAccessToken()->delete();
+        if (!$token) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Access token is missing.',
+            ], 401);
+        }
 
-        return response()->json(['message' => 'Logged out successfully']);
+        try {
+            // Invalidate token để đảm bảo không thể sử dụng lại
+            JWTAuth::setToken($token)->invalidate();
+
+            // Xóa cookie chứa token
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout successful.',
+            ])->withCookie(cookie()->forget('access_token'));
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is invalid.',
+            ], 401);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred during logout.',
+            ], 500);
+        }
     }
 }

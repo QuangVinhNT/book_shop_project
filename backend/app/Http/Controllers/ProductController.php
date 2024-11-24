@@ -22,10 +22,14 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $perPage = $request->input('per_page', 10);
+
+        $products = Product::with('category:id,name')->paginate($perPage);
+
         return response()->json([
+            'message' => 'Products fetched successfully',
             'products' => $products
         ]);
     }
@@ -108,7 +112,7 @@ class ProductController extends Controller
      */
     public function getProductById($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('image')->find($id);
 
         if (!$product) {
             return response()->json([
@@ -125,9 +129,75 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(Request $request, $id)
     {
-        //
+        try {
+            // Validate the request data
+            $validator = Validator::make($request->all(), [
+                'productUpdated.author' => 'required|string|min:3',
+                'productUpdated.category_id' => 'required|integer|exists:category,id',
+                'productUpdated.date_published' => 'required|date',
+                'productUpdated.description' => 'required|string',
+                'productUpdated.format' => 'required|string',
+                'productUpdated.language' => 'required|string',
+                'productUpdated.name' => 'required|string|min:3',
+                'productUpdated.price' => 'required|numeric|min:0',
+                'productUpdated.publisher' => 'required|string|min:3',
+                'productUpdated.quantity' => 'required|integer|min:1',
+                'productUpdated.reduced_price' => 'nullable|numeric|min:0',
+                'deleteImageIds' => 'array',
+                'deleteImageIds.*' => 'integer|exists:image,id',
+            ]);
+
+            // Check if validation fails
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation Error',
+                    'errors' => $validator->errors(),
+                ], 400); // HTTP status code 422: Unprocessable Entity
+            }
+
+            // Fetch the validated data
+            $validatedData = $validator->validated();
+
+            // Fetch the product to update
+            $product = Product::findOrFail($id);
+
+            // Update product details
+            $product->update($validatedData['productUpdated']);
+
+            // Handle image deletions if provided
+            if (!empty($validatedData['deleteImageIds'])) {
+                // Fetch the images to delete
+                $imagesToDelete = Image::whereIn('id', $validatedData['deleteImageIds'])->get();
+
+                foreach ($imagesToDelete as $image) {
+
+                    $url = $image->url; // Assume the URL is stored in the `url` field
+                    $publicId = $image->public_id;
+
+                    if ($publicId) {
+                        // Delete the image from Cloudinary
+                        Cloudinary::destroy($publicId);
+                    }
+
+                    // Delete the image record from the database
+                    $image->delete();
+                }
+            }
+
+            $product->load('image');
+
+            return response()->json([
+                'message' => 'Product updated successfully.',
+                'product' => $product,
+            ], 200);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -170,25 +240,25 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $images = Image::where('product_id', $id)->get();
+        try {
+            // Fetch the product
+            $product = Product::with('image')->findOrFail($id); // Ensure `images` relation is loaded
 
-        if (!$images) {
-            return response()->json([
-                'message' => 'No images found for this product',
-            ], 404);
+            // Loop through associated images and delete from Cloudinary and database
+            foreach ($product->image as $image) {
+                // Delete the image from Cloudinary
+                Cloudinary::destroy($image->public_id);
+
+                // Delete the image record from the database
+                $image->delete();
+            }
+
+            // Delete the product itself
+            $product->delete();
+
+            return response()->json(['message' => 'Product and associated images deleted successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete product.'], 500);
         }
-
-        foreach ($images as $image) {
-            $url = $image->image_name;
-            $filename = basename($url);
-            $filenameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
-            Cloudinary::destroy('book_shop_laravel/' . $filenameWithoutExtension);
-        }
-
-        Image::where('product_id', $id)->delete();
-
-        Product::findOrFail($id)->delete();
-
-        return response()->json(['message' => 'Product deleted successfully']);
     }
 }
