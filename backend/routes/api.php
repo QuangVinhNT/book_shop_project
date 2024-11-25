@@ -54,5 +54,6 @@ Route::post('/cart/decrease', [CartController::class, 'decreaseQuantity']);
 Route::post('/cart/remove', [CartController::class, 'removeItem']);
 Route::post('/cart/clear', [CartController::class, 'clearCart']);
 Route::get('/cart/total/{accountId}', [CartController::class, 'calculateTotal']);
+
 Route::post('/uploads-with-product-id', [ImageController::class, 'uploadImagesWithProductId']);
 Route::post('/upload', [ImageController::class, 'uploadImage']);
