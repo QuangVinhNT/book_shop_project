@@ -1,15 +1,133 @@
-import { GoPlus } from 'react-icons/go'
-import { LiaTimesSolid } from 'react-icons/lia'
-import { Link } from 'react-router-dom'
-import { PiImageSquareFill } from 'react-icons/pi'
+import {GoPlus} from 'react-icons/go'
+import {LiaTimesSolid} from 'react-icons/lia'
+import {Link} from 'react-router-dom'
+import {PiImageSquareFill} from 'react-icons/pi'
 
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import {categories} from '~/utils/util'
 
-const categories = ['Arts & Photography', 'Travel', 'Novel', 'Fashion']
+import {useState} from 'react'
+import {useForm} from 'react-hook-form'
+import {toast} from 'react-toastify'
+import {environment} from '~/utils/environment'
+import {SwiperSlide, Swiper} from 'swiper/react'
+import {Grid, Pagination} from 'swiper/modules'
+
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+
+// const categories = ['Arts & Photography', 'Travel', 'Novel', 'Fashion']
 
 export default function ProductAddition() {
-	const { register } = useForm()
+	const [imageIsRequired, setImageIsRequired] = useState(false)
+	const [prodImages, setProdImages] = useState([])
+	const [previewProdImages, setPreviewProdImages] = useState([])
+	const {
+		register,
+		handleSubmit,
+		formState: {errors},
+		reset,
+		getValues
+	} = useForm({
+		defaultValues: {
+			name: 'Sample Book',
+			category_id: 1,
+			price: 10.0,
+			reduced_price: 8.0,
+			quantity: 1,
+			author: 'John Doe',
+			language: 'English',
+			format: 'Paperback',
+			date_published: '2023-01-01',
+			publisher: 'Default Publisher',
+			description: 'This is a default description for the product.'
+		},
+		mode: 'onTouched'
+	})
+
+	const handleUploadProdImages = (e) => {
+		const fileList = Array.from(e.target.files)
+		const previewImages = fileList.reduce((result, file) => {
+			const tempUrl = URL.createObjectURL(file)
+			return [...result, tempUrl]
+		}, [])
+
+		setImageIsRequired(fileList.length === 0)
+		setProdImages(fileList)
+		setPreviewProdImages(previewImages)
+	}
+
+	const onSubmit = async (data) => {
+		const toastId = toast.loading('Please wait...')
+		try {
+			const {images, ...productInfo} = data
+			const imageDatas = new FormData()
+			Array.from(images).forEach((image) => {
+				imageDatas.append(`images[]`, image)
+			})
+			const responseImages = await fetch(`${environment.BACKEND_URL}/uploads`, {
+				method: 'POST',
+				body: imageDatas,
+				credentials: 'include'
+			})
+			if (responseImages.ok) {
+				const dataImages = await responseImages.json()
+				const responseProduct = await fetch(
+					`${environment.BACKEND_URL}/add-product`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							product_info: productInfo,
+							images: dataImages.images
+						}),
+						credentials: 'include'
+					}
+				)
+				if (responseProduct.ok) {
+					const productData = await responseProduct.json()
+					reset()
+					toast.update(toastId, {
+						render: data.message || 'Upload product success.',
+						type: 'success',
+						isLoading: false,
+						autoClose: 3000
+					})
+					setPreviewProdImages([])
+					setProdImages([])
+				} else {
+					toast.update(toastId, {
+						render: data.message || 'Upload product failed.',
+						type: 'error',
+						isLoading: false,
+						autoClose: 3000
+					})
+				}
+			} else {
+				toast.update(toastId, {
+					render:
+						data.message ||
+						'Upload product failed size image <= 2048 kilobytes.',
+					type: 'error',
+					isLoading: false,
+					autoClose: 3000
+				})
+			}
+		} catch (error) {
+			console.log(error)
+			toast.update(toastId, {
+				render: 'Internal server error.',
+				type: 'error',
+				isLoading: false,
+				autoClose: 3000
+			})
+		}
+	}
+
+	const onError = (data) => {
+		setImageIsRequired(prodImages.length === 0)
+	}
 
 	const [cateSelected, setCateSelected] = useState('')
 	return (
@@ -33,7 +151,7 @@ export default function ProductAddition() {
 						</Link>
 					</div>
 				</div>
-				<div className='flex gap-5'>
+				<form onSubmit={handleSubmit(onSubmit, onError)} className='flex gap-5'>
 					<div className='w-3/4 flex flex-col gap-5'>
 						{/* General Information */}
 						<div className='bg-white px-5 py-6 rounded-lg border border-gray-300'>
@@ -43,90 +161,137 @@ export default function ProductAddition() {
 									Product Name
 								</label>
 								<input
-									{...register("name", {
-										required: "Name is required",
-										minLength: { value: 3, message: "Name must be at least 3 characters long" }
+									{...register('name', {
+										required: 'Name is required',
+										minLength: {
+											value: 3,
+											message: 'Name must be at least 3 characters long'
+										}
 									})}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type product name here...'
 								/>
+								{errors.name && (
+									<p className='text-red-500 text-sm'>{errors.name.message}</p>
+								)}
 							</div>
 							<div className='mt-4 text-sm'>
 								<label className='block font-medium text-cap' htmlFor=''>
 									Author
 								</label>
 								<input
-									{...register("author", {
-										required: "Author is required",
-										minLength: { value: 3, message: "Author name must be at least 3 characters long" }
+									{...register('author', {
+										required: 'Author is required',
+										minLength: {
+											value: 3,
+											message: 'Author name must be at least 3 characters long'
+										}
 									})}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type author here...'
 								/>
+								{errors.author && (
+									<p className='text-red-500 text-sm'>
+										{errors.author.message}
+									</p>
+								)}
 							</div>
 							<div className='mt-4 text-sm'>
 								<label className='block font-medium text-cap' htmlFor=''>
 									Language
 								</label>
 								<input
-									{...register("language", { required: "Language is required" })}
+									{...register('language', {required: 'Language is required'})}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type language here...'
 								/>
+								{errors.language && (
+									<p className='text-red-500 text-sm'>
+										{errors.language.message}
+									</p>
+								)}
 							</div>
 							<div className='mt-4 text-sm'>
 								<label className='block font-medium text-cap' htmlFor=''>
 									Format
 								</label>
 								<input
-									{...register("format", { required: "Format is required" })}
+									{...register('format', {required: 'Format is required'})}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type format here...'
 								/>
+								{errors.format && (
+									<p className='text-red-500 text-sm'>
+										{errors.format.message}
+									</p>
+								)}
 							</div>
 							<div className='mt-4 text-sm'>
 								<label className='block font-medium text-cap' htmlFor=''>
 									Date Published
 								</label>
 								<input
-									{...register("date_published", { required: "Date published is required" })}
+									{...register('date_published', {
+										required: 'Date published is required'
+									})}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type date published here...'
 								/>
+								{errors.date_published && (
+									<p className='text-red-500 text-sm'>
+										{errors.date_published.message}
+									</p>
+								)}
 							</div>
 							<div className='mt-4 text-sm'>
 								<label className='block font-medium text-cap' htmlFor=''>
 									Publisher
 								</label>
 								<input
-									{...register("publisher", {
-										required: "Publisher is required",
-										minLength: { value: 3, message: "Publisher name must be at least 3 characters long" }
+									{...register('publisher', {
+										required: 'Publisher is required',
+										minLength: {
+											value: 3,
+											message:
+												'Publisher name must be at least 3 characters long'
+										}
 									})}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type publisher here...'
 								/>
+								{errors.publisher && (
+									<p className='text-red-500 text-sm'>
+										{errors.publisher.message}
+									</p>
+								)}
 							</div>
 							<div className='mt-4 text-sm'>
 								<label className='block font-medium text-cap' htmlFor=''>
 									Description
 								</label>
 								<textarea
-									{...register("description", { required: "Description is required" })}
+									{...register('description', {
+										required: 'Description is required'
+									})}
 									placeholder='Type product description here...'
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none h-32'
 								></textarea>
+								{errors.description && (
+									<p className='text-red-500 text-sm'>
+										{errors.description.message}
+									</p>
+								)}
 							</div>
 						</div>
 
 						{/* Media */}
-						<div className='bg-white h-fit px-5 py-6 rounded-lg border border-gray-300'>
+						{/* <div className='bg-white h-fit px-5 py-6 rounded-lg border border-gray-300'>
 							<h6 className='font-medium text-lg mb-3'>Media</h6>
 							<span className='block font-medium text-cap text-sm'>Photo</span>
 							<div className='bg-lightGray flex flex-col gap-3 items-center p-5 mt-1 rounded-md border-2 boder-gray-300 border-dashed'>
@@ -149,6 +314,54 @@ export default function ProductAddition() {
 									id='addImg'
 								/>
 							</div>
+						</div> */}
+
+						<div className='md:col-span-2'>
+							<div>
+								<label className='block' htmlFor='multiple_files'>
+									More product images
+								</label>
+								<input
+									{...register('images', {
+										required: 'Images is required'
+									})}
+									onChange={(e) => handleUploadProdImages(e)}
+									id='multiple_files'
+									type='file'
+									multiple
+								/>
+								{errors.images &&
+									prodImages.length === 0 &&
+									imageIsRequired && (
+										<p className='text-red-500 text-sm'>
+											{errors.images.message}
+										</p>
+									)}
+							</div>
+							<div className='mt-5 relative'>
+								<Swiper
+									slidesPerView={4}
+									spaceBetween={0}
+									pagination={{
+										clickable: true
+									}}
+									navigation={{
+										nextEl: '.swiper-button-next',
+										prevEl: '.swiper-button-prev'
+									}}
+									modules={[Grid, Pagination]}
+									className='mySwiper'
+								>
+									{previewProdImages &&
+										previewProdImages.map((tempUrl, index) => (
+											<SwiperSlide key={index}>
+												<div className='w-full h-[200px] border flex items-center justify-center p-4'>
+													<img src={tempUrl} className='w-full object-cover' />
+												</div>
+											</SwiperSlide>
+										))}
+								</Swiper>
+							</div>
 						</div>
 
 						{/* Pricing */}
@@ -166,14 +379,22 @@ export default function ProductAddition() {
 										$
 									</span>
 									<input
-										{...register("price", {
-											required: "Price is required",
-											min: { value: 0.01, message: "Price must be greater than 0" }
+										{...register('price', {
+											required: 'Price is required',
+											min: {
+												value: 0.01,
+												message: 'Price must be greater than 0'
+											}
 										})}
 										type='number'
 										placeholder='Type base price here...'
 										className='bg-lightGray w-full pr-3 pl-6 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none text-sm'
 									/>
+									{errors.price && (
+										<p className='text-red-500 text-sm'>
+											{errors.price.message}
+										</p>
+									)}
 								</div>
 							</div>
 							<div>
@@ -183,13 +404,17 @@ export default function ProductAddition() {
 								>{`Discount Percentage (%)`}</label>
 								<input
 									defaultValue='0'
-									{...register("reduced_price")}
+									{...register('reduced_price')}
 									type='number'
 									placeholder='Type discount percentage...'
 									className='bg-lightGray w-full pr-3 pl-6 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none text-sm'
 								/>
+								{errors.reduced_price && (
+									<p className='text-red-500 text-sm'>
+										{errors.reduced_price.message}
+									</p>
+								)}
 							</div>
-
 						</div>
 
 						{/* Inventory */}
@@ -200,14 +425,19 @@ export default function ProductAddition() {
 									Quantity
 								</label>
 								<input
-									{...register("quantity", {
-										required: "Quantity is required",
-										min: { value: 1, message: "Quantity must be at least 1" }
+									{...register('quantity', {
+										required: 'Quantity is required',
+										min: {value: 1, message: 'Quantity must be at least 1'}
 									})}
 									type='number'
 									placeholder='Type product quantity here...'
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 								/>
+								{errors.quantity && (
+									<p className='text-red-500 text-sm'>
+										{errors.quantity.message}
+									</p>
+								)}
 							</div>
 						</div>
 					</div>
@@ -219,50 +449,44 @@ export default function ProductAddition() {
 							Product Category
 						</label>
 						<select
-							name=''
-							id=''
+							{...register('category_id', {required: 'Category is required'})}
 							className='text-sm bg-lightGray w-full px-3 py-2 mt-1 border border-gray-300 rounded-md cursor-pointer focus:outline-none'
 							onChange={(e) => setCateSelected(e.target.value)}
 						>
-							{cateSelected === '' && (
-								<option value='' className=''>
-									Select a category
+							<option value=''>Select a category</option>
+							{categories.map((category) => (
+								<option key={category.id} value={category.id}>
+									{category.name}
 								</option>
-							)}
-							{categories.map((category, index) => {
-								return (
-									<option value={category} key={index}>
-										{category}
-									</option>
-								)
-							})}
-							{/*  */}
+							))}
 						</select>
+						{errors.category_id && (
+							<p className='text-red-500 text-sm'>
+								{errors.category_id.message}
+							</p>
+						)}
 					</div>
-				</div>
-			</div>
 
-			{/* Product Completion */}
-			<div className='flex items-center justify-between p-5'>
-				<div className='flex items-center gap-3 font-medium'>
-					<h5>Product Completion</h5>
-					<span className='bg-red-100 text-red-500 px-4 py-1.5 rounded-full text-sm'>
-						0%
-					</span>
-				</div>
-				<div className='flex items-center gap-3'>
-					<button className=' text-cap px-3 py-2 rounded-md flex items-center gap-2 transition border border-cap hover:border-red-500 hover:text-red-500'>
-						<LiaTimesSolid className='text-xl' />
-						<span className='font-medium text-sm'>Cancel</span>
-					</button>
-					<Link
-						to={'/admin/products/add'}
-						className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'
-					>
-						<GoPlus className='text-2xl' />
-						<span className='font-medium text-sm'>Add Product</span>
-					</Link>
-				</div>
+					{/* Product Completion */}
+					<div className='flex items-center justify-between p-5'>
+						<div className='flex items-center gap-3 font-medium'>
+							<h5>Product Completion</h5>
+							<span className='bg-red-100 text-red-500 px-4 py-1.5 rounded-full text-sm'>
+								0%
+							</span>
+						</div>
+						<div className='flex items-center gap-3'>
+							<button className=' text-cap px-3 py-2 rounded-md flex items-center gap-2 transition border border-cap hover:border-red-500 hover:text-red-500'>
+								<LiaTimesSolid className='text-xl' />
+								<span className='font-medium text-sm'>Cancel</span>
+							</button>
+							<button className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'>
+								<GoPlus className='text-2xl' />
+								<span className='font-medium text-sm'>Add Product</span>
+							</button>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 	)

@@ -22,19 +22,13 @@ import Checkout from './pages/Checkout/Checkout'
 import Account from './pages/Account/Account'
 import Admin from './Admin'
 import ProductList from './pages/Admin/ProductList/ProductList'
-<<<<<<< HEAD
 import NotFound from './pages/NotFound'
 import AddProduct from './pages/Admin/ProductList/AddProduct'
 import EditProduct from './pages/Admin/ProductList/EditProduct'
 import ViewProduct from './pages/Admin/ProductList/ViewProduct'
-=======
-import NotFound from './pages/NotFound';
-import AddProduct from './pages/Admin/ProductList/AddProduct';
-import EditProduct from './pages/Admin/ProductList/EditProduct';
-import ViewProduct from './pages/Admin/ProductList/ViewProduct';
-import ForgotPassword from './pages/Auth/ForgotPassword';
-import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion';
->>>>>>> 99744d9d224c485e98a92682faa1c22c93d9f71e
+import ForgotPassword from './pages/Auth/ForgotPassword'
+import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion'
+import ProductUpdate from './pages/Admin/ProductList/ProductUpdate/ProductUpdate'
 
 const router = createBrowserRouter([
 	{
@@ -83,6 +77,7 @@ const router = createBrowserRouter([
 			{
 				path: 'edit-product/:id',
 				element: <EditProduct />
+				// element: <ProductUpdate />
 			},
 			{
 				path: 'view-product/:id',

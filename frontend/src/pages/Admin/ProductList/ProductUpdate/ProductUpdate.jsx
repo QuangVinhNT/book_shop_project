@@ -21,13 +21,13 @@ const product = {
 	datePublished: 'April 1986',
 	publisher: 'Greenwillow Books (US), Methuen (November 1986)',
 	quantity: 1,
-	// image: book1,
-	image: null,
+	image: book1,
+	// image: null,
 	thumbnails: [
 		bookThumbnails1,
 		bookThumbnails2,
-		bookThumbnails3
-		// bookThumbnails4
+		bookThumbnails3,
+		bookThumbnails4
 	],
 	description: `Howl's Mooving Castle is a fantasy novel by British author Diana Wynne Jones, first published in 1986 by Greenwillow Books of New York. It was a runner-up for the annual Boston Globe-Horn Book Award, and won the Phoenix Award twenty years later. It was adapted into an animated film of the same name in 2004, which was nominated for the Academy Award for Best Animated Feature.`,
 	plotSummary: `Sophie Hatter, an 18-year-old girl in the magical kingdom of Ingary, is cursed by the Witch of the Waste and transformed into an old woman. Leaving her mundane life behind, she becomes a cleaning lady for the enigmatic wizard Howl, whose moving castle hides many secrets. Sophie strikes a deal with Howl's fire demon, Calcifer, to break her curse in exchange for freeing Calcifer from his contract with Howl.
