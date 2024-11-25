@@ -105,7 +105,6 @@ class CartController extends Controller
         ], 200);
     }
 
-
     public function removeItem(Request $request)
     {
         $validator = Validator::make($request->all(), [

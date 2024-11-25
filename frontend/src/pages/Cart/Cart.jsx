@@ -31,11 +31,17 @@ export default function Cart() {
 
 	useEffect(() => {
 		getCartItems()
-	})
+	}, [])
 
 	if (!account) {
 		return <div className='text-3xl text-center py-5 text-red-500'>
 			Login to use cart
+		</div>
+	}
+
+	if(cartItems.length == 0) {
+		return <div className='text-3xl text-center py-5 text-red-500'> 
+			Cart empty
 		</div>
 	}
 
