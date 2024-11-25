@@ -57,3 +57,6 @@ Route::prefix('cart')->group(function () {
     Route::get('/total/{accountId}', [CartController::class, 'calculateTotal']);
     Route::get('/quantity/{accountId}', [CartController::class, 'countQuantity']);
 });
+
+Route::post('/uploads-with-product-id', [ImageController::class, 'uploadImagesWithProductId']);
+Route::post('/upload', [ImageController::class, 'uploadImage']);
