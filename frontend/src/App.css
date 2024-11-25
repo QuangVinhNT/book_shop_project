@@ -15,3 +15,14 @@ body {
 .coverClipPath {
 	clip-path: polygon(0 0, 100% 100%, 0 100%);
 }
+
+.activeCateBar {
+	width: 80px;
+	height: 6px;
+	background-color: #8d27ae;
+}
+
+.activePagination {
+	background-color: #8d27ae;
+	color: white;
+}

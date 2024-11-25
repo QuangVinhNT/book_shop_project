@@ -55,7 +55,7 @@ const customerAreas = [
 
 export default function Footer() {
 	return (
-		<div className='px-[70px] flex justify-between gap-10'>
+		<div className='px-[70px] pb-[146px] pt-[50px] flex justify-between gap-10'>
 			{/* intro */}
 			<div className='w-1/3'>
 				<div className='flex items-center'>
@@ -74,16 +74,16 @@ export default function Footer() {
 				</p>
 				<span className='text-xl my-7 font-medium inline-block'>Follow Us</span>
 				<div className='text-2xl flex gap-4'>
-					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-sm cursor-pointer transition-all hover:bg-primary hover:text-white'>
+					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-roundShadow shadow-gray-100 cursor-pointer transition-all hover:bg-primary hover:text-white'>
 						<FiFacebook />
 					</div>
-					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-sm cursor-pointer transition-all hover:bg-primary hover:text-white'>
+					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-roundShadow shadow-gray-100 cursor-pointer transition-all hover:bg-primary hover:text-white'>
 						<PiInstagramLogoLight />
 					</div>
-					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-sm cursor-pointer transition-all hover:bg-primary hover:text-white'>
+					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-roundShadow shadow-gray-100 cursor-pointer transition-all hover:bg-primary hover:text-white'>
 						<CiTwitter />
 					</div>
-					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-sm cursor-pointer transition-all hover:bg-primary hover:text-white'>
+					<div className='bg-white text-primary size-10 rounded-full flex justify-center items-center border border-light shadow-roundShadow shadow-gray-100 cursor-pointer transition-all hover:bg-primary hover:text-white'>
 						<CiLinkedin />
 					</div>
 				</div>

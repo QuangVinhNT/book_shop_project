@@ -1,22 +1,12 @@
-import {createRoot} from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import './index.css'
+import Swiper from 'swiper';
+import 'swiper/css';
 import App from './App.jsx'
-import {createBrowserRouter, RouterProvider} from 'react-router-dom'
-import Home from './pages/Home/Home.jsx'
-
-const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <App />,
-		children: [
-			{
-				path: '/',
-				element: <Home />
-			}
-		]
-	}
-])
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 createRoot(document.getElementById('root')).render(
-	<RouterProvider router={router} />
+	<GoogleOAuthProvider clientId="496139560764-n7u29ks4p1untriic3l6j9f1sfc23jne.apps.googleusercontent.com">
+		<App />
+	</GoogleOAuthProvider>
 )
