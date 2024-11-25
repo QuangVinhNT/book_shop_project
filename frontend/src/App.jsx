@@ -26,6 +26,7 @@ import NotFound from './pages/NotFound';
 import AddProduct from './pages/Admin/ProductList/AddProduct';
 import EditProduct from './pages/Admin/ProductList/EditProduct';
 import ViewProduct from './pages/Admin/ProductList/ViewProduct';
+import ForgotPassword from './pages/Auth/ForgotPassword';
 
 const router = createBrowserRouter([
 	{
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
 		element: <EmailVerificationRoute>
 			<EmailVerification />
 		</EmailVerificationRoute>
+	},
+	{
+		path: '/forgot-password',
+		element: <ForgotPassword />
 	},
 	{
 		path: '*',

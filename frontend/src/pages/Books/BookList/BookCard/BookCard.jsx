@@ -21,27 +21,27 @@ export default function BookCard({book}) {
 				</div>
 				<div className='rounded-2xl overflow-hidden'>
 					<img
-						src={book.image}
+						src={book.image[0].image_name}
 						alt=''
 						className='lg:w-[200px] lg:h-[300px] 2xl:w-[250px] 2xl:h-[350px] object-cover'
 					/>
 				</div>
-				{book.discount !== 0 && (
+				{book.reduced_price !== 0 && (
 					<div className='absolute top-5 left-0 px-4 py-1 rounded-r-full bg-star z-20'>
-						<span className='text-white text-sm'>-{book.discount * 100}%</span>
+						<span className='text-white text-sm'>-{book.reduced_price * 100}%</span>
 					</div>
 				)}
 			</div>
 			<div className='mt-4 flex flex-col gap-1'>
 				<div className='flex items-center gap-1'>
 					<FaStar className='text-star text-xs' />
-					<span className='text-sm'>{book.rating}</span>
+					<span className='text-sm'>3.5</span>
 					<div className='flex items-center ml-2 text-cap'>
 						<BsDot className='text-lg' />
-						<span className='text-xs'>{book.numOfReviews} Reviews</span>
+						<span className='text-xs'>100 Reviews</span>
 					</div>
 				</div>
-				<span className='text-primary text-sm font-medium'>{book.genre}</span>
+				<span className='text-primary text-sm font-medium'>{book.category.name}</span>
 				<Link to={book.link}>
 					<h6 className='lg:text-xl 2xl:text-2xl font-bold hover:text-primary cursor-pointer transition-all'>
 						{book.name}

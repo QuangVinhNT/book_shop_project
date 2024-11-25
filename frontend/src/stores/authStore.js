@@ -2,5 +2,7 @@ import { create } from "zustand";
 
 export const useAuthStore = create((set) => ({
   account: null,
-  setAccount: (acc) => set({ account: acc })
+  emailForgot: null,
+  setAccount: (acc) => set({ account: acc }),
+  setEmailForgot: (email) => set({ emailForgot: email })
 }))

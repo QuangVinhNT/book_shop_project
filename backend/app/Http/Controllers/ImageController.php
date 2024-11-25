@@ -21,7 +21,7 @@ class ImageController extends Controller
         try {
             $validatedData = $request->validate([
                 'images' => 'required|array',
-                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif',
             ]);
         } catch (ValidationException $e) {
             return response()->json([
@@ -59,7 +59,7 @@ class ImageController extends Controller
             $validatedData = $request->validate([
                 'product_id' => 'required|integer|exists:product,id',
                 'images' => 'required|array',
-                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif',
             ]);
 
             $savedImages = [];
@@ -97,7 +97,7 @@ class ImageController extends Controller
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         // Upload ảnh lên Cloudinary

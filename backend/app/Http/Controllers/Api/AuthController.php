@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
+use App\Mail\SendEmailCodeResetPassword;
 use App\Mail\VerifyEmail;
 use App\Models\Account;
 use Carbon\Carbon;
@@ -121,6 +122,7 @@ class AuthController extends Controller
                     'password' => Hash::make(Str::random(16)), // Tạo mật khẩu ngẫu nhiên
                     'is_verified' => true, // Đánh dấu là đã xác thực
                     'image' => $avatar, // Lưu ảnh đại diện từ Google
+                    'is_social_login' => true
                 ]);
             }
 
@@ -255,6 +257,12 @@ class AuthController extends Controller
             // Kiểm tra xem người dùng đã tồn tại chưa
             $account = Account::where('email', $email)->first();
 
+            if ($account && !$account->is_social_login) {
+                return response()->json([
+                    'message' => 'This account is already logged in using another form'
+                ], 400);
+            }
+
             if (!$account) {
                 $account = Account::create([
                     'full_name' => $fullName,
@@ -262,6 +270,7 @@ class AuthController extends Controller
                     'password' => Hash::make(Str::random(16)), // Tạo mật khẩu ngẫu nhiên
                     'is_verified' => true, // Đánh dấu là đã xác thực
                     'image' => $avatar, // Lưu ảnh đại diện từ Google
+                    'is_social_login' => true
                 ]);
             }
 
@@ -350,6 +359,51 @@ class AuthController extends Controller
         ]);
     }
 
+    public function emailForgotVerifyCode(Request $request)
+    {
+        // 1. Validate input
+        $request->validate([
+            'code' => 'required|string',
+        ]);
+
+        $email = $request->email;
+
+        $account = Account::where('email', $email)->first();
+
+        if (!$account) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Account not found.',
+            ], 404);
+        }
+
+        if ($account->verify_code !== $request->code) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid verification code.',
+            ], 400);
+        }
+
+        if (Carbon::now()->greaterThan($account->expiration_time)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Verification code has expired.',
+            ], 400);
+        }
+
+        $account->update([
+            'is_verified' => 1,
+            'verify_code' => null,
+            'expiration_time' => null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Verify code forgot password success',
+            'account' => $account
+        ]);
+    }
+
     public function getAccount(Request $request)
     {
         // Lấy token từ cookie
@@ -428,12 +482,10 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function resetPassword(Request $request)
+    public function sendEmailForgotPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:users,email',
-            'access_token' => 'required',
-            'password' => 'required|min:6',
+            'email' => 'required|email|exists:account,email',
         ]);
 
         if ($validator->fails()) {
@@ -443,19 +495,61 @@ class AuthController extends Controller
             ], 404);
         }
 
-        $passwordReset = DB::table('password_resets')->where('email', $request->email)->where('token', $request->token)->first();
+        $email = $request->email;
 
-        if (!$passwordReset) {
+        $verifyCode = Str::random(6);
+        $expirationTime = Carbon::now()->addMinutes(3);
+
+        // Sử dụng Eloquent Model
+        $account = Account::where('email', $email)->first();
+
+        if ($account->is_social_login) {
             return response()->json([
-                'message' => 'This password reset token is invalid or expired.',
+                'success' => false,
+                'message' => 'Account does not support password reset as it uses social login.',
             ], 400);
         }
 
-        $user = Account::where('email', $request->email)->first();
-        $user->password = Hash::make($request->password);
-        $user->save();
+        if ($account) {
+            $account->update([
+                'verify_code' => $verifyCode,
+                'expiration_time' => $expirationTime,
+            ]);
+        }
 
-        DB::table('password_resets')->where('email', $request->email)->delete();
+        try {
+            Mail::to($email)->send(new SendEmailCodeResetPassword($account, $verifyCode));
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send email. Please try again.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'A verification code has been sent to your email. Please check your inbox.',
+            'email' => $account->email,
+        ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'newPassword' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 404);
+        }
+
+        $user = Account::where('email', $request->email)->first();
+        $user->password = Hash::make($request->newPassword);
+        $user->save();
 
         return response()->json([
             'message' => 'Password has been reset successfully.',
