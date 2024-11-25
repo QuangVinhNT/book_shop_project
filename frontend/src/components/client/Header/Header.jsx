@@ -4,6 +4,7 @@ import { IoCartOutline } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useAuthStore } from '~/stores/authStore'
+import { useCartStore } from '~/stores/cartStore'
 import { environment } from '~/utils/environment'
 export default function Header() {
 
@@ -11,6 +12,8 @@ export default function Header() {
 
 	const setAccount = useAuthStore(state => state.setAccount)
 	const account = useAuthStore(state => state.account)
+
+	const quantity = useCartStore(state => state.quantity)
 
 	const logout = async () => {
 		const toastId = toast.loading('Please wait...')
@@ -55,15 +58,12 @@ export default function Header() {
 				<CiSearch className='text-2xl cursor-pointer text-black transition-all hover:text-primary' />
 			</div>
 
-			{/* cart */}
-			<Link to={'/cart'}>
+			{account && <Link to={'/cart'}>
 				<div className='group size-10 rounded-full relative flex justify-center items-center shadow-sm cursor-pointer transition-all hover:bg-primary'>
 					<IoCartOutline className='text-2xl transition-all group-hover:text-white' />
-					<div className='absolute top-2 right-2 bg-[#CF3A3A] size-[9px] rounded-full flex justify-center items-center'>
-						<span className='text-white text-[6px]'>1</span>
-					</div>
+					<span className='absolute -top-1 -right-1 size-4 bg-red-500 text-white rounded-full flex items-center justify-center text-[12px]'>{quantity}</span>
 				</div>
-			</Link>
+			</Link>}
 
 			{
 				account ? <div>

@@ -3,8 +3,12 @@ import {BsDot} from 'react-icons/bs'
 import {CiShare2} from 'react-icons/ci'
 import {IoCartOutline} from 'react-icons/io5'
 import {Link} from 'react-router-dom'
+import { useCartStore } from '~/stores/cartStore'
 
 export default function BookCard({book}) {
+
+	const addToCart = useCartStore(state => state.addToCart)
+
 	return (
 		<div className='w-fit relative mb-10'>
 			<div className='group/image relative cursor-pointer overflow-hidden'>
@@ -15,7 +19,7 @@ export default function BookCard({book}) {
 					<div className='bg-white size-10 rounded-full flex justify-center items-center hover:bg-primary hover:text-white transition-all'>
 						<CiShare2 />
 					</div>
-					<div className='bg-white size-10 rounded-full flex justify-center items-center hover:bg-primary hover:text-white transition-all'>
+					<div onClick={() => addToCart(book.id)} className='bg-white size-10 rounded-full flex justify-center items-center hover:bg-primary hover:text-white transition-all'>
 						<IoCartOutline />
 					</div>
 				</div>
