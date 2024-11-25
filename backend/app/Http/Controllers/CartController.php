@@ -151,6 +151,18 @@ class CartController extends Controller
         ], 200);
     }
 
+    public function countQuantity($accountId)
+    {
+        $totalQuantity = Cart::where('account_id', $accountId)->sum('quantity');
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'total_quantity' => $totalQuantity,
+            ]
+        ]);
+    }
+
     public function calculateTotal($accountId)
     {
         $cartItems = Cart::where('account_id', $accountId)->with('product')->get();

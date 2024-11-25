@@ -48,12 +48,15 @@ Route::delete('/delete-product/{id}', [ProductController::class, 'destroy']);
 Route::post('/uploads', [ImageController::class, 'uploadImages']);
 Route::post('/upload', [ImageController::class, 'uploadImage']);
 
-Route::get('/cart/{id}', [CartController::class, 'index']);
-Route::post('/cart/add', [CartController::class, 'addToCart']);
-Route::post('/cart/decrease', [CartController::class, 'decreaseQuantity']);
-Route::post('/cart/remove', [CartController::class, 'removeItem']);
-Route::post('/cart/clear', [CartController::class, 'clearCart']);
-Route::get('/cart/total/{accountId}', [CartController::class, 'calculateTotal']);
+Route::prefix('cart')->group(function () {
+    Route::get('/{id}', [CartController::class, 'index']);
+    Route::post('/add', [CartController::class, 'addToCart']);
+    Route::post('/decrease', [CartController::class, 'decreaseQuantity']);
+    Route::post('/remove', [CartController::class, 'removeItem']);
+    Route::post('/clear', [CartController::class, 'clearCart']);
+    Route::get('/total/{accountId}', [CartController::class, 'calculateTotal']);
+    Route::get('/quantity/{accountId}', [CartController::class, 'countQuantity']);
+});
 
 Route::post('/uploads-with-product-id', [ImageController::class, 'uploadImagesWithProductId']);
 Route::post('/upload', [ImageController::class, 'uploadImage']);
