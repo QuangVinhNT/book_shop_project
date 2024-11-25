@@ -65,8 +65,6 @@ export default function AccountInformation({ account }) {
 	)
 	const [wardSelected, setWardSelected] = useState(account.address?.ward)
 
-
-
 	return (
 		<div className='flex flex-col gap-10'>
 			{/* Personal data */}
@@ -111,7 +109,7 @@ export default function AccountInformation({ account }) {
 						<input
 							className='border border-gray-300 text-sm px-3 py-1.5 rounded-lg focus:outline-none'
 							type='text'
-							placeholder={`+84 ${account.phoneNumber ? account.phoneNumber : 'Not updated'}`}
+							placeholder={`${account.phoneNumber ? account.phoneNumber : ''}`}
 						/>
 					</div>
 				</div>
