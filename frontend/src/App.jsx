@@ -27,6 +27,7 @@ import AddProduct from './pages/Admin/ProductList/AddProduct';
 import EditProduct from './pages/Admin/ProductList/EditProduct';
 import ViewProduct from './pages/Admin/ProductList/ViewProduct';
 import ForgotPassword from './pages/Auth/ForgotPassword';
+import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion';
 
 const router = createBrowserRouter([
 	{
@@ -69,7 +70,8 @@ const router = createBrowserRouter([
 			},
 			{
 				path: '/admin/add-product',
-				element: <AddProduct />
+				// element: <AddProduct />
+				element: <ProductAddition />
 			},
 			{
 				path: 'edit-product/:id',
