@@ -215,31 +215,6 @@ export default function ProductList() {
 					}
 					activeClassName={'bg-primary text-white'}
 				/>
-				{/* <td className='p-4 border-t border-gray-300' colSpan={3}>
-					Showing 1-10 from 100
-				</td> */}
-				{/* <td className='border-t border-gray-300' colSpan={5}>
-					<div className='flex justify-end pr-8 gap-2'>
-						<span className='size-8 text-center text-primary bg-light text-xs p-2 rounded-lg cursor-pointer transition-all hover:bg-primary hover:text-white'>
-							{'<'}
-						</span>
-						<span className='activePagination text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white'>
-							1
-						</span>
-						<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white'>
-							2
-						</span>
-						<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white'>
-							3
-						</span>
-						<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white'>
-							...
-						</span>
-						<span className='size-8 text-center text-primary bg-light text-xs p-2 rounded-lg cursor-pointer transition-all hover:bg-primary hover:text-white'>
-							{'>'}
-						</span>
-					</div>
-				</td> */}
 			</div>
 		</div>
 	)
