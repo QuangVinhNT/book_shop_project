@@ -2,10 +2,24 @@
 
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+Route::middleware('auth:sanctum')->group(function () {});
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/login/google', [AuthController::class, 'loginWithGoogle']);
 Route::post('/auth/register', [AuthController::class, 'register']);
@@ -32,5 +46,13 @@ Route::put('/update-product/{id}', [ProductController::class, 'edit']);
 Route::delete('/delete-product/{id}', [ProductController::class, 'destroy']);
 
 Route::post('/uploads', [ImageController::class, 'uploadImages']);
+Route::post('/upload', [ImageController::class, 'uploadImage']);
+
+Route::get('/cart/{id}', [CartController::class, 'index']);
+Route::post('/cart/add', [CartController::class, 'addToCart']);
+Route::post('/cart/decrease', [CartController::class, 'decreaseQuantity']);
+Route::post('/cart/remove', [CartController::class, 'removeItem']);
+Route::post('/cart/clear', [CartController::class, 'clearCart']);
+Route::get('/cart/total/{accountId}', [CartController::class, 'calculateTotal']);
 Route::post('/uploads-with-product-id', [ImageController::class, 'uploadImagesWithProductId']);
 Route::post('/upload', [ImageController::class, 'uploadImage']);

@@ -70,7 +70,6 @@ class ProductController extends Controller
 
         $productInfo = $request->input('product_info');
 
-        // Tạo sản phẩm
         $product = Product::create([
             'name' => $productInfo['name'],
             'description' => $productInfo['description'],
@@ -93,17 +92,15 @@ class ProductController extends Controller
 
         $images = $request->input('images', []); // Lấy danh sách ảnh từ request
         foreach ($images as $image) {
-            // Cập nhật product_id cho từng ảnh
             Image::where('id', $image['id'])->update([
                 'product_id' => $product->id,
             ]);
         }
 
-        // Trả về thông tin sản phẩm và danh sách ảnh đã liên kết
         return response()->json([
             'message' => 'Product created and images linked successfully',
             'product' => $product,
-            'linked_images' => Image::where('product_id', $product->id)->get(), // Danh sách ảnh liên kết
+            'linked_images' => Image::where('product_id', $product->id)->get(),
         ], 201);
     }
 
