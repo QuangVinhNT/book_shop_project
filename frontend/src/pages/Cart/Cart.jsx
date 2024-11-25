@@ -39,12 +39,6 @@ export default function Cart() {
 		</div>
 	}
 
-	if(cartItems.length == 0) {
-		return <div className='text-3xl text-center py-5 text-red-500'> 
-			Cart empty
-		</div>
-	}
-
 	return (
 		<div className='pt-10'>
 			<div className='w-3/4 mx-auto mb-10'>

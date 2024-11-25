@@ -27,6 +27,7 @@ import ProductUpdate from './pages/Admin/ProductList/ProductUpdate/ProductUpdate
 import ViewProduct from './pages/Admin/ProductList/ViewProduct'
 import ForgotPassword from './pages/Auth/ForgotPassword'
 import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion'
+import Loading from './components/notification/Loading/Loading'
 
 const router = createBrowserRouter([
 	{
@@ -144,8 +145,8 @@ function App() {
 
 	if (loading) {
 		return (
-			<div className='flex items-center text-3xl text-red-500 justify-center'>
-				Loading
+			<div className='h-screen relative'>
+				<Loading/>
 			</div>
 		)
 	}

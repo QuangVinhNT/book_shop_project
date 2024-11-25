@@ -10,7 +10,7 @@ export default function BookCard({book}) {
 	const addToCart = useCartStore(state => state.addToCart)
 
 	return (
-		<div className='w-fit relative mb-10'>
+		<div className='w-fit relative mb-10 lg:w-[200px] lg:h-[480px] 2xl:w-[250px] 2xl:h-[530px]'>
 			<div className='group/image relative cursor-pointer overflow-hidden'>
 				<Link to={book.link}>
 					<div className='absolute w-full h-full bg-primary group-hover/image:opacity-50 opacity-0 rounded-2xl z-10 transition-all'></div>
@@ -32,7 +32,7 @@ export default function BookCard({book}) {
 				</div>
 				{book.reduced_price !== 0 && (
 					<div className='absolute top-5 left-0 px-4 py-1 rounded-r-full bg-star z-20'>
-						<span className='text-white text-sm'>-{book.reduced_price * 100}%</span>
+						<span className='text-white text-sm'>-{book.reduced_price}%</span>
 					</div>
 				)}
 			</div>
@@ -47,7 +47,7 @@ export default function BookCard({book}) {
 				</div>
 				<span className='text-primary text-sm font-medium'>{book.category.name}</span>
 				<Link to={book.link}>
-					<h6 className='lg:text-xl 2xl:text-2xl font-bold hover:text-primary cursor-pointer transition-all'>
+					<h6 className='lg:text-xl 2xl:text-2xl font-bold hover:text-primary cursor-pointer transition-all overflow-hidden text-ellipsis line-clamp-2'>
 						{book.name}
 					</h6>
 				</Link>
