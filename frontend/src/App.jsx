@@ -1,9 +1,9 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { ToastContainer } from 'react-toastify'
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
+import {useEffect, useState} from 'react'
+import {ToastContainer} from 'react-toastify'
 
 import './index.css'
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
 
 import Home from './pages/Home/Home.jsx'
 import Login from './pages/Auth/Login'
@@ -13,8 +13,8 @@ import AuthRoute from './pages/ProtectedRoutes/AuthRoute'
 import EmailVerificationRoute from './pages/ProtectedRoutes/EmailVerificationRoute'
 import Client from './pages/Client'
 
-import { useAuthStore } from './stores/authStore'
-import { environment } from './utils/environment'
+import {useAuthStore} from './stores/authStore'
+import {environment} from './utils/environment'
 import Books from './pages/Books/Books'
 import BookDetail from './pages/BookDetail/BookDetail'
 import Cart from './pages/Cart/Cart'
@@ -22,10 +22,10 @@ import Checkout from './pages/Checkout/Checkout'
 import Account from './pages/Account/Account'
 import Admin from './Admin'
 import ProductList from './pages/Admin/ProductList/ProductList'
-import NotFound from './pages/NotFound';
-import AddProduct from './pages/Admin/ProductList/AddProduct';
-import EditProduct from './pages/Admin/ProductList/EditProduct';
-import ViewProduct from './pages/Admin/ProductList/ViewProduct';
+import NotFound from './pages/NotFound'
+import AddProduct from './pages/Admin/ProductList/AddProduct'
+import EditProduct from './pages/Admin/ProductList/EditProduct'
+import ViewProduct from './pages/Admin/ProductList/ViewProduct'
 
 const router = createBrowserRouter([
 	{
@@ -82,23 +82,27 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/login',
-		element:
+		element: (
 			<AuthRoute>
 				<Login />
 			</AuthRoute>
+		)
 	},
 	{
 		path: '/register',
-		element:
+		element: (
 			<AuthRoute>
 				<Register />
 			</AuthRoute>
+		)
 	},
 	{
 		path: '/email-verify',
-		element: <EmailVerificationRoute>
-			<EmailVerification />
-		</EmailVerificationRoute>
+		element: (
+			<EmailVerificationRoute>
+				<EmailVerification />
+			</EmailVerificationRoute>
+		)
 	},
 	{
 		path: '*',
@@ -108,7 +112,7 @@ const router = createBrowserRouter([
 
 function App() {
 	const [loading, setLoading] = useState(true)
-	const setAccount = useAuthStore(state => state.setAccount)
+	const setAccount = useAuthStore((state) => state.setAccount)
 
 	const getAccount = async () => {
 		setLoading(true)
@@ -121,8 +125,7 @@ function App() {
 			if (response.ok) {
 				const data = await response.json()
 				setAccount(data.account)
-			}
-			else {
+			} else {
 				setAccount(null)
 			}
 		} finally {
@@ -135,9 +138,11 @@ function App() {
 	}, [])
 
 	if (loading) {
-		return <div className='flex items-center text-3xl text-red-500 justify-center'>
-			Loading
-		</div>
+		return (
+			<div className='flex items-center text-3xl text-red-500 justify-center'>
+				Loading
+			</div>
+		)
 	}
 
 	return (
