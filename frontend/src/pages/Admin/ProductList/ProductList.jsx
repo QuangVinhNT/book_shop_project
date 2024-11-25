@@ -1,13 +1,13 @@
-import { GoPlus } from 'react-icons/go'
+import {GoPlus} from 'react-icons/go'
 import ProductTable from './ProductTable/ProductTable'
-import { PiExportBold } from 'react-icons/pi'
-import { IoSearch } from 'react-icons/io5'
-import { MdOutlineCalendarToday } from 'react-icons/md'
-import { IoMdOptions } from 'react-icons/io'
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { environment } from '~/utils/environment'
-import { toast } from 'react-toastify'
+import {PiExportBold} from 'react-icons/pi'
+import {IoSearch} from 'react-icons/io5'
+import {MdOutlineCalendarToday} from 'react-icons/md'
+import {IoMdOptions} from 'react-icons/io'
+import {useNavigate} from 'react-router-dom'
+import {useEffect, useState} from 'react'
+import {environment} from '~/utils/environment'
+import {toast} from 'react-toastify'
 import ReactPaginate from 'react-paginate'
 
 // const products = [
@@ -95,28 +95,45 @@ import ReactPaginate from 'react-paginate'
 
 export default function ProductList() {
 	const [products, setProducts] = useState([])
-	const [currentPage, setCurrentPage] = useState(1);
-	const [itemsPerPage] = useState(1);
-	const [pageCount, setPageCount] = useState(0);
+	const [currentPage, setCurrentPage] = useState(1)
+	const [itemsPerPage] = useState(1)
+	const [pageCount, setPageCount] = useState(0)
 
 	const getProducts = async () => {
 		const toastId = toast.loading('Loading products....')
 		try {
-			const response = await fetch(`${environment.BACKEND_URL}/products?page=${currentPage}&per_page=${itemsPerPage}`, {
-				method: 'GET',
-				credentials: 'include'
-			})
+			const response = await fetch(
+				`${environment.BACKEND_URL}/products?page=${currentPage}&per_page=${itemsPerPage}`,
+				{
+					method: 'GET',
+					credentials: 'include'
+				}
+			)
 			const data = await response.json()
 			if (response.ok) {
 				setProducts(data.products.data)
 				setPageCount(data.products.last_page)
-				toast.update(toastId, { render: data.message || 'Load product success.', type: 'success', isLoading: false, autoClose: 1000 });
-			}
-			else {
-				toast.update(toastId, { render: data.message || 'Load product failed.', type: 'error', isLoading: false, autoClose: 1000 });
+				toast.update(toastId, {
+					render: data.message || 'Load product success.',
+					type: 'success',
+					isLoading: false,
+					autoClose: 1000
+				})
+			} else {
+				toast.update(toastId, {
+					render: data.message || 'Load product failed.',
+					type: 'error',
+					isLoading: false,
+					autoClose: 1000
+				})
 			}
 		} catch (err) {
-			toast.update(toastId, { render: 'Internal server error', type: 'error', isLoading: false, autoClose: 1000 });
+			toast.update(toastId, {
+				render: 'Internal server error',
+				type: 'error',
+				isLoading: false,
+				autoClose: 1000
+			})
 		}
 	}
 
@@ -125,9 +142,8 @@ export default function ProductList() {
 	}, [currentPage])
 
 	const handlePageClick = (event) => {
-		setCurrentPage(event.selected + 1);
-	};
-
+		setCurrentPage(event.selected + 1)
+	}
 
 	const navigate = useNavigate()
 	return (
@@ -139,7 +155,10 @@ export default function ProductList() {
 						<PiExportBold className='text-xl' />
 						<span className='font-medium text-sm'>Export</span>
 					</button>
-					<button onClick={() => navigate('/admin/add-product')} className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'>
+					<button
+						onClick={() => navigate('/admin/add-product')}
+						className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'
+					>
 						<GoPlus className='text-2xl' />
 						<span className='font-medium text-sm'>Add Product</span>
 					</button>
@@ -165,9 +184,13 @@ export default function ProductList() {
 					</button>
 				</div>
 			</div>
-			<ProductTable setCurrentPage={setCurrentPage} getProducts={getProducts} products={products} />
+			<ProductTable
+				setCurrentPage={setCurrentPage}
+				getProducts={getProducts}
+				products={products}
+			/>
 
-			<div className='text-[15px] mt-5 bg-white'>
+			<div className='text-[15px] py-5 bg-white border-x-2 border-b-2 rounded-b-xl border-gray-200'>
 				<ReactPaginate
 					previousLabel={'<'}
 					nextLabel={'>'}
@@ -178,10 +201,18 @@ export default function ProductList() {
 					forcePage={currentPage - 1}
 					onPageChange={handlePageClick}
 					containerClassName={'flex justify-center items-center gap-2'}
-					pageClassName={'text-blue-500 bg-light text-xs rounded-sm cursor-pointer'}
-					pageLinkClassName={'text-center block p-3 transition-all hover:bg-primary hover:text-white'}
-					previousClassName={'text-primary bg-light text-xs p-2 rounded-lg cursor-pointer'}
-					nextClassName={'text-primary bg-light text-xs p-2 rounded-lg cursor-pointer'}
+					pageClassName={
+						'bg-light text-primary hover:bg-primary hover:text-white rounded-md flex'
+					}
+					pageLinkClassName={
+						'text-xs font-semibold inline-block text-center leading-8 size-8 cursor-pointer transition-all'
+					}
+					previousClassName={
+						'size-8 text-center text-primary bg-light text-xs p-2 rounded-md cursor-pointer transition-all hover:bg-primary hover:text-white'
+					}
+					nextClassName={
+						'size-8 text-center text-primary bg-light text-xs p-2 rounded-md cursor-pointer transition-all hover:bg-primary hover:text-white'
+					}
 					activeClassName={'bg-primary text-white'}
 				/>
 				{/* <td className='p-4 border-t border-gray-300' colSpan={3}>

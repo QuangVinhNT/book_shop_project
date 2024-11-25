@@ -63,7 +63,7 @@ export default function ProductTable({products, getProducts, setCurrentPage}) {
 
 	return (
 		<>
-			<table className='w-full mt-5 border-spacing-0 border-separate rounded-xl border-2 shadow-roundShadow shadow-gray-200 overflow-hidden'>
+			<table className='w-full mt-5 border-spacing-0 border-separate rounded-t-xl border-2 shadow-roundShadow shadow-gray-200 overflow-hidden'>
 				<thead>
 					<tr className='text-[15px]'>
 						<th className='p-4 border-gray-500 rounded-xl text-left'>
@@ -102,8 +102,8 @@ export default function ProductTable({products, getProducts, setCurrentPage}) {
 					{products.map((product, index) => {
 						return (
 							<tr key={index} className='text-[15px] bg-white'>
-								<td>
-									<div className='flex items-center p-4'>
+								<td className='flex items-center p-4 border-t border-gray-300'>
+									<div>
 										<input type='checkbox' className='size-5 cursor-pointer' />
 									</div>
 								</td>
