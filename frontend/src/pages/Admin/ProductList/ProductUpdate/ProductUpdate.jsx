@@ -1,293 +1,477 @@
-import {FaSave} from 'react-icons/fa'
+import {useForm} from 'react-hook-form'
+import {categories} from '~/utils/util'
+import {Swiper, SwiperSlide} from 'swiper/react'
+import {Pagination, Grid} from 'swiper/modules'
+import {useState} from 'react'
+import {environment} from '~/utils/environment'
+import {toast} from 'react-toastify'
+import {Link, useParams} from 'react-router-dom'
+
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 import {LiaTimesSolid} from 'react-icons/lia'
-import {FiPlus} from 'react-icons/fi'
-import {Link} from 'react-router-dom'
-import book1 from '~/assets/images/book_1.png'
-import bookThumbnails1 from '~/assets/images/book_thumbnails_1.png'
-import bookThumbnails2 from '~/assets/images/book_thumbnails_2.png'
-import bookThumbnails3 from '~/assets/images/book_thumbnails_3.png'
-import bookThumbnails4 from '~/assets/images/book_thumbnails_4.png'
+import {GrUpdate} from 'react-icons/gr'
+import {FaTimes, FaTimesCircle} from 'react-icons/fa'
 
-const categories = ['Arts & Photography', 'Travel', 'Novel', 'Fashion']
+function ProductUpdate() {
+	const [loading, setLoading] = useState(true)
+	const param = useParams()
 
-const product = {
-	name: "Howl's Mooving Castle",
-	author: 'Diana Wynne Jones',
-	price: 20.0,
-	discount: 0.02,
-	categories: 'Literature & Fiction',
-	language: 'English',
-	format: '212 pp (first edition)',
-	datePublished: 'April 1986',
-	publisher: 'Greenwillow Books (US), Methuen (November 1986)',
-	quantity: 1,
-	image: book1,
-	// image: null,
-	thumbnails: [
-		bookThumbnails1,
-		bookThumbnails2,
-		bookThumbnails3,
-		bookThumbnails4
-	],
-	description: `Howl's Mooving Castle is a fantasy novel by British author Diana Wynne Jones, first published in 1986 by Greenwillow Books of New York. It was a runner-up for the annual Boston Globe-Horn Book Award, and won the Phoenix Award twenty years later. It was adapted into an animated film of the same name in 2004, which was nominated for the Academy Award for Best Animated Feature.`,
-	plotSummary: `Sophie Hatter, an 18-year-old girl in the magical kingdom of Ingary, is cursed by the Witch of the Waste and transformed into an old woman. Leaving her mundane life behind, she becomes a cleaning lady for the enigmatic wizard Howl, whose moving castle hides many secrets. Sophie strikes a deal with Howl's fire demon, Calcifer, to break her curse in exchange for freeing Calcifer from his contract with Howl.
-As Sophie unravels the mysteries of Howl's heart and the true nature of the Witch's curse, she discovers her own magical ability to bring objects to life. Facing dangers, unexpected revelations, and the Witch's schemes, Sophie and Howl confront their feelings for each other. In the end, Sophie breaks her curse, restores Howl's heart, and the two confess their love, setting the stage for a “happily ever after.”`
-}
+	const [deleteImageIds, setDeleteImageIds] = useState([])
+	const [oldProdImages, setOldProdImages] = useState([])
+	const [newProdImages, setProdImages] = useState([])
+	const [previewProdImages, setPreviewProdImages] = useState([])
 
-export default function ProductUpdate() {
+	const {
+		register,
+		handleSubmit,
+		formState: {errors},
+		reset
+	} = useForm({
+		defaultValues: async () => {
+			const response = await fetch(
+				`${environment.BACKEND_URL}/product/${param.id}`
+			)
+			const data = await response.json()
+			setLoading(false)
+			setOldProdImages(data.product.image)
+			return data.product
+		},
+		mode: 'onTouched'
+	})
+
+	const handleUploadProdImages = (e) => {
+		const fileList = Array.from(e.target.files)
+		const previewImages = fileList.reduce((result, file) => {
+			const tempUrl = URL.createObjectURL(file)
+			return [...result, tempUrl]
+		}, [])
+
+		setProdImages((prevImages) => [...prevImages, ...fileList])
+		setPreviewProdImages((prevPreviews) => [...prevPreviews, ...previewImages])
+	}
+
+	const onSubmit = async (data) => {
+		if (oldProdImages.length === 0 && newProdImages.length === 0) return
+		const toastId = toast.loading('Please wait...')
+		try {
+			const {images, image, ...productInfo} = data
+
+			const responseUpdatedProduct = await fetch(
+				`${environment.BACKEND_URL}/update-product/${param.id}`,
+				{
+					method: 'PUT',
+					credentials: 'include',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						productUpdated: {...productInfo},
+						deleteImageIds
+					})
+				}
+			)
+
+			if (responseUpdatedProduct.ok) {
+				const dataUpdatedProduct = await responseUpdatedProduct.json()
+
+				if (newProdImages.length !== 0) {
+					const imageDatas = new FormData()
+					// Array.from(images).forEach((image) => {
+					//   imageDatas.append(`images[]`, image);
+					// });
+					newProdImages.forEach((image) => {
+						imageDatas.append(`images[]`, image)
+					})
+					imageDatas.append('product_id', dataUpdatedProduct.product.id)
+
+					const responseImages = await fetch(
+						`${environment.BACKEND_URL}/uploads-with-product-id`,
+						{
+							method: 'POST',
+							body: imageDatas,
+							credentials: 'include'
+						}
+					)
+
+					if (responseImages.ok) {
+						const productData = await responseImages.json()
+						setOldProdImages(productData.product.image)
+						setPreviewProdImages([])
+						setDeleteImageIds([])
+						setProdImages([])
+						toast.update(toastId, {
+							render: 'Update product success',
+							type: 'success',
+							isLoading: false,
+							autoClose: 3000
+						})
+					} else {
+						toast.update(toastId, {
+							render: 'Update product failed',
+							type: 'error',
+							isLoading: false,
+							autoClose: 3000
+						})
+					}
+				} else {
+					setDeleteImageIds([])
+					setOldProdImages(dataUpdatedProduct.product.image)
+					toast.update(toastId, {
+						render: data.message || 'Update product success',
+						type: 'success',
+						isLoading: false,
+						autoClose: 3000
+					})
+				}
+			} else {
+				toast.update(toastId, {
+					render: data.message || 'Update product failed',
+					type: 'error',
+					isLoading: false,
+					autoClose: 3000
+				})
+			}
+		} catch (error) {
+			toast.update(toastId, {
+				render: 'Internal server error.',
+				type: 'error',
+				isLoading: false,
+				autoClose: 3000
+			})
+		}
+	}
+
+	if (loading) {
+		return (
+			<div className='flex items-center text-3xl justify-center h-screen text-blue-500'>
+				Get product {param.id}
+			</div>
+		)
+	}
+
 	return (
-		<div>
-			<div className='pt-10 pb-5 px-5 bg-lightGray'>
-				<div className='flex items-center justify-between mb-5'>
-					<span className='text-2xl font-medium text-cap'>Update Product</span>
-					<div className='flex items-center gap-3'>
+		<div className='mx-auto pt-10 pb-5 px-5 bg-lightGray rounded-lg'>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className='bg-white px-5 py-6 rounded-lg border-2 border-gray-300'
+			>
+				<div className='flex items-center justify-between'>
+					<h3 className='text-2xl font-medium mb-4 text-ca'>
+						Edit Product #{param.id}
+					</h3>
+					{/* Update Button */}
+					<div className='flex items-center gap-2'>
 						<Link to={'/admin/products'}>
-							<button className=' text-cap px-3 py-2 rounded-md flex items-center gap-2 transition border border-cap hover:border-red-500 hover:text-red-500'>
+							<button className=' text-cap px-4 py-2 rounded-md flex items-center gap-2 transition border border-cap hover:border-red-500 hover:text-red-500'>
 								<LiaTimesSolid className='text-xl' />
 								<span className='font-medium text-sm'>Cancel</span>
 							</button>
 						</Link>
-						<Link
-							to={'/admin/products'}
-							className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'
-						>
-							<FaSave className='text-2xl mr-1' />
-							<span className='font-medium text-sm'>Save</span>
-						</Link>
+						<div className=''>
+							<button
+								type='submit'
+								className='w-full px-4 py-2 bg-primary text-white rounded-md hover:brightness-125 transition-all flex items-center gap-2'
+							>
+								<GrUpdate />
+								<span>Update</span>
+							</button>
+						</div>
 					</div>
 				</div>
-				<div className='flex gap-5'>
-					<div className='w-3/4 flex flex-col gap-5'>
-						{/* General Information */}
-						<div className='bg-white px-5 py-6 rounded-lg border border-gray-300'>
-							<h6 className='font-medium text-lg mb-3'>General Information</h6>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
-									Product Name
-								</label>
-								<input
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
-									type='text'
-									placeholder={product.name}
-								/>
-							</div>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
-									Author
-								</label>
-								<input
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
-									type='text'
-									placeholder={product.author}
-								/>
-							</div>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
-									Language
-								</label>
-								<input
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
-									type='text'
-									placeholder={product.language}
-								/>
-							</div>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
-									Format
-								</label>
-								<input
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
-									type='text'
-									placeholder={product.format}
-								/>
-							</div>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
-									Date Published
-								</label>
-								<input
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
-									type='text'
-									placeholder={product.datePublished}
-								/>
-							</div>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
-									Publisher
-								</label>
-								<input
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
-									type='text'
-									placeholder={product.publisher}
-								/>
-							</div>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
-									Plot Summary
-								</label>
-								<textarea
-									name=''
-									id=''
-									placeholder={product.plotSummary}
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none h-32'
-								></textarea>
-							</div>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
-									Description
-								</label>
-								<textarea
-									name=''
-									id=''
-									placeholder={product.description}
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none h-32'
-								></textarea>
-							</div>
-						</div>
-
-						{/* Media */}
-						<div className='bg-white h-fit px-5 py-6 rounded-lg border border-gray-300'>
-							<h6 className='font-medium text-lg mb-3'>Media</h6>
-							<span className='block font-medium text-cap text-sm'>Photo</span>
-							<div className='bg-lightGray flex flex-col gap-3 items-center p-5 mt-1 rounded-md border-2 boder-gray-300 border-dashed'>
-								{product.image ? (
-									<div className='relative'>
-										<img
-											src={product.image}
-											alt=''
-											className='w-[215px] h-[300px] object-cover'
-										/>
-										<LiaTimesSolid className='absolute right-2 top-2 bg-lightGray rounded-full p-1 size-5 transition-all hover:text-red-500 hover:bg-red-200 cursor-pointer' />
-									</div>
-								) : (
-									<label className='cursor-pointer bg-light text-primary flex flex-col items-center justify-center gap-2 border border-dashed border-primary w-[215px] h-[300px] rounded-md transition-all hover:bg-primary hover:border-solid hover:text-white'>
-										<FiPlus className='text-3xl' />
-										<span className='font-medium'>Add Image</span>
-									</label>
-								)}
-								<div className='flex items-center justify-center gap-2'>
-									{product.thumbnails.map((thumbnail, index) => {
-										return (
-											<div key={index} className='relative'>
-												<img
-													src={thumbnail}
-													alt=''
-													className='w-[150px] h-[150px] object-cover'
-												/>
-												<LiaTimesSolid className='absolute right-2 top-2 bg-lightGray rounded-full p-1 size-5 transition-all hover:text-red-500 hover:bg-red-200 cursor-pointer' />
-											</div>
-										)
-									})}
-									{product.thumbnails.length < 4 && (
-										<>
-											<label
-												htmlFor='thumbnail'
-												className='cursor-pointer bg-light text-primary flex flex-col items-center justify-center gap-2 border border-dashed border-primary w-[150px] h-[150px] rounded-md transition-all hover:bg-primary hover:border-solid hover:text-white'
-											>
-												<FiPlus className='text-3xl' />
-												<span className='font-medium'>Add Image</span>
-											</label>
-											<input
-												type='file'
-												name=''
-												id='thumbnail'
-												className='hidden'
-											/>
-										</>
-									)}
-								</div>
-							</div>
-						</div>
-
-						{/* Pricing */}
-						<div className='bg-white h-fit px-5 py-6 rounded-lg border border-gray-300'>
-							<h6 className='font-medium text-lg mb-3'>Pricing</h6>
-							<div>
-								<label
-									className='block font-medium text-cap text-sm mt-4'
-									htmlFor=''
-								>
-									Base Price
-								</label>
-								<div className='relative'>
-									<span className='absolute inline-block top-1/2 -translate-y-1/2 mt-0.5 left-2 text-cap font-semibold'>
-										$
-									</span>
-									<input
-										type='number'
-										placeholder={product.price}
-										className='bg-lightGray w-full pr-3 pl-6 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none text-sm'
-									/>
-								</div>
-							</div>
-							<div>
-								<label
-									className='block font-medium text-cap text-sm mt-4'
-									htmlFor=''
-								>{`Discount Percentage (%)`}</label>
-								<input
-									type='number'
-									placeholder={product.discount * 100}
-									className='bg-lightGray w-full pr-3 pl-6 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none text-sm'
-								/>
-							</div>
-							<div>
-								<label
-									className='block font-medium text-cap text-sm mt-4'
-									htmlFor=''
-								>
-									Tax Class
-								</label>
-								<select
-									name=''
-									id=''
-									className='text-sm bg-lightGray w-full px-3 py-2 mt-1 border border-gray-300 rounded-md cursor-pointer focus:outline-none text-cap'
-								>
-									<option value=''>Select a tax class</option>
-								</select>
-							</div>
-						</div>
-
-						{/* Inventory */}
-						<div className='bg-white h-fit px-5 py-6 rounded-lg border border-gray-300'>
-							<h6 className='font-medium text-lg mb-3'>Inventory</h6>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
-									Quantity
-								</label>
-								<input
-									type='number'
-									placeholder={product.quantity}
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
-								/>
-							</div>
-						</div>
+				<div className='grid grid-cols-1 md:grid-cols-2 gap-6 '>
+					{/* Name */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>Name</label>
+						<input
+							{...register('name', {
+								required: 'Name is required',
+								minLength: {
+									value: 3,
+									message: 'Name must be at least 3 characters long'
+								}
+							})}
+							type='text'
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						/>
+						{errors.name && (
+							<p className='text-red-500 text-sm'>{errors.name.message}</p>
+						)}
 					</div>
 
-					{/* Category */}
-					<div className='bg-white w-1/4 h-fit px-5 py-6 rounded-lg border border-gray-300'>
-						<h6 className='font-medium text-lg mb-3'>Category</h6>
-						<label className='block font-medium text-cap text-sm' htmlFor=''>
-							Product Category
+					{/* Category ID */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>
+							Category
 						</label>
 						<select
-							name=''
-							id=''
-							className='text-sm bg-lightGray w-full px-3 py-2 mt-1 border border-gray-300 rounded-md cursor-pointer focus:outline-none'
-							defaultValue={product.categories}
+							{...register('category_id', {required: 'Category is required'})}
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
 						>
-							{categories.map((category, index) => {
-								return (
-									<option value={category} key={index}>
-										{category}
-									</option>
-								)
-							})}
-							{/*  */}
+							<option value=''>Select a category</option>
+							{categories.map((category) => (
+								<option key={category.id} value={category.id}>
+									{category.name}
+								</option>
+							))}
 						</select>
+						{errors.category_id && (
+							<p className='text-red-500 text-sm'>
+								{errors.category_id.message}
+							</p>
+						)}
+					</div>
+
+					{/* Price */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>Price</label>
+						<input
+							{...register('price', {
+								required: 'Price is required',
+								min: {value: 0.01, message: 'Price must be greater than 0'}
+							})}
+							type='number'
+							step='0.01'
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						/>
+						{errors.price && (
+							<p className='text-red-500 text-sm'>{errors.price.message}</p>
+						)}
+					</div>
+
+					{/* Reduced Price */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>
+							Reduced Price
+						</label>
+						<input
+							defaultValue='0'
+							{...register('reduced_price')}
+							type='number'
+							step='0.01'
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						/>
+						{errors.reduced_price && (
+							<p className='text-red-500 text-sm'>
+								{errors.reduced_price.message}
+							</p>
+						)}
+					</div>
+
+					{/* Quantity */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>
+							Quantity
+						</label>
+						<input
+							{...register('quantity', {
+								required: 'Quantity is required',
+								min: {value: 1, message: 'Quantity must be at least 1'}
+							})}
+							type='number'
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						/>
+						{errors.quantity && (
+							<p className='text-red-500 text-sm'>{errors.quantity.message}</p>
+						)}
+					</div>
+
+					{/* Author */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>Author</label>
+						<input
+							{...register('author', {
+								required: 'Author is required',
+								minLength: {
+									value: 3,
+									message: 'Author name must be at least 3 characters long'
+								}
+							})}
+							type='text'
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						/>
+						{errors.author && (
+							<p className='text-red-500 text-sm'>{errors.author.message}</p>
+						)}
+					</div>
+
+					{/* Language */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>
+							Language
+						</label>
+						<input
+							{...register('language', {required: 'Language is required'})}
+							type='text'
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						/>
+						{errors.language && (
+							<p className='text-red-500 text-sm'>{errors.language.message}</p>
+						)}
+					</div>
+
+					{/* Format */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>Format</label>
+						<input
+							{...register('format', {required: 'Format is required'})}
+							type='text'
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						/>
+						{errors.format && (
+							<p className='text-red-500 text-sm'>{errors.format.message}</p>
+						)}
+					</div>
+
+					{/* Date Published */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>
+							Date Published
+						</label>
+						<input
+							{...register('date_published', {
+								required: 'Date published is required'
+							})}
+							type='date'
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						/>
+						{errors.date_published && (
+							<p className='text-red-500 text-sm'>
+								{errors.date_published.message}
+							</p>
+						)}
+					</div>
+
+					{/* Publisher */}
+					<div>
+						<label className='block text-sm font-medium text-cap'>
+							Publisher
+						</label>
+						<input
+							{...register('publisher', {
+								required: 'Publisher is required',
+								minLength: {
+									value: 3,
+									message: 'Publisher name must be at least 3 characters long'
+								}
+							})}
+							type='text'
+							className='w-full px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						/>
+						{errors.publisher && (
+							<p className='text-red-500 text-sm'>{errors.publisher.message}</p>
+						)}
+					</div>
+
+					{/* Description */}
+					<div className='md:col-span-2'>
+						<label className='block text-sm font-medium text-cap'>
+							Description
+						</label>
+						<textarea
+							{...register('description', {
+								required: 'Description is required'
+							})}
+							className='w-full h-[150px] px-3 py-2 border border-gray-300 bg-lightGray rounded-lg focus:outline-none mt-1'
+						></textarea>
+						{errors.description && (
+							<p className='text-red-500 text-sm'>
+								{errors.description.message}
+							</p>
+						)}
+					</div>
+
+					<div className='md:col-span-2'>
+						<div className='border-2 border-dashed border-gray-300 rounded-md p-5'>
+							<div>
+								<label
+									className='block text-primary bg-light w-fit px-4 py-2 rounded-md transition-all cursor-pointer hover:bg-primary hover:text-white mx-auto'
+									htmlFor='multiple_files'
+								>
+									Add Images
+								</label>
+								<input
+									hidden
+									{...register('images')}
+									onChange={(e) => handleUploadProdImages(e)}
+									id='multiple_files'
+									type='file'
+									multiple
+								/>
+								{oldProdImages.length === 0 && newProdImages.length === 0 && (
+									<p className='text-red-500 text-sm text-center'>
+										Require at least one image
+									</p>
+								)}
+							</div>
+							<div className='mt-5'>
+								<Swiper
+									slidesPerView={5}
+									spaceBetween={0}
+									pagination={{
+										clickable: true
+									}}
+									navigation={{
+										nextEl: '.swiper-button-next',
+										prevEl: '.swiper-button-prev'
+									}}
+									modules={[Grid, Pagination]}
+									className='mySwiper'
+								>
+									{oldProdImages &&
+										oldProdImages.map((prodImg, index) => (
+											<SwiperSlide key={index}>
+												<div className='w-[150px] h-[220px] flex items-center flex-col justify-center p-4 relative'>
+													<img
+														src={prodImg.image_name}
+														className='w-full h-full object-cover pb-5'
+													/>
+													<button
+														type='button'
+														onClick={() => {
+															setDeleteImageIds((prev) => [...prev, prodImg.id])
+															setOldProdImages((prevImages) =>
+																prevImages.filter((_, i) => i !== index)
+															)
+														}}
+													>
+														<FaTimes className='text-red-500 bg-white size-5 p-1 absolute right-7 top-7 opacity-70 hover:text-white hover:opacity-100 hover:bg-red-500 transition-all rounded-full' />
+													</button>
+												</div>
+											</SwiperSlide>
+										))}
+									{previewProdImages &&
+										previewProdImages.map((tempUrl, index) => (
+											<SwiperSlide key={index}>
+												<div className='w-[150px] h-[220px] flex items-center flex-col justify-center p-4 relative'>
+													<img
+														src={tempUrl}
+														className='w-full h-full object-cover pb-5'
+													/>
+													<button
+														type='button'
+														onClick={() => {
+															setPreviewProdImages((prevPreviews) =>
+																prevPreviews.filter((_, i) => i !== index)
+															)
+															setProdImages((prevImages) =>
+																prevImages.filter((_, i) => i !== index)
+															)
+														}}
+													>
+														<FaTimes className='text-red-500 bg-white size-5 p-1 absolute right-7 top-7 opacity-70 hover:text-white hover:opacity-100 hover:bg-red-500 transition-all rounded-full' />
+													</button>
+												</div>
+											</SwiperSlide>
+										))}
+								</Swiper>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	)
 }
+
+export default ProductUpdate

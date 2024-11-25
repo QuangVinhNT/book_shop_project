@@ -343,33 +343,33 @@ export default function ProductAddition() {
 													{errors.images.message}
 												</p>
 											)}
-									</div>
-									<div className='mt-5 relative'>
-										<Swiper
-											slidesPerView={4}
-											spaceBetween={0}
-											pagination={{
-												clickable: true
-											}}
-											navigation={{
-												nextEl: '.swiper-button-next',
-												prevEl: '.swiper-button-prev'
-											}}
-											modules={[Grid, Pagination]}
-											className='mySwiper'
-										>
-											{previewProdImages &&
-												previewProdImages.map((tempUrl, index) => (
-													<SwiperSlide key={index}>
-														<div className='w-full h-[200px] border flex items-center justify-center p-4'>
-															<img
-																src={tempUrl}
-																className='w-full object-cover'
-															/>
-														</div>
-													</SwiperSlide>
-												))}
-										</Swiper>
+										<div className='mt-5 w-full'>
+											<Swiper
+												slidesPerView={4}
+												spaceBetween={0}
+												pagination={{
+													clickable: true
+												}}
+												navigation={{
+													nextEl: '.swiper-button-next',
+													prevEl: '.swiper-button-prev'
+												}}
+												modules={[Grid, Pagination]}
+												className='mySwiper'
+											>
+												{previewProdImages &&
+													previewProdImages.map((tempUrl, index) => (
+														<SwiperSlide key={index}>
+															<div className='w-[150px] h-[220px] flex items-center justify-center p-4'>
+																<img
+																	src={tempUrl}
+																	className='w-full h-full object-cover pb-5'
+																/>
+															</div>
+														</SwiperSlide>
+													))}
+											</Swiper>
+										</div>
 									</div>
 								</div>
 							</div>
