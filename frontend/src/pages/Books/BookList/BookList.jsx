@@ -1,10 +1,10 @@
-import { CiGrid42 } from 'react-icons/ci'
-import { IoIosList } from 'react-icons/io'
+import {CiGrid42} from 'react-icons/ci'
+import {IoIosList} from 'react-icons/io'
 import BookCard from './BookCard/BookCard'
 
 import book1 from '~/assets/images/book_1.png'
 import ReactPaginate from 'react-paginate'
-import { useState } from 'react'
+import {useState} from 'react'
 
 // const books = [
 // 	{
@@ -117,7 +117,12 @@ import { useState } from 'react'
 // 	}
 // ]
 
-export default function BookList({ bookList, pageCount, setCurrentPage, currentPage }) {
+export default function BookList({
+	bookList,
+	pageCount,
+	setCurrentPage,
+	currentPage
+}) {
 	return (
 		<div className='w-full'>
 			<div>
@@ -136,7 +141,7 @@ export default function BookList({ bookList, pageCount, setCurrentPage, currentP
 					</div>
 				</div>
 			</div>
-			<div className='mt-20 flex flex-wrap justify-between'>
+			<div className='mt-20 flex flex-wrap justify-center 2xl:gap-[100px] lg:gap-10'>
 				{bookList.map((book, index) => {
 					return <BookCard book={book} key={index} />
 				})}

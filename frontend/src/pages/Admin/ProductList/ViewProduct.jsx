@@ -1,107 +1,128 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { environment } from "~/utils/environment";
-import { categories } from "~/utils/util";
+import {useEffect, useState} from 'react'
+import {FaArrowLeftLong} from 'react-icons/fa6'
+import {Link, useParams} from 'react-router-dom'
+import Loading from '~/components/notification/Loading/Loading'
+import {environment} from '~/utils/environment'
+import {categories} from '~/utils/util'
+
+import book1 from '~/assets/images/book_1.png'
 
 function ViewProduct() {
-  const [product, setProduct] = useState(null);
-  const { id } = useParams();
+	const [product, setProduct] = useState(null)
+	const {id} = useParams()
 
-  const getProduct = async () => {
-    const response = await fetch(`${environment.BACKEND_URL}/product/${id}`);
-    const data = await response.json();
+	const getProduct = async () => {
+		const response = await fetch(`${environment.BACKEND_URL}/product/${id}`)
+		const data = await response.json()
 
-    if (response.ok) {
-      setProduct(data.product);
-    } else {
-      setProduct(null);
-    }
-  };
+		if (response.ok) {
+			setProduct(data.product)
+		} else {
+			setProduct(null)
+		}
+	}
 
-  useEffect(() => {
-    getProduct();
-  }, []);
+	useEffect(() => {
+		getProduct()
+	}, [])
 
-  if (!product) {
-    return (
-      <div className="flex items-center justify-center h-screen text-3xl text-red-500">
-        Loading...
-      </div>
-    );
-  }
+	if (!product) {
+		return (
+			<div className='h-screen relative'>
+				<Loading />
+			</div>
+		)
+	}
 
-  return (
-    <div className="p-8 bg-gray-100">
-      <div className="max-w-6xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">{product.name}</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Product Details */}
-            <div>
-              <p className="text-lg text-gray-700">
-                <strong>Category:</strong> {categories.find(cate => cate.id == product.category_id).name} 
-              </p>
-              <p className="text-lg text-gray-700">
-                <strong>Price:</strong> ${product.price}
-              </p>
-              <p className="text-lg text-gray-700">
-                <strong>Reduced Price:</strong> ${product.reduced_price}
-              </p>
-              <p className="text-lg text-gray-700">
-                <strong>Quantity:</strong> {product.quantity}
-              </p>
-              <p className="text-lg text-gray-700">
-                <strong>Author:</strong> {product.author}
-              </p>
-              <p className="text-lg text-gray-700">
-                <strong>Language:</strong> {product.language}
-              </p>
-              <p className="text-lg text-gray-700">
-                <strong>Format:</strong> {product.format}
-              </p>
-            </div>
+	return (
+		<div className='p-8 bg-gray-100'>
+			<Link to={'/admin/products'}>
+				<div className='flex items-center gap-3 mb-2 hover:text-primary w-fit cursor-pointer transition-all'>
+					<FaArrowLeftLong />
+					<span className='text-lg font-medium'>Back</span>
+				</div>
+			</Link>
+			<h1 className='text-3xl font-bold text-gray-800 mb-4 bg-white rounded-lg p-6'>
+				{product.name}
+			</h1>
+			<div className='mx-auto bg-white rounded-lg overflow-hidden p-6 mb-4'>
+				{/* Product Details */}
+				<div className='p-5 flex gap-10'>
+					<div className='w-1/2 flex flex-col gap-2'>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Category</strong>{' '}
+							{categories.find((cate) => cate.id == product.category_id).name}
+						</p>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Price</strong> $
+							{product.price}
+						</p>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Reduced Price</strong>{' '}
+							${product.reduced_price}
+						</p>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Quantity</strong>{' '}
+							{product.quantity}
+						</p>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Author</strong>{' '}
+							{product.author}
+						</p>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Language</strong>{' '}
+							{product.language}
+						</p>
+					</div>
+					<div className='w-1/2 flex flex-col gap-2'>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Format</strong>{' '}
+							{product.format}
+						</p>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Published Date</strong>{' '}
+							{new Date(product.date_published).toLocaleDateString()}
+						</p>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Publisher</strong>{' '}
+							{product.publisher}
+						</p>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Created At</strong>{' '}
+							{new Date(product.created_at).toLocaleString()}
+						</p>
+						<p className='text-lg text-gray-700 '>
+							<strong className='inline-block w-[170px]'>Updated At</strong>{' '}
+							{new Date(product.updated_at).toLocaleString()}
+						</p>
+					</div>
+				</div>
+			</div>
 
-            {/* Additional Information */}
-            <div>
-              <p className="text-lg text-gray-700">
-                <strong>Published Date:</strong> {new Date(product.date_published).toLocaleDateString()}
-              </p>
-              <p className="text-lg text-gray-700">
-                <strong>Publisher:</strong> {product.publisher}
-              </p>
-              <p className="text-lg text-gray-700">
-                <strong>Created At:</strong> {new Date(product.created_at).toLocaleString()}
-              </p>
-              <p className="text-lg text-gray-700">
-                <strong>Updated At:</strong> {new Date(product.updated_at).toLocaleString()}
-              </p>
-            </div>
-          </div>
-          {/* Product Description */}
-          <div className="mt-6">
-            <h2 className="text-2xl font-semibold text-gray-800">Description</h2>
-            <p className="text-gray-600 mt-2">{product.description}</p>
-          </div>
-        </div>
+			{/* Product Description */}
+			<div className='mx-auto bg-white rounded-lg overflow-hidden p-6 mb-4'>
+				<h2 className='text-2xl font-semibold text-gray-800'>Description</h2>
+				<p className='text-gray-600 mt-2'>{product.description}</p>
+			</div>
 
-        {/* Product Images */}
-        <div className="mt-6">
-          <h2 className="text-2xl font-semibold text-gray-800 px-6">Product Images</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-6">
-            {product.image.map((img) => (
-              <div key={img.id} className="overflow-hidden rounded-lg shadow-md">
-                <img
-                  src={img.image_name}
-                  alt={`Image ${img.id}`}
-                  className="object-contain w-full h-48"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+			{/* Product Images */}
+			<div className='mx-auto bg-white rounded-lg overflow-hidden p-6'>
+				<h2 className='text-2xl font-semibold text-gray-800'>Product Images</h2>
+				<div className='gap-4 mt-2'>
+					{product.image.map((img) => (
+						<div key={img.id} className='overflow-hidden rounded-lg'>
+							<img
+								// src={img.image_name}
+								src={book1}
+								alt={`Image ${img.id}`}
+								className='object-cover w-[150px] h-[200px] rounded-lg border-gray-200'
+							/>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+	)
 }
 
-export default ViewProduct;
+export default ViewProduct
