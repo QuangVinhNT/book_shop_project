@@ -39,11 +39,12 @@ Route::put('/admin/updateUser/{id}', [AdminController::class, 'updateUser']);
 Route::delete('/admin/deleteUser/{id}', [AdminController::class, 'deleteUser']);
 
 
-Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products', [ProductController::class, 'filter']);
 Route::get('/product/{id}', [ProductController::class, 'getProductById']);
 Route::post('/add-product', [ProductController::class, 'add']);
 Route::put('/update-product/{id}', [ProductController::class, 'edit']);
 Route::delete('/delete-product/{id}', [ProductController::class, 'destroy']);
+// Route::get('/products/filter', [ProductController::class, 'filter']);
 
 Route::post('/uploads', [ImageController::class, 'uploadImages']);
 Route::post('/upload', [ImageController::class, 'uploadImage']);
