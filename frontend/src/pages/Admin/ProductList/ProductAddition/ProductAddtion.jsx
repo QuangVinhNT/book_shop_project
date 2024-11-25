@@ -15,10 +15,12 @@ export default function ProductAddition() {
 				<div className='flex items-center justify-between mb-5'>
 					<span className='text-2xl font-medium text-cap'>Add Product</span>
 					<div className='flex items-center gap-3'>
-						<button className=' text-cap px-3 py-2 rounded-md flex items-center gap-2 transition border border-cap hover:border-red-500 hover:text-red-500'>
-							<LiaTimesSolid className='text-xl' />
-							<span className='font-medium text-sm'>Cancel</span>
-						</button>
+						<Link to={'/admin/products'}>
+							<button className=' text-cap px-3 py-2 rounded-md flex items-center gap-2 transition border border-cap hover:border-red-500 hover:text-red-500'>
+								<LiaTimesSolid className='text-xl' />
+								<span className='font-medium text-sm'>Cancel</span>
+							</button>
+						</Link>
 						<Link
 							to={'/admin/products'}
 							className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'
