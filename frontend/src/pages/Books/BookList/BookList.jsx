@@ -153,10 +153,18 @@ export default function BookList({ bookList, pageCount, setCurrentPage, currentP
 					forcePage={currentPage - 1}
 					onPageChange={(e) => setCurrentPage(+e.selected + 1)}
 					containerClassName={'flex justify-center items-center gap-2'}
-					pageClassName={'text-blue-500 bg-light text-xs rounded-sm cursor-pointer'}
-					pageLinkClassName={'text-center block p-3 transition-all hover:bg-primary hover:text-white'}
-					previousClassName={'text-primary bg-light text-xs p-2 rounded-lg cursor-pointer'}
-					nextClassName={'text-primary bg-light text-xs p-2 rounded-lg cursor-pointer'}
+					pageClassName={
+						'bg-light text-primary hover:bg-primary hover:text-white rounded-md flex'
+					}
+					pageLinkClassName={
+						'text-xs font-semibold inline-block text-center leading-8 size-8 cursor-pointer transition-all'
+					}
+					previousClassName={
+						'size-8 text-center text-primary bg-light text-xs p-2 rounded-md cursor-pointer transition-all hover:bg-primary hover:text-white'
+					}
+					nextClassName={
+						'size-8 text-center text-primary bg-light text-xs p-2 rounded-md cursor-pointer transition-all hover:bg-primary hover:text-white'
+					}
 					activeClassName={'bg-primary text-white'}
 				/>
 				{/* <span className='text-primary bg-light text-xs p-2 rounded-lg cursor-pointer transition-all hover:bg-primary hover:text-white'>
