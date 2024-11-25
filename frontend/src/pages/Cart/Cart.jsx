@@ -1,8 +1,11 @@
 import Summary from '~/components/client/Summary/Summary'
 import CartItem from './CartItem/CartItem'
-import {Link} from 'react-router-dom'
-import {FaPlus} from 'react-icons/fa'
+import { Link } from 'react-router-dom'
+import { FaPlus } from 'react-icons/fa'
 import book1 from '~/assets/images/book_1.png'
+import { useAuthStore } from '~/stores/authStore'
+import { useCartStore } from '~/stores/cartStore'
+import { useEffect } from 'react'
 
 const items = [
 	{
@@ -22,6 +25,26 @@ const items = [
 ]
 
 export default function Cart() {
+	const account = useAuthStore(state => state.account)
+	const getCartItems = useCartStore(state => state.getCartItems)
+	const cartItems = useCartStore(state => state.cartItems)
+
+	useEffect(() => {
+		getCartItems()
+	}, [])
+
+	if (!account) {
+		return <div className='text-3xl text-center py-5 text-red-500'>
+			Login to use cart
+		</div>
+	}
+
+	if(cartItems.length == 0) {
+		return <div className='text-3xl text-center py-5 text-red-500'> 
+			Cart empty
+		</div>
+	}
+
 	return (
 		<div className='pt-10'>
 			<div className='w-3/4 mx-auto mb-10'>
@@ -35,7 +58,7 @@ export default function Cart() {
 					<span className='inline-block w-[40px] text-center'></span>
 				</div>
 				<div className='flex flex-col gap-20 py-20 '>
-					{items.map((item, index) => {
+					{cartItems.map((item, index) => {
 						return (
 							<div key={index}>
 								<CartItem item={item} />

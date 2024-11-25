@@ -102,6 +102,11 @@ export default function ProductTable({products, getProducts, setCurrentPage}) {
 					{products.map((product, index) => {
 						return (
 							<tr key={index} className='text-[15px] bg-white'>
+								<td>
+									<div className='flex items-center p-4'>
+										<input type='checkbox' className='size-5 cursor-pointer' />
+									</div>
+								</td>
 								<td className='pl-2 border-t border-gray-300'>
 									{product.name}
 								</td>
