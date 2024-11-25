@@ -1,13 +1,16 @@
-import {GoPlus} from 'react-icons/go'
-import {LiaTimesSolid} from 'react-icons/lia'
-import {Link} from 'react-router-dom'
-import {PiImageSquareFill} from 'react-icons/pi'
+import { GoPlus } from 'react-icons/go'
+import { LiaTimesSolid } from 'react-icons/lia'
+import { Link } from 'react-router-dom'
+import { PiImageSquareFill } from 'react-icons/pi'
 
-import {useState} from 'react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 const categories = ['Arts & Photography', 'Travel', 'Novel', 'Fashion']
 
 export default function ProductAddition() {
+	const { register } = useForm()
+
 	const [cateSelected, setCateSelected] = useState('')
 	return (
 		<div>
@@ -40,6 +43,10 @@ export default function ProductAddition() {
 									Product Name
 								</label>
 								<input
+									{...register("name", {
+										required: "Name is required",
+										minLength: { value: 3, message: "Name must be at least 3 characters long" }
+									})}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type product name here...'
@@ -50,6 +57,10 @@ export default function ProductAddition() {
 									Author
 								</label>
 								<input
+									{...register("author", {
+										required: "Author is required",
+										minLength: { value: 3, message: "Author name must be at least 3 characters long" }
+									})}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type author here...'
@@ -60,6 +71,7 @@ export default function ProductAddition() {
 									Language
 								</label>
 								<input
+									{...register("language", { required: "Language is required" })}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type language here...'
@@ -70,6 +82,7 @@ export default function ProductAddition() {
 									Format
 								</label>
 								<input
+									{...register("format", { required: "Format is required" })}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type format here...'
@@ -80,6 +93,7 @@ export default function ProductAddition() {
 									Date Published
 								</label>
 								<input
+									{...register("date_published", { required: "Date published is required" })}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type date published here...'
@@ -90,6 +104,10 @@ export default function ProductAddition() {
 									Publisher
 								</label>
 								<input
+									{...register("publisher", {
+										required: "Publisher is required",
+										minLength: { value: 3, message: "Publisher name must be at least 3 characters long" }
+									})}
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'
 									type='text'
 									placeholder='Type publisher here...'
@@ -97,22 +115,10 @@ export default function ProductAddition() {
 							</div>
 							<div className='mt-4 text-sm'>
 								<label className='block font-medium text-cap' htmlFor=''>
-									Plot Summary
-								</label>
-								<textarea
-									name=''
-									id=''
-									placeholder='Type plot summary here...'
-									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none h-32'
-								></textarea>
-							</div>
-							<div className='mt-4 text-sm'>
-								<label className='block font-medium text-cap' htmlFor=''>
 									Description
 								</label>
 								<textarea
-									name=''
-									id=''
+									{...register("description", { required: "Description is required" })}
 									placeholder='Type product description here...'
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none h-32'
 								></textarea>
@@ -160,6 +166,10 @@ export default function ProductAddition() {
 										$
 									</span>
 									<input
+										{...register("price", {
+											required: "Price is required",
+											min: { value: 0.01, message: "Price must be greater than 0" }
+										})}
 										type='number'
 										placeholder='Type base price here...'
 										className='bg-lightGray w-full pr-3 pl-6 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none text-sm'
@@ -172,26 +182,14 @@ export default function ProductAddition() {
 									htmlFor=''
 								>{`Discount Percentage (%)`}</label>
 								<input
+									defaultValue='0'
+									{...register("reduced_price")}
 									type='number'
 									placeholder='Type discount percentage...'
 									className='bg-lightGray w-full pr-3 pl-6 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none text-sm'
 								/>
 							</div>
-							<div>
-								<label
-									className='block font-medium text-cap text-sm mt-4'
-									htmlFor=''
-								>
-									Tax Class
-								</label>
-								<select
-									name=''
-									id=''
-									className='text-sm bg-lightGray w-full px-3 py-2 mt-1 border border-gray-300 rounded-md cursor-pointer focus:outline-none text-cap'
-								>
-									<option value=''>Select a tax class</option>
-								</select>
-							</div>
+
 						</div>
 
 						{/* Inventory */}
@@ -202,6 +200,10 @@ export default function ProductAddition() {
 									Quantity
 								</label>
 								<input
+									{...register("quantity", {
+										required: "Quantity is required",
+										min: { value: 1, message: "Quantity must be at least 1" }
+									})}
 									type='number'
 									placeholder='Type product quantity here...'
 									className='bg-lightGray w-full px-3 py-2 border border-gray-300 rounded-md mt-1 focus:outline-none'

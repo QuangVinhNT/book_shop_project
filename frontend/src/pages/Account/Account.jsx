@@ -1,9 +1,10 @@
-import {AiOutlineUser} from 'react-icons/ai'
-import {useState} from 'react'
+import { AiOutlineUser } from 'react-icons/ai'
+import { useState } from 'react'
 import AccountInformation from './AccountTab/AccountInformation'
 import Order from './AccountTab/Order'
 import book1 from '~/assets/images/book_1.png'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useAuthStore } from '~/stores/authStore'
 
 const user = {
 	firstName: 'Nguyễn',
@@ -78,45 +79,49 @@ const user = {
 
 export default function Account() {
 	const [tabSelect, setTabSelect] = useState('Account information')
+
+	const account = useAuthStore(state => state.account)
+
 	return (
 		<div className='px-28 mt-7 mb-14 flex gap-16'>
 			<div className='bg-lessLighter pt-10 pb-32 pl-10 rounded-xl w-1/4 h-fit'>
 				<div className='flex items-center gap-3 mb-6'>
 					<AiOutlineUser className='text-2xl text-primary bg-light rounded-full size-10 p-2' />
-					<span className='text-sm font-medium'>{`${user.firstName} ${user.lastName}`}</span>
+					<span className='text-sm font-medium'>{account.full_name}</span>
 				</div>
 				<div className='flex flex-col gap-2 text-sm font-medium'>
 					<span
-						className={`${
-							tabSelect === 'Account information'
-								? 'text-primary cursor-default'
-								: 'transition-all hover:underline hover:text-primary cursor-pointer'
-						} `}
+						className={`${tabSelect === 'Account information'
+							? 'text-primary cursor-default'
+							: 'transition-all hover:underline hover:text-primary cursor-pointer'
+							} `}
 						onClick={() => setTabSelect('Account information')}
 					>
 						Account information
 					</span>
 					<span
-						className={`${
-							tabSelect === 'Order'
-								? 'text-primary cursor-default'
-								: 'transition-all hover:underline hover:text-primary cursor-pointer'
-						} `}
+						className={`${tabSelect === 'Order'
+							? 'text-primary cursor-default'
+							: 'transition-all hover:underline hover:text-primary cursor-pointer'
+							} `}
 						onClick={() => setTabSelect('Order')}
 					>
 						Order
 					</span>
-					<Link
-						to={'/'}
-						className='transition-all hover:underline hover:text-red-400 cursor-pointer'
+					<span
+						className={`${tabSelect === 'Order'
+							? 'text-primary cursor-default'
+							: 'transition-all hover:underline hover:text-primary cursor-pointer'
+							} `}
+						onClick={() => setTabSelect('Order')}
 					>
-						Logout
-					</Link>
+						Change password
+					</span>
 				</div>
 			</div>
 			<div className='w-3/4'>
 				{tabSelect === 'Account information' ? (
-					<AccountInformation user={user} />
+					<AccountInformation account={account} />
 				) : (
 					<Order orders={user.orders} />
 				)}

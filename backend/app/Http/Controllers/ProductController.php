@@ -26,7 +26,7 @@ class ProductController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $products = Product::with('category:id,name')->paginate($perPage);
+        $products = Product::with(['category:id,name', 'image:id,product_id,image_name'])->paginate($perPage);
 
         return response()->json([
             'message' => 'Products fetched successfully',

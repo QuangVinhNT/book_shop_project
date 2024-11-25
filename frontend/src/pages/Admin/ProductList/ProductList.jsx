@@ -109,7 +109,7 @@ export default function ProductList() {
 			const data = await response.json()
 			if (response.ok) {
 				setProducts(data.products.data)
-				setPageCount(data.products.total)
+				setPageCount(data.products.last_page)
 				toast.update(toastId, { render: data.message || 'Load product success.', type: 'success', isLoading: false, autoClose: 1000 });
 			}
 			else {

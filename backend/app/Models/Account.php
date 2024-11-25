@@ -29,6 +29,7 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
         'image',
         'verify_code',
         'is_verified',
+        'is_social_login',
         'expiration_time',
         'role'
     ];

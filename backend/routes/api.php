@@ -13,7 +13,8 @@ Route::post('/auth/register/google', [AuthController::class, 'registerWithGoogle
 Route::post('/auth/email-verify', [AuthController::class, 'emailVerify']);
 Route::get('/auth/account', [AuthController::class, 'getAccount']);
 Route::get('/auth/logout', [AuthController::class, 'logout']);
-
+Route::post('/auth/send-email-forgot-password', [AuthController::class, 'sendEmailForgotPassword']);
+Route::post('/auth/send-code-forgot', [AuthController::class, 'emailForgotVerifyCode']);
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/auth/change-password', [AuthController::class, 'changePassword']);
