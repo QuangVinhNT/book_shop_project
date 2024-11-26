@@ -17,7 +17,14 @@ export default {
 				uncoloredStar: '#e7e7e7',
 				darkGray: '#03030e66',
 				inactiveBar: '#cbcbcb',
-				customYellow: '#FFD782'
+				customYellow: '#FFD782',
+				lighterBlue: '#dedefa',
+				darkBlue: '#4543ae',
+				lighterGreen: '#e7f4ee',
+				customGreen: '#0d894f',
+				lighterRed: '#feedec',
+				customRed: '#f04438',
+				lighterOrange: '#fdf1e8'
 			},
 			boxShadow: {
 				roundShadow: '0 0 10px 1px'

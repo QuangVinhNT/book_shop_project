@@ -230,12 +230,12 @@ function Login() {
 							<p className='text-red-400'>{errors.password?.message}</p>
 						</div>
 						<div className='flex justify-end mt-4 mb-8'>
-							<button
+							<span
 								className='underline text-sm font-medium text-cap'
 								onClick={() => setShow(true)}
 							>
 								Forgot password?
-							</button>
+							</span>
 						</div>
 						<button
 							className={`${
