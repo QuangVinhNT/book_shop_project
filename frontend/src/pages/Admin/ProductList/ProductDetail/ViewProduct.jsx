@@ -112,8 +112,8 @@ function ViewProduct() {
 					{product.image.map((img) => (
 						<div key={img.id} className='overflow-hidden rounded-lg'>
 							<img
-								// src={img.image_name}
-								src={book1}
+								src={img.image_name}
+								// src={book1}
 								alt={`Image ${img.id}`}
 								className='object-cover w-[150px] h-[200px] rounded-lg border-gray-200'
 							/>

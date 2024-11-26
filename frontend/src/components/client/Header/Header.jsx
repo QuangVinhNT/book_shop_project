@@ -1,19 +1,18 @@
-import { useState } from 'react'
-import { CiSearch } from 'react-icons/ci'
-import { IoCartOutline } from 'react-icons/io5'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { useAuthStore } from '~/stores/authStore'
-import { useCartStore } from '~/stores/cartStore'
-import { environment } from '~/utils/environment'
+import {useState} from 'react'
+import {CiSearch} from 'react-icons/ci'
+import {IoCartOutline} from 'react-icons/io5'
+import {Link} from 'react-router-dom'
+import {toast} from 'react-toastify'
+import {useAuthStore} from '~/stores/authStore'
+import {useCartStore} from '~/stores/cartStore'
+import {environment} from '~/utils/environment'
 export default function Header() {
-
 	const [showDropdown, setShowDropdown] = useState(false)
 
-	const setAccount = useAuthStore(state => state.setAccount)
-	const account = useAuthStore(state => state.account)
+	const setAccount = useAuthStore((state) => state.setAccount)
+	const account = useAuthStore((state) => state.account)
 
-	const quantity = useCartStore(state => state.quantity)
+	const quantity = useCartStore((state) => state.quantity)
 
 	const logout = async () => {
 		const toastId = toast.loading('Please wait...')
@@ -25,14 +24,28 @@ export default function Header() {
 
 			if (response.ok) {
 				setAccount(null)
-				toast.update(toastId, { render: 'Logout success', type: 'success', isLoading: false, autoClose: 3000 })
-			}
-			else {
+				toast.update(toastId, {
+					render: 'Logout success',
+					type: 'success',
+					isLoading: false,
+					autoClose: 3000
+				})
+			} else {
 				const data = await response.json()
-				toast.update(toastId, { render: data.message, type: 'error', isLoading: false, autoClose: 3000 })
+				toast.update(toastId, {
+					render: data.message,
+					type: 'error',
+					isLoading: false,
+					autoClose: 3000
+				})
 			}
 		} catch (error) {
-			toast.update(toastId, { render: 'Internal server error', type: 'error', isLoading: false, autoClose: 3000 })
+			toast.update(toastId, {
+				render: 'Internal server error',
+				type: 'error',
+				isLoading: false,
+				autoClose: 3000
+			})
 		}
 	}
 
@@ -58,41 +71,83 @@ export default function Header() {
 				<CiSearch className='text-2xl cursor-pointer text-black transition-all hover:text-primary' />
 			</div>
 
-			{account && <Link to={'/cart'}>
-				<div className='group size-10 rounded-full relative flex justify-center items-center shadow-sm cursor-pointer transition-all hover:bg-primary'>
-					<IoCartOutline className='text-2xl transition-all group-hover:text-white' />
-					<span className='absolute -top-1 -right-1 size-4 bg-red-500 text-white rounded-full flex items-center justify-center text-[12px]'>{quantity}</span>
-				</div>
-			</Link>}
+			{account && (
+				<Link to={'/cart'}>
+					<div className='group size-10 rounded-full relative flex justify-center items-center shadow-sm cursor-pointer transition-all hover:bg-primary'>
+						<IoCartOutline className='text-2xl transition-all group-hover:text-white' />
+						<span className='absolute -top-1 -right-1 size-4 bg-red-500 text-white rounded-full flex items-center justify-center text-[12px]'>
+							{quantity}
+						</span>
+					</div>
+				</Link>
+			)}
 
-			{
-				account ? <div>
-
-					<button onClick={() => setShowDropdown(!showDropdown)}
-						className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+			{account ? (
+				<div>
+					<button
+						onClick={() => setShowDropdown(!showDropdown)}
+						className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+						type='button'
+					>
 						{account.full_name}
-						{account.image && <div>
-							<img width={25} height={25} className='rounded-full ml-2' src={account.image} /></div>}
+						{account.image && (
+							<div>
+								<img
+									width={25}
+									height={25}
+									className='rounded-full ml-2'
+									src={account.image}
+								/>
+							</div>
+						)}
 					</button>
 
-					<div className={`z-10 ${showDropdown ? 'absolute right-0' : 'hidden'} bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}>
-						<ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
+					<div
+						className={`z-10 ${
+							showDropdown ? 'absolute right-0' : 'hidden'
+						} bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+					>
+						<ul
+							className='py-2 text-sm text-gray-700 dark:text-gray-200'
+							aria-labelledby='dropdownDividerButton'
+						>
 							<li>
-								<Link to='/account' className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+								<Link
+									to='/account'
+									className='block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
+								>
+									Profile
+								</Link>
 							</li>
 							<li>
-								<a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Purchase history</a>
+								<a
+									href='#'
+									className='block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
+								>
+									Purchase history
+								</a>
 							</li>
 							<li>
-								<a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+								<a
+									href='#'
+									className='block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
+								>
+									Earnings
+								</a>
 							</li>
 						</ul>
-						<div onClick={logout} className="py-2">
-							<a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Logout</a>
+						<div onClick={logout} className='py-2'>
+							<a
+								href='#'
+								className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+							>
+								Logout
+							</a>
 						</div>
 					</div>
-
-				</div> : <div className='text-sm font-medium'>
+				</div>
+			) : (
+				<div className='text-sm font-medium'>
 					<Link
 						to='/login'
 						className='px-[20px] py-3 transition-all hover:text-primary hover:underline'
@@ -106,8 +161,7 @@ export default function Header() {
 						Create account
 					</Link>
 				</div>
-			}
-
+			)}
 		</div>
 	)
 }

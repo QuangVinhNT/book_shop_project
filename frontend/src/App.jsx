@@ -24,7 +24,7 @@ import Admin from './Admin'
 import ProductList from './pages/Admin/ProductList/ProductList'
 import NotFound from './pages/NotFound'
 import ProductUpdate from './pages/Admin/ProductList/ProductUpdate/ProductUpdate'
-import ViewProduct from './pages/Admin/ProductList/ViewProduct'
+import ViewProduct from './pages/Admin/ProductList/ProductDetail/ViewProduct'
 import ForgotPassword from './pages/Auth/ForgotPassword'
 import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion'
 import Loading from './components/notification/Loading/Loading'
@@ -146,7 +146,7 @@ function App() {
 	if (loading) {
 		return (
 			<div className='h-screen relative'>
-				<Loading/>
+				<Loading />
 			</div>
 		)
 	}
