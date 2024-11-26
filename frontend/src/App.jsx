@@ -28,6 +28,7 @@ import ViewProduct from './pages/Admin/ProductList/ProductDetail/ViewProduct'
 import ForgotPassword from './pages/Auth/ForgotPassword'
 import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion'
 import Loading from './components/notification/Loading/Loading'
+import Dashboard from './pages/Admin/Dashboard/Dashboard'
 
 const router = createBrowserRouter([
 	{
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
 		path: '/admin',
 		element: <Admin />,
 		children: [
+			{
+				path: '/admin',
+				element: <Dashboard />
+			},
 			{
 				path: '/admin/products',
 				element: <ProductList />
