@@ -94,7 +94,7 @@ export default function Sidebar() {
 							</Link>
 						</div>
 					</div>
-					<Link>
+					<Link to={'/admin/orders'}>
 						<div
 							className={`flex items-center gap-2 py-3 px-2 rounded-lg transition-all cursor-pointer hover:bg-light hover:text-primary ${
 								tabSelected === 'Orders' && 'bg-light text-primary'
