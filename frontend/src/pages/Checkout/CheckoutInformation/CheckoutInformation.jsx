@@ -58,74 +58,52 @@ const cities = [
 	}
 ]
 
-export default function CheckoutInformation() {
-
-	const [paymentMethod, setPaymentMethod] = useState('')
-
-	const [detail, setDetail] = useState('')
-	const [citySelected, setCitySelected] = useState('')
-	const [districtSelected, setDistrictSelected] = useState('')
-	const [wardSelected, setWardSelected] = useState('')
-
-	const [isChecked, setIsChecked] = useState(false)
-
-	const account = useAuthStore(state => state.account)
-	const { register } = useForm({
-		defaultValues: {
-			full_name: account.full_name,
-			email: account.email,
-			phone_number: account.phone_number
-		}
-	})
-
-	const handleCheck = () => {
-		setIsChecked(!isChecked)
-		if (!isChecked) {
-			setDetail(JSON.parse(account.address).detail)
-			setCitySelected(JSON.parse(account.address).city)
-			setDistrictSelected(JSON.parse(account.address).district)
-			setWardSelected(JSON.parse(account.address).ward)
-		}
-		else {
-			setDetail('')
-			setCitySelected('')
-			setDistrictSelected('')
-			setWardSelected('')
-		}
+export default function CheckoutInformation(
+	{ detail,
+		setDetail,
+		citySelected,
+		setCitySelected,
+		districtSelected,
+		setDistrictSelected,
+		setWardSelected,
+		wardSelected,
+		paymentMethod,
+		setPaymentMethod,
+		full_name,
+		setFullName,
+		email,
+		phone_number,
+		setPhoneNumber
 	}
+) {
 
 	return (
 		<div className='w-2/3'>
 			<div className='text-sm flex flex-col gap-4'>
-				<input
-					{...register('full_name')}
-					type='text'
-					placeholder='Name'
-					className='focus:outline-none border border-gray-300 rounded-md w-full px-2 py-1'
-				/>
+				<div>
+					<input
+						placeholder='Name'
+						value={full_name}
+						onChange={e => setFullName(e.target.value)}
+						className='focus:outline-none border border-gray-300 rounded-md w-full px-2 py-1'
+					/>
+				</div>
 				<div className='flex gap-6'>
 					<input
-						{...register('email')}
-						type='email'
-						placeholder='Email'
+						value={email}
+						disabled
 						className='focus:outline-none border border-gray-300 rounded-md w-3/5 px-2 py-1.5'
 					/>
-					<input
-						{...register('phone_number')}
-						type='text'
-						placeholder='Phone number'
-						className='focus:outline-none border border-gray-300 rounded-md w-2/5 px-2 py-1'
-					/>
-				</div>
-				<div className='flex items-center justify-center gap-2'>
-					<label>Use current address</label>
-					<input type="checkbox"
-						id="checkbox"
-						checked={isChecked}
-						onChange={handleCheck} />
+					<div>
+						<input
+							onChange={e => setPhoneNumber(e.target.value)}
+							placeholder='Phone number'
+							value={phone_number}
+							className='focus:outline-none border border-gray-300 rounded-md w-full px-2 py-1'
+						/>
+					</div>
 				</div>
 				<input
-					// value={isChecked ? JSON.parse(account.address).detail : ''}
 					onChange={e => setDetail(e.target.value)}
 					value={detail}
 					type='text'
@@ -217,7 +195,6 @@ export default function CheckoutInformation() {
 						Additional information
 					</label>
 					<textarea
-						{...register('note')}
 						id='txtArea'
 						placeholder='Write notes for your application...'
 						className='focus:outline-none border border-gray-300 rounded-lg p-2 h-32'

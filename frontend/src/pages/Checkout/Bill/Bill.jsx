@@ -1,14 +1,16 @@
-import {IoDocumentTextSharp} from 'react-icons/io5'
+import { IoDocumentTextSharp } from 'react-icons/io5'
 
 import CheckoutSuccess from '../CheckoutStatus/CheckoutSuccess'
 import CheckoutError from '../CheckoutStatus/CheckoutError'
-import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useCartStore } from '~/stores/cartStore'
 import { useAuthStore } from '~/stores/authStore'
 import { useForm } from 'react-hook-form'
 
-export default function Bill() {
+export default function Bill({handleCheckout}) {
+
+
 	const cartItems = useCartStore(state => state.cartItems)
 	const [checkoutStatus, setCheckoutStatus] = useState(true)
 	const [checkoutNoti, setCheckoutNoti] = useState(false)
@@ -16,13 +18,6 @@ export default function Bill() {
 
 	console.log(cartItems)
 
-	const handleCheckout = async () => {
-		
-		// setCheckoutNoti(true)
-		// await new Promise((resolve) => setTimeout(resolve, 2000))
-		// setCheckoutNoti(false)
-		// navigate('/books')
-	}
 
 	return (
 		<>

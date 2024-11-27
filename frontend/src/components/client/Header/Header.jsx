@@ -1,12 +1,13 @@
 import {useState} from 'react'
 import {CiSearch} from 'react-icons/ci'
 import {IoCartOutline} from 'react-icons/io5'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import {useAuthStore} from '~/stores/authStore'
 import {useCartStore} from '~/stores/cartStore'
 import {environment} from '~/utils/environment'
 export default function Header() {
+	const navigate = useNavigate()
 	const [showDropdown, setShowDropdown] = useState(false)
 
 	const setAccount = useAuthStore((state) => state.setAccount)
@@ -30,6 +31,8 @@ export default function Header() {
 					isLoading: false,
 					autoClose: 3000
 				})
+				navigate('/')
+				
 			} else {
 				const data = await response.json()
 				toast.update(toastId, {

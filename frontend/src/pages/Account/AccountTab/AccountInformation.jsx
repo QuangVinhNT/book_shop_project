@@ -90,6 +90,10 @@ export default function AccountInformation({ account }) {
 			toast.warn('Select district')
 			return
 		}
+		else if (citySelected && !detailAddress) {
+			toast.warn('Enter detail address')
+			return
+		}
 
 		const toastId = toast.loading('Please wait...')
 
