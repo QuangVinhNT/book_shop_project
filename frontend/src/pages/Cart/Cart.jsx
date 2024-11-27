@@ -102,10 +102,13 @@ export default function Cart() {
 									<span className='text-cap font-bold'>Subtotal</span>
 									<span className='text-lg font-semibold'>
 										${' '}
-										{cartItems.reduce(
-											(total, item) => item.quantity * item.product.price,
-											0
-										)}
+										{cartItems
+											.reduce(
+												(total, item) =>
+													total + item.quantity * item.product.price,
+												0
+											)
+											.toFixed(2)}
 									</span>
 								</div>
 								<div className='flex justify-between items-center'>
@@ -118,10 +121,13 @@ export default function Cart() {
 								<span className='text-cap font-bold'>Total</span>
 								<span className='text-lg font-semibold'>
 									${' '}
-									{cartItems.reduce(
-										(total, item) => item.quantity * item.product.price,
-										0
-									)}
+									{cartItems
+										.reduce(
+											(total, item) =>
+												total + item.quantity * item.product.price,
+											0
+										)
+										.toFixed(2)}
 								</span>
 							</div>
 							<Link to={'/checkout'}>
