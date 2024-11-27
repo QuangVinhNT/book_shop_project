@@ -1,4 +1,9 @@
-import {FaAngleDown, FaEye} from 'react-icons/fa6'
+import {
+	FaAngleDown,
+	FaChevronLeft,
+	FaChevronRight,
+	FaEye
+} from 'react-icons/fa6'
 import {IoMdOptions} from 'react-icons/io'
 import {LuPencil} from 'react-icons/lu'
 
@@ -98,27 +103,10 @@ const recentOrders = [
 export default function OrdersTable() {
 	return (
 		<div>
-			<div className='flex items-center justify-between p-5'>
-				<div className='flex items-center gap-2'>
-					<span className='text-xl font-medium'>Recent Orders</span>
-					<span className='font-medium text-customGreen bg-lighterGreen px-3 py-1 text-sm rounded-full'>
-						+2 Orders
-					</span>
-				</div>
-				<div className='flex items-center gap-3'>
-					<button className='bg-white text-cap px-3 py-2 rounded-md flex items-center gap-2 transition border border-cap hover:border-primary hover:text-primary'>
-						<IoMdOptions className='text-xl' />
-						<span className='font-medium text-sm'>Filter</span>
-					</button>
-					<button className='text-sm font-medium bg-primary text-white px-3 py-2 rounded-md transition-all hover:brightness-125'>
-						See More
-					</button>
-				</div>
-			</div>
 			<table className='w-full'>
 				<thead className='text-sm'>
 					<tr>
-						<th className='text-left'>
+						<th className='bg-lightGray text-left rounded-tl-md'>
 							<div className='p-4 flex items-center justify-between'>
 								<input
 									type='checkbox'
@@ -126,34 +114,42 @@ export default function OrdersTable() {
 								/>
 							</div>
 						</th>
-						<th className='font-medium text-cap p-4 text-left'>Order ID</th>
-						<th className='text-left'>
+						<th className='bg-lightGray font-medium text-cap p-4 text-left'>
+							Order ID
+						</th>
+						<th className='bg-lightGray text-left'>
 							<div className='flex items-center gap-5 font-medium text-cap p-4'>
 								<span>Product</span>
 								<FaAngleDown />
 							</div>
 						</th>
-						<th className='text-left'>
+						<th className='bg-lightGray text-left'>
 							<div className='flex items-center gap-5 font-medium text-cap p-4'>
 								<span>Product</span>
 								<FaAngleDown />
 							</div>
 						</th>
-						<th className='font-medium text-cap p-4 text-left'>Customer</th>
-						<th className='text-left'>
+						<th className='bg-lightGray font-medium text-cap p-4 text-left'>
+							Customer
+						</th>
+						<th className='bg-lightGray text-left'>
 							<div className='flex items-center gap-5 font-medium text-cap p-4'>
 								<span>Total</span>
 								<FaAngleDown />
 							</div>
 						</th>
-						<th className='font-medium text-cap p-4 text-left'>Payment</th>
-						<th className='text-left'>
+						<th className='bg-lightGray font-medium text-cap p-4 text-left'>
+							Payment
+						</th>
+						<th className='bg-lightGray text-left'>
 							<div className='flex items-center gap-5 font-medium text-cap p-4'>
 								<span>Status</span>
 								<FaAngleDown />
 							</div>
 						</th>
-						<th className='font-medium text-cap p-4'>Action</th>
+						<th className='bg-lightGray font-medium text-cap p-4 rounded-tr-md'>
+							Action
+						</th>
 					</tr>
 				</thead>
 				<tbody className='text-sm'>
@@ -204,6 +200,37 @@ export default function OrdersTable() {
 					})}
 				</tbody>
 			</table>
+			<div className='flex justify-between items-center p-4 border-t border-gray-300'>
+				<span className='text-gray-500 text-sm font-medium'>
+					Showing 1-10 from 100
+				</span>
+				<div className='flex gap-2'>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg cursor-pointer transition-all hover:bg-primary hover:text-white size-8 flex justify-center items-center'>
+						<FaChevronLeft />
+					</span>
+					<span className='activePagination text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						1
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						2
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						3
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						4
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						5
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						...
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg cursor-pointer transition-all hover:bg-primary hover:text-white font-medium size-8 flex justify-center items-center'>
+						<FaChevronRight />
+					</span>
+				</div>
+			</div>
 		</div>
 	)
 }

@@ -30,6 +30,7 @@ import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAd
 import Loading from './components/notification/Loading/Loading'
 import Dashboard from './pages/Admin/Dashboard/Dashboard'
 import OrdersInvoice from './pages/Admin/OrdersInvoice/OrdersInvoice'
+import Categories from './pages/Admin/Categories/Categories'
 
 const router = createBrowserRouter([
 	{
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
 			{
 				path: '/admin/products',
 				element: <ProductList />
+			},
+			{
+				path: '/admin/categories',
+				element: <Categories />
 			},
 			{
 				path: '/admin/orders',

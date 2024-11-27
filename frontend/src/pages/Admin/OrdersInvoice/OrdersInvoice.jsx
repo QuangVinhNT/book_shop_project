@@ -16,7 +16,7 @@ export default function OrdersInvoice() {
 					</button>
 					<button className='bg-primary text-white px-3 py-2 rounded-md flex items-center gap-1 transition hover:brightness-125'>
 						<GoPlus className='text-2xl' />
-						<span className='font-medium text-sm'>Add Product</span>
+						<span className='font-medium text-sm'>Add Order</span>
 					</button>
 				</div>
 			</div>

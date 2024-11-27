@@ -1,4 +1,9 @@
-import {FaAngleDown, FaEye} from 'react-icons/fa6'
+import {
+	FaAngleDown,
+	FaChevronLeft,
+	FaChevronRight,
+	FaEye
+} from 'react-icons/fa6'
 import {IoMdOptions} from 'react-icons/io'
 import {LuPencil} from 'react-icons/lu'
 
@@ -204,6 +209,37 @@ export default function RecentOrdersTable() {
 					})}
 				</tbody>
 			</table>
+			<div className='flex justify-between items-center p-4 border-t border-gray-300'>
+				<span className='text-gray-500 text-sm font-medium'>
+					Showing 1-10 from 100
+				</span>
+				<div className='flex gap-2'>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg cursor-pointer transition-all hover:bg-primary hover:text-white size-8 flex justify-center items-center'>
+						<FaChevronLeft />
+					</span>
+					<span className='activePagination text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						1
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						2
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						3
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						4
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						5
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg size-8 text-center cursor-pointer transition-all hover:bg-primary hover:text-white font-medium'>
+						...
+					</span>
+					<span className='text-primary bg-light text-xs p-2 rounded-lg cursor-pointer transition-all hover:bg-primary hover:text-white font-medium size-8 flex justify-center items-center'>
+						<FaChevronRight />
+					</span>
+				</div>
+			</div>
 		</div>
 	)
 }

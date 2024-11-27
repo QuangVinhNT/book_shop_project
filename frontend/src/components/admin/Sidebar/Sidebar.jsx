@@ -82,6 +82,7 @@ export default function Sidebar() {
 								Product List
 							</Link>
 							<Link
+								to={'/admin/categories'}
 								className={`py-3 pl-9 rounded-lg transition-all cursor-pointer hover:bg-primary hover:text-white ${
 									tabSelected === 'Categories' && 'bg-primary text-white'
 								}`}
