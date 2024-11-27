@@ -87,17 +87,34 @@ export default function BookInformation({book}) {
 					</div>
 				</div>
 				<div className='flex flex-col justify-between'>
-					{book.thumbnails.map((image, index) => {
-						return (
-							<div key={index}>
-								<img
-									src={image}
-									alt=''
-									className='lg:w-[750px] lg:h-[115px] 2xl:w-[650px] 2xl:h-[120px]'
-								/>
-							</div>
-						)
-					})}
+					<div className='w-[130px] h-[130px] rounded-lg overflow-hidden'>
+						<img
+							src={book.image}
+							alt=''
+							className='scale-[200%] translate-x-1/2 -translate-y-1/2'
+						/>
+					</div>
+					<div className='w-[130px] h-[130px] rounded-lg overflow-hidden'>
+						<img
+							src={book.image}
+							alt=''
+							className='scale-[200%] translate-x-1/2 translate-y-1/2'
+						/>
+					</div>
+					<div className='w-[130px] h-[130px] rounded-lg overflow-hidden'>
+						<img
+							src={book.image}
+							alt=''
+							className='scale-[200%] -translate-x-1/2 -translate-y-1/2'
+						/>
+					</div>
+					<div className='w-[130px] h-[130px] rounded-lg overflow-hidden'>
+						<img
+							src={book.image}
+							alt=''
+							className='scale-[200%] -translate-x-1/2 translate-y-1/2'
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
