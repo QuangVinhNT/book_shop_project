@@ -35,3 +35,13 @@
 	color: #4543ae;
 	background-color: #dedefa;
 }
+
+.blockedStatus {
+	background-color: #feedec;
+	color: #f04438;
+}
+
+.activeStatus {
+	background-color: #e7f4ee;
+	color: #0d894f;
+}
