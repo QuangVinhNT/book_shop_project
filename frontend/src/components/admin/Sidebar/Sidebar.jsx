@@ -65,7 +65,7 @@ export default function Sidebar() {
 							)}
 						</div>
 						<div
-							className={`flex flex-col text-sm transition-all ${
+							className={`flex flex-col text-sm transition-all gap-2 ${
 								showProductChild ? 'mt-2' : '-mt-[88px]'
 							}`}
 						>
@@ -82,6 +82,7 @@ export default function Sidebar() {
 								Product List
 							</Link>
 							<Link
+								to={'/admin/categories'}
 								className={`py-3 pl-9 rounded-lg transition-all cursor-pointer hover:bg-primary hover:text-white ${
 									tabSelected === 'Categories' && 'bg-primary text-white'
 								}`}
@@ -94,7 +95,7 @@ export default function Sidebar() {
 							</Link>
 						</div>
 					</div>
-					<Link>
+					<Link to={'/admin/orders'}>
 						<div
 							className={`flex items-center gap-2 py-3 px-2 rounded-lg transition-all cursor-pointer hover:bg-light hover:text-primary ${
 								tabSelected === 'Orders' && 'bg-light text-primary'
@@ -109,7 +110,7 @@ export default function Sidebar() {
 							<span className='text-sm'>Orders</span>
 						</div>
 					</Link>
-					<Link>
+					<Link to={'/admin/customers'}>
 						<div
 							className={`flex items-center gap-2 py-3 px-2 rounded-lg transition-all cursor-pointer hover:bg-light hover:text-primary ${
 								tabSelected === 'Customers' && 'bg-light text-primary'
