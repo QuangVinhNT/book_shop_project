@@ -24,10 +24,12 @@ import Admin from './Admin'
 import ProductList from './pages/Admin/ProductList/ProductList'
 import NotFound from './pages/NotFound'
 import ProductUpdate from './pages/Admin/ProductList/ProductUpdate/ProductUpdate'
-import ViewProduct from './pages/Admin/ProductList/ViewProduct'
+import ViewProduct from './pages/Admin/ProductList/ProductDetail/ViewProduct'
 import ForgotPassword from './pages/Auth/ForgotPassword'
 import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion'
 import { useCartStore } from './stores/cartStore'
+import Loading from './components/notification/Loading/Loading'
+import Dashboard from './pages/Admin/Dashboard/Dashboard'
 
 const router = createBrowserRouter([
 	{
@@ -64,6 +66,10 @@ const router = createBrowserRouter([
 		path: '/admin',
 		element: <Admin />,
 		children: [
+			{
+				path: '/admin',
+				element: <Dashboard />
+			},
 			{
 				path: '/admin/products',
 				element: <ProductList />
@@ -147,8 +153,8 @@ function App() {
 
 	if (loading) {
 		return (
-			<div className='flex items-center text-3xl text-red-500 justify-center'>
-				Loading
+			<div className='h-screen relative'>
+				<Loading />
 			</div>
 		)
 	}
