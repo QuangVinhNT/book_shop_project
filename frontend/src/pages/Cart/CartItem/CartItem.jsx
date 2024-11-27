@@ -1,9 +1,11 @@
-import {FaMinus, FaPlus} from 'react-icons/fa'
-import {IoTrashBinOutline} from 'react-icons/io5'
+import { FaMinus, FaPlus } from 'react-icons/fa'
+import { IoTrashBinOutline } from 'react-icons/io5'
 import { useCartStore } from '~/stores/cartStore'
 
-export default function CartItem({item}) {
+export default function CartItem({ item }) {
 	const removeItem = useCartStore(state => state.removeItem)
+	const addToCart = useCartStore(state => state.addToCart)
+	const decreaseQuantity = useCartStore(state => state.decreaseQuantity)
 
 	return (
 		<div className='relative px-5 py-5 bg-white shadow-roundShadow shadow-light rounded-xl'>
@@ -21,7 +23,7 @@ export default function CartItem({item}) {
 					<div className='border-2 border-gray-200 rounded-md flex items-center w-fit mx-auto bg-gray-200'>
 						<button
 							className='px-4 transition-all hover:text-primary py-4'
-							// onClick={() => setQuantity(quantity + 1)}
+							onClick={() => addToCart(item.product.id)}
 						>
 							<FaPlus className='text-sm' />
 						</button>
@@ -30,9 +32,7 @@ export default function CartItem({item}) {
 						</span>
 						<button
 							className='px-4 transition-all hover:text-primary py-4'
-							// onClick={() => {
-							// 	quantity > 0 ? setQuantity(quantity - 1) : setQuantity(0)
-							// }}
+							onClick={() => decreaseQuantity(item.product.id)}
 						>
 							<FaMinus className='text-sm' />
 						</button>

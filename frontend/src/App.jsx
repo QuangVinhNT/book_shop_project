@@ -27,6 +27,7 @@ import ProductUpdate from './pages/Admin/ProductList/ProductUpdate/ProductUpdate
 import ViewProduct from './pages/Admin/ProductList/ViewProduct'
 import ForgotPassword from './pages/Auth/ForgotPassword'
 import ProductAddition from './pages/Admin/ProductList/ProductAddition/ProductAddtion'
+import { useCartStore } from './stores/cartStore'
 
 const router = createBrowserRouter([
 	{
@@ -118,6 +119,7 @@ const router = createBrowserRouter([
 function App() {
 	const [loading, setLoading] = useState(true)
 	const setAccount = useAuthStore((state) => state.setAccount)
+	const getQuantityCart = useCartStore(state => state.getQuantityCart)
 
 	const getAccount = async () => {
 		setLoading(true)
@@ -130,6 +132,7 @@ function App() {
 			if (response.ok) {
 				const data = await response.json()
 				setAccount(data.account)
+				await getQuantityCart()
 			} else {
 				setAccount(null)
 			}

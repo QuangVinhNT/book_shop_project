@@ -39,7 +39,8 @@ export const useCartStore = create((set) => ({
         });
 
         // Gọi lại API để cập nhật danh sách giỏ hàng
-        await useCartStore.getState().getCartItems();
+        await useCartStore.getState().getCartItems()
+        await useCartStore.getState().getQuantityCart()
       } else {
         toast.update(toastId, {
           render: data.message || 'Failed to remove item',
@@ -54,6 +55,28 @@ export const useCartStore = create((set) => ({
     }
   },
 
+  getQuantityCart: async () => {
+    const accountId = useAuthStore.getState().account?.id;
+
+    if (accountId) {
+      try {
+        const response = await fetch(`${environment.BACKEND_URL}/cart/quantity/${accountId}`)
+
+        const data = await response.json()
+        if (response.ok) {
+          set((state) => ({
+            ...state,
+            quantity: data.data.total_quantity
+          }))
+        }
+        else {
+          console.log(data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  },
 
   getCartItems: async () => {
     const accountId = useAuthStore.getState().account?.id;
@@ -105,7 +128,8 @@ export const useCartStore = create((set) => ({
 
       if (response.ok) {
         const data = await response.json();
-        await useCartStore.getState().getCartItems(); 
+        await useCartStore.getState().getCartItems();
+        await useCartStore.getState().getQuantityCart()
         toast.update(toastId, { type: 'success', autoClose: 3000, isLoading: false, render: 'Add to cart success' })
       } else {
         toast.update(toastId, { render: 'Add to cart error', type: 'error', autoClose: 3000, isLoading: false, })
@@ -114,5 +138,35 @@ export const useCartStore = create((set) => ({
       toast.update(toastId, { render: 'Internal server error', type: 'error', autoClose: 3000, isLoading: false, })
     }
   },
+
+  decreaseQuantity: async (product_id) => {
+    const accountId = useAuthStore.getState().account?.id;
+
+    const toastId = toast.loading('Please wait...');
+    try {
+      const response = await fetch(`${environment.BACKEND_URL}/cart/decrease`, {
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify({
+          account_id: accountId,
+          product_id: product_id,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        await useCartStore.getState().getCartItems();
+        await useCartStore.getState().getQuantityCart()
+        toast.update(toastId, { type: 'success', autoClose: 3000, isLoading: false, render: 'decrease to cart success' })
+      } else {
+        toast.update(toastId, { render: 'decrease to cart error', type: 'error', autoClose: 3000, isLoading: false, })
+      }
+    } catch (error) {
+      toast.update(toastId, { render: 'Internal server error', type: 'error', autoClose: 3000, isLoading: false, })
+    }
+  }
 
 }))
