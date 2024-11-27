@@ -6,6 +6,7 @@ import book1 from '~/assets/images/book_1.png'
 import { useAuthStore } from '~/stores/authStore'
 import { useCartStore } from '~/stores/cartStore'
 import { useEffect } from 'react'
+import cartEmpty from '~/assets/images/cart-empty.jpg'
 
 const items = [
 	{
@@ -41,6 +42,9 @@ export default function Cart() {
 
 	return (
 		<div className='pt-10'>
+			<Link to='/books' className='flex items-center justify-center text-2xl py-2'>
+				<span>^---- Back to book</span>
+			</Link>
 			<div className='w-3/4 mx-auto mb-10'>
 				<div className='bg-lessDark text-white text-sm font-medium p-5 rounded-xl'>
 					<span className='inline-block w-2/5 text-center'>Item</span>
@@ -51,16 +55,21 @@ export default function Cart() {
 					<span className='inline-block w-1/5 text-center'>Total Price</span>
 					<span className='inline-block w-[40px] text-center'></span>
 				</div>
-				<div className='flex flex-col gap-20 py-20 '>
-					{cartItems.map((item, index) => {
-						return (
-							<div key={index}>
-								<CartItem item={item} />
-							</div>
-						)
-					})}
-				</div>
-				<div className='bg-[#f5ecf7] flex px-16 py-10 gap-36 rounded-xl'>
+				{cartItems.length == 0 ?
+					<div className='flex justify-center py-3'>
+						<img src={cartEmpty} />
+					</div> :
+					<div className='flex flex-col gap-20 py-20 '>
+						{cartItems.map((item, index) => {
+							return (
+								<div key={index}>
+									<CartItem item={item} />
+								</div>
+							)
+						})}
+					</div>
+				}
+				{cartItems.length > 0 && <div className='bg-[#f5ecf7] flex px-16 py-10 gap-36 rounded-xl'>
 					<div className='w-1/2 flex flex-col gap-5'>
 						<h2 className='text-3xl font-semibold'>Shopping Summary</h2>
 						<p className='text-cap'>
@@ -82,21 +91,17 @@ export default function Cart() {
 						<div className='flex flex-col gap-2.5'>
 							<div className='flex justify-between items-center'>
 								<span className='text-cap font-bold'>Subtotal</span>
-								<span className='text-lg font-semibold'>$ 56.7</span>
-							</div>
-							<div className='flex justify-between items-center'>
-								<span className='text-cap font-bold'>Tax</span>
-								<span className='text-lg font-semibold'>$ 56.7</span>
+								<span className='text-lg font-semibold'>$ {cartItems.reduce((total, item) => item.quantity * item.product.price, 0)}</span>
 							</div>
 							<div className='flex justify-between items-center'>
 								<span className='text-cap font-bold'>Discount</span>
-								<span className='text-lg font-semibold'>$ 56.7</span>
+								<span className='text-lg font-semibold'>$ 0</span>
 							</div>
 						</div>
 						<hr className='mt-5 mb-4 border-primary' />
 						<div className='flex justify-between'>
 							<span className='text-cap font-bold'>Total</span>
-							<span className='text-lg font-semibold'>$ 56.7</span>
+							<span className='text-lg font-semibold'>$ {cartItems.reduce((total, item) => item.quantity * item.product.price, 0)}</span>
 						</div>
 						<Link to={'/checkout'}>
 							<button className='block w-full bg-lessDark text-white uppercase text-sm py-3 mt-3 rounded-md transition-all hover:brightness-125'>
@@ -110,7 +115,7 @@ export default function Cart() {
 							Continue Shopping
 						</Link>
 					</div>
-				</div>
+				</div>}
 			</div>
 			<Summary />
 		</div>

@@ -224,6 +224,7 @@ function Register() {
 							</p>
 						</div>
 						<button
+							type='button'
 							className='shadow-roundShadow shadow-light flex items-center justify-center gap-2 w-full py-2.5 rounded-md transition-all hover:bg-light hover:text-primary'
 							onClick={() => registerGoogle()}
 						>

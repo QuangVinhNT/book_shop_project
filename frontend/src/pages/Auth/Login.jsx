@@ -9,11 +9,13 @@ import loginBg from '~/assets/images/login_bg.png'
 import {BsEnvelope} from 'react-icons/bs'
 import {FiLock} from 'react-icons/fi'
 import googleIcon from '~/assets/google_icon_colored.svg'
+import { useCartStore } from '~/stores/cartStore'
 
 function Login() {
 	const [inputEmailForgot, setInputEmailForgot] = useState('')
 	const [show, setShow] = useState(false)
 	const navigate = useNavigate()
+	const getQuantityCart = useCartStore(state => state.getQuantityCart)
 
 	const {
 		register,
@@ -57,6 +59,7 @@ function Login() {
 						isLoading: false,
 						autoClose: 3000
 					})
+					await getQuantityCart()
 					navigate('/')
 				}
 			} else {
@@ -97,12 +100,14 @@ function Login() {
 			const data = await response.json()
 
 			if (response.ok) {
+				await getQuantityCart()
 				toast.update(toastId, {
 					render: data.message || 'Login success.',
 					type: 'success',
 					isLoading: false,
 					autoClose: 3000
 				})
+				
 				setAccount(data.account)
 				navigate('/')
 			} else {
@@ -229,7 +234,7 @@ function Login() {
 							</div>
 							<p className='text-red-400'>{errors.password?.message}</p>
 						</div>
-						<div className='flex justify-end mt-4 mb-8'>
+						<div className='flex justify-end mt-4 mb-8 cursor-pointer'>
 							<span
 								className='underline text-sm font-medium text-cap'
 								onClick={() => setShow(true)}
@@ -246,6 +251,7 @@ function Login() {
 							Login now
 						</button>
 						<button
+							type='button'
 							className='shadow-roundShadow shadow-light mt-4 flex items-center justify-center gap-2 w-full py-2.5 rounded-md transition-all hover:bg-light hover:text-primary'
 							onClick={() => login()}
 						>

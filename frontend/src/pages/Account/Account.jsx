@@ -5,6 +5,7 @@ import Order from './AccountTab/Order'
 import book1 from '~/assets/images/book_1.png'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '~/stores/authStore'
+import ChangePassword from './AccountTab/ChangePassword'
 
 const user = {
 	firstName: 'Nguyễn',
@@ -109,22 +110,20 @@ export default function Account() {
 						Order
 					</span>
 					<span
-						className={`${tabSelect === 'Order'
+						className={`${tabSelect === 'Change password'
 							? 'text-primary cursor-default'
 							: 'transition-all hover:underline hover:text-primary cursor-pointer'
 							} `}
-						onClick={() => setTabSelect('Order')}
+						onClick={() => setTabSelect('Change password')}
 					>
 						Change password
 					</span>
 				</div>
 			</div>
 			<div className='w-3/4'>
-				{tabSelect === 'Account information' ? (
-					<AccountInformation account={account} />
-				) : (
-					<Order orders={user.orders} />
-				)}
+				{tabSelect === 'Account information' && <AccountInformation account={account} />}
+				{tabSelect === 'Order' && <Order orders={user.orders} />}
+				{tabSelect === 'Change password' && <ChangePassword />}
 			</div>
 		</div>
 	)

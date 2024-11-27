@@ -5,11 +5,6 @@ function Profile() {
 
   const account = useAuthStore(state => state.account)
 
-  // Hàm xử lý thay đổi mật khẩu
-  const handleChangePassword = () => {
-    alert("Redirecting to change password...");
-  };
-
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <div className="flex items-center space-x-6">
@@ -39,7 +34,7 @@ function Profile() {
       {!account.is_social_login && (
         <div className="mt-6">
           <button
-            onClick={handleChangePassword}
+            // onClick={handleChangePassword}
             className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
           >
             Change Password

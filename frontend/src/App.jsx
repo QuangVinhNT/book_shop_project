@@ -126,6 +126,7 @@ function App() {
 	const [loading, setLoading] = useState(true)
 	const setAccount = useAuthStore((state) => state.setAccount)
 	const getQuantityCart = useCartStore(state => state.getQuantityCart)
+	const getCartItems = useCartStore(state => state.getCartItems)
 
 	const getAccount = async () => {
 		setLoading(true)
@@ -139,6 +140,7 @@ function App() {
 				const data = await response.json()
 				setAccount(data.account)
 				await getQuantityCart()
+				await getCartItems()
 			} else {
 				setAccount(null)
 			}

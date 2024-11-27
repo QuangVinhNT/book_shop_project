@@ -1,6 +1,8 @@
 import vnpayImg from '~/assets/images/vnpay.png'
 import cashImg from '~/assets/images/cash.png'
-import {useRef, useState} from 'react'
+import { useRef, useState } from 'react'
+import { useAuthStore } from '~/stores/authStore'
+import { useForm } from 'react-hook-form'
 
 const cities = [
 	{
@@ -57,32 +59,75 @@ const cities = [
 ]
 
 export default function CheckoutInformation() {
+
 	const [paymentMethod, setPaymentMethod] = useState('')
+
+	const [detail, setDetail] = useState('')
 	const [citySelected, setCitySelected] = useState('')
 	const [districtSelected, setDistrictSelected] = useState('')
 	const [wardSelected, setWardSelected] = useState('')
+
+	const [isChecked, setIsChecked] = useState(false)
+
+	const account = useAuthStore(state => state.account)
+	const { register } = useForm({
+		defaultValues: {
+			full_name: account.full_name,
+			email: account.email,
+			phone_number: account.phone_number
+		}
+	})
+
+	const handleCheck = () => {
+		setIsChecked(!isChecked)
+		if (!isChecked) {
+			setDetail(JSON.parse(account.address).detail)
+			setCitySelected(JSON.parse(account.address).city)
+			setDistrictSelected(JSON.parse(account.address).district)
+			setWardSelected(JSON.parse(account.address).ward)
+		}
+		else {
+			setDetail('')
+			setCitySelected('')
+			setDistrictSelected('')
+			setWardSelected('')
+		}
+	}
 
 	return (
 		<div className='w-2/3'>
 			<div className='text-sm flex flex-col gap-4'>
 				<input
+					{...register('full_name')}
 					type='text'
 					placeholder='Name'
 					className='focus:outline-none border border-gray-300 rounded-md w-full px-2 py-1'
 				/>
 				<div className='flex gap-6'>
 					<input
+						{...register('email')}
 						type='email'
 						placeholder='Email'
 						className='focus:outline-none border border-gray-300 rounded-md w-3/5 px-2 py-1.5'
 					/>
 					<input
+						{...register('phone_number')}
 						type='text'
 						placeholder='Phone number'
 						className='focus:outline-none border border-gray-300 rounded-md w-2/5 px-2 py-1'
 					/>
 				</div>
+				<div className='flex items-center justify-center gap-2'>
+					<label>Use current address</label>
+					<input type="checkbox"
+						id="checkbox"
+						checked={isChecked}
+						onChange={handleCheck} />
+				</div>
 				<input
+					// value={isChecked ? JSON.parse(account.address).detail : ''}
+					onChange={e => setDetail(e.target.value)}
+					value={detail}
 					type='text'
 					placeholder='Address'
 					className='focus:outline-none border border-gray-300 rounded-md w-full px-2 py-1'
@@ -93,8 +138,7 @@ export default function CheckoutInformation() {
 							City
 						</span>
 						<select
-							name=''
-							id=''
+							value={citySelected}
 							className='focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer'
 							onChange={(e) => {
 								setCitySelected(e.target.value)
@@ -117,16 +161,13 @@ export default function CheckoutInformation() {
 							District
 						</span>
 						<select
-							name=''
-							id=''
-							className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${
-								!citySelected && 'bg-lightGray'
-							}`}
+							value={districtSelected}
+							className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${!citySelected && 'bg-lightGray'
+								}`}
 							onChange={(e) => {
 								setDistrictSelected(e.target.value)
 								setWardSelected('')
 							}}
-							disabled={!citySelected}
 						>
 							<option value=''>Choose district</option>
 							{citySelected &&
@@ -146,11 +187,9 @@ export default function CheckoutInformation() {
 							Ward
 						</span>
 						<select
-							name=''
-							id=''
-							className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${
-								!districtSelected && 'bg-lightGray'
-							}`}
+							value={wardSelected}
+							className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${!districtSelected && 'bg-lightGray'
+								}`}
 							onChange={(e) => {
 								setWardSelected(e.target.value)
 							}}
@@ -178,7 +217,7 @@ export default function CheckoutInformation() {
 						Additional information
 					</label>
 					<textarea
-						name=''
+						{...register('note')}
 						id='txtArea'
 						placeholder='Write notes for your application...'
 						className='focus:outline-none border border-gray-300 rounded-lg p-2 h-32'
@@ -191,18 +230,16 @@ export default function CheckoutInformation() {
 				</span>
 				<div className='flex gap-10'>
 					<div
-						className={`flex items-center ${
-							paymentMethod === 'COD' ? 'bg-primary text-white' : 'bg-light '
-						} w-1/2 py-5 px-2 gap-3 font-medium rounded-xl cursor-pointer transition-all border-2 border-light hover:border-primary`}
+						className={`flex items-center ${paymentMethod === 'COD' ? 'bg-primary text-white' : 'bg-light '
+							} w-1/2 py-5 px-2 gap-3 font-medium rounded-xl cursor-pointer transition-all border-2 border-light hover:border-primary`}
 						onClick={() => setPaymentMethod('COD')}
 					>
 						<img src={cashImg} alt='' className='w-20' />
 						<span>{`Cash on Delivery (COD)`}</span>
 					</div>
 					<div
-						className={`flex items-center ${
-							paymentMethod === 'VNP' ? 'bg-primary text-white' : 'bg-light '
-						} w-1/2 py-5 px-2 gap-3 font-medium rounded-xl cursor-pointer transition-all border-2 border-light hover:border-primary`}
+						className={`flex items-center ${paymentMethod === 'VNP' ? 'bg-primary text-white' : 'bg-light '
+							} w-1/2 py-5 px-2 gap-3 font-medium rounded-xl cursor-pointer transition-all border-2 border-light hover:border-primary`}
 						onClick={() => setPaymentMethod('VNP')}
 					>
 						<img src={vnpayImg} alt='' className='w-20' />

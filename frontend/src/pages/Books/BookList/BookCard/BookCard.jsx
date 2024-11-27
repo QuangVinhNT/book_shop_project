@@ -48,7 +48,7 @@ export default function BookCard({book}) {
 				<span className='text-primary text-sm font-medium'>{book.category.name}</span>
 				<Link to={book.link}>
 					<h6 className='lg:text-xl 2xl:text-2xl font-bold hover:text-primary cursor-pointer transition-all overflow-hidden text-ellipsis line-clamp-2'>
-						{book.name}
+						{book.name} 
 					</h6>
 				</Link>
 				<span className='text-xs lg:font-medium 2xl:font-semibold text-cap'>

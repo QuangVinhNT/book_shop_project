@@ -4,17 +4,26 @@ import CheckoutSuccess from '../CheckoutStatus/CheckoutSuccess'
 import CheckoutError from '../CheckoutStatus/CheckoutError'
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
+import { useCartStore } from '~/stores/cartStore'
+import { useAuthStore } from '~/stores/authStore'
+import { useForm } from 'react-hook-form'
+
 export default function Bill() {
+	const cartItems = useCartStore(state => state.cartItems)
 	const [checkoutStatus, setCheckoutStatus] = useState(true)
 	const [checkoutNoti, setCheckoutNoti] = useState(false)
 	const navigate = useNavigate()
 
+	console.log(cartItems)
+
 	const handleCheckout = async () => {
-		setCheckoutNoti(true)
-		await new Promise((resolve) => setTimeout(resolve, 2000))
-		setCheckoutNoti(false)
-		navigate('/books')
+		
+		// setCheckoutNoti(true)
+		// await new Promise((resolve) => setTimeout(resolve, 2000))
+		// setCheckoutNoti(false)
+		// navigate('/books')
 	}
+
 	return (
 		<>
 			<div className='w-1/3 flex flex-col'>
@@ -27,15 +36,11 @@ export default function Bill() {
 					<div className='bg-light text-xs flex flex-col gap-2 p-5 rounded-lg'>
 						<div className='flex justify-between text-primary'>
 							<span>Subtotal</span>
-							<span className='font-semibold'>$ 56.7</span>
-						</div>
-						<div className='flex justify-between text-primary'>
-							<span>Tax</span>
-							<span className='font-semibold'>$ 4.33</span>
+							<span className='font-semibold'>$ {cartItems.reduce((total, item) => item.quantity * item.product.price, 0)}</span>
 						</div>
 						<div className='flex justify-between text-primary'>
 							<span>Discount</span>
-							<span className='font-semibold'>$ 1.00</span>
+							<span className='font-semibold'>$ 0</span>
 						</div>
 					</div>
 					<div>
@@ -45,7 +50,7 @@ export default function Bill() {
 						<div className='flex justify-between items-center py-5 mt-5'>
 							<div className='flex flex-col'>
 								<span className='text-xs text-cap'>Total</span>
-								<span className='text-xl text-primary font-semibold'>$ 60</span>
+								<span className='text-xl text-primary font-semibold'>$ {cartItems.reduce((total, item) => item.quantity * item.product.price, 0)}</span>
 							</div>
 							<IoDocumentTextSharp className='text-5xl text-primary' />
 						</div>

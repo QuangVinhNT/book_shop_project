@@ -32,6 +32,7 @@ Route::post('/auth/send-code-forgot', [AuthController::class, 'emailForgotVerify
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/auth/change-password', [AuthController::class, 'changePassword']);
+Route::post('/auth/change-profile', [AuthController::class, 'changeProfile']);
 
 Route::get('/admin/users', [AdminController::class, 'getAllUser']);
 Route::post('/admin/addUser', [AdminController::class, 'addUser']);

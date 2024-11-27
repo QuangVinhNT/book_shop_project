@@ -587,6 +587,21 @@ class AuthController extends Controller
         ], 200);
     }
 
+    public function changeProfile(Request $request) 
+    {
+        $account = Account::where('email', $request->email)->first();
+        $account->full_name = $request->full_name ?? $account->full_name;
+        $account->phone_number = $request->phone_number ?? $account->phone_number;
+        $account->address = $request->address ?? $account->address;
+
+        $account->save();
+        
+        return response()->json([
+            'message'=> 'Profile updated successfully',
+            'account'=> $account
+        ], 200);
+    }
+
     public function logout(Request $request)
     {
         $token = $request->cookie('access_token');
