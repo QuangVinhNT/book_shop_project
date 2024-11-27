@@ -1,23 +1,46 @@
 import {RxDashboard} from 'react-icons/rx'
-import {MdContentPaste} from 'react-icons/md'
+import {MdContentPaste, MdLogout} from 'react-icons/md'
 import {FaAngleUp} from 'react-icons/fa6'
 import {FaAngleDown} from 'react-icons/fa6'
 import {LuShoppingCart} from 'react-icons/lu'
 import {BsPeople} from 'react-icons/bs'
 import {FiHeadphones} from 'react-icons/fi'
 import {IoSettingsOutline} from 'react-icons/io5'
-import {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {useEffect, useState} from 'react'
+import {Link, useLocation} from 'react-router-dom'
 
 export default function Sidebar() {
-	const [tabSelected, setTabSelected] = useState(
-		localStorage.getItem('sidebarSelected') ?? 'Dashboard'
-	)
+	const location = useLocation()
+
+	const [tabSelected, setTabSelected] = useState('Dashboard')
 	const [showProductChild, setShowProductChild] = useState(
 		tabSelected === 'Product List' || tabSelected === 'Categories'
 			? true
 			: false
 	)
+
+	useEffect(() => {
+		switch (location.pathname) {
+			case '/admin':
+				setTabSelected('Dashboard')
+				break
+			case '/admin/products':
+				setTabSelected('Product List')
+				break
+			case '/admin/categories':
+				setTabSelected('Categories')
+				break
+			case '/admin/orders':
+				setTabSelected('Orders')
+				break
+			case '/admin/customers':
+				setTabSelected('Customers')
+				break
+			default:
+				setTabSelected('Dashboard')
+		}
+	}, [location.pathname])
+
 	return (
 		<div className='w-[250px] border-r border-gray-300'>
 			<div className='flex items-center gap-3 h-[70px] justify-center'>
@@ -30,7 +53,7 @@ export default function Sidebar() {
 			</div>
 			<div className='p-3 font-semibold text-cap flex flex-col justify-between gap-2 h-[calc(100vh-60px)]'>
 				<div className='flex flex-col gap-2'>
-					<Link>
+					<Link to={'/admin'}>
 						<div
 							className={`flex items-center gap-2 py-3 px-2 rounded-lg transition-all cursor-pointer hover:bg-light hover:text-primary ${
 								tabSelected === 'Dashboard' && 'bg-light text-primary'
@@ -66,7 +89,7 @@ export default function Sidebar() {
 						</div>
 						<div
 							className={`flex flex-col text-sm transition-all gap-2 ${
-								showProductChild ? 'mt-2' : '-mt-[88px]'
+								showProductChild ? 'mt-2' : '-mt-[96px]'
 							}`}
 						>
 							<Link
@@ -130,21 +153,6 @@ export default function Sidebar() {
 					<Link>
 						<div
 							className={`flex items-center gap-2 py-3 px-2 rounded-lg transition-all cursor-pointer hover:bg-light hover:text-primary ${
-								tabSelected === 'Support' && 'bg-light text-primary'
-							}`}
-							onClick={() => {
-								localStorage.setItem('sidebarSelected', 'Support')
-								setTabSelected('Support')
-								setShowProductChild(false)
-							}}
-						>
-							<FiHeadphones className='text-xl' />
-							<span className='text-sm'>Support</span>
-						</div>
-					</Link>
-					<Link>
-						<div
-							className={`flex items-center gap-2 py-3 px-2 rounded-lg transition-all cursor-pointer hover:bg-light hover:text-primary ${
 								tabSelected === 'Setting' && 'bg-light text-primary'
 							}`}
 							onClick={() => {
@@ -155,6 +163,21 @@ export default function Sidebar() {
 						>
 							<IoSettingsOutline className='text-xl' />
 							<span className='text-sm'>Setting</span>
+						</div>
+					</Link>
+					<Link>
+						<div
+							className={`flex items-center gap-2 py-3 px-2 rounded-lg transition-all cursor-pointer hover:bg-lighterRed hover:text-customRed ${
+								tabSelected === 'Support' && 'bg-light text-primary'
+							}`}
+							onClick={() => {
+								localStorage.setItem('sidebarSelected', 'Support')
+								setTabSelected('Support')
+								setShowProductChild(false)
+							}}
+						>
+							<MdLogout className='text-xl' />
+							<span className='text-sm'>Logout</span>
 						</div>
 					</Link>
 				</div>

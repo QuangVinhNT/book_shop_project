@@ -86,9 +86,8 @@ export default function Header() {
 			)}
 
 			{account ? (
-				<div>
+				<div className='group relative'>
 					<button
-						onClick={() => setShowDropdown(!showDropdown)}
 						className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
 						type='button'
 					>
@@ -106,9 +105,7 @@ export default function Header() {
 					</button>
 
 					<div
-						className={`z-10 ${
-							showDropdown ? 'absolute right-0' : 'hidden'
-						} bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+						className={`z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 absolute top-full right-0 group-hover:block hidden`}
 					>
 						<ul
 							className='py-2 text-sm text-gray-700 dark:text-gray-200'
