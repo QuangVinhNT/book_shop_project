@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
-import { useAuthStore } from '~/stores/authStore'
-import { environment } from '~/utils/environment'
+import {useState} from 'react'
+import {useForm} from 'react-hook-form'
+import {toast} from 'react-toastify'
+import {useAuthStore} from '~/stores/authStore'
+import {environment} from '~/utils/environment'
 
 const cities = [
 	{
@@ -58,35 +58,38 @@ const cities = [
 	}
 ]
 
-export default function AccountInformation({ account }) {
-	const { register, handleSubmit } = useForm({
+export default function AccountInformation({account}) {
+	const {register, handleSubmit} = useForm({
 		defaultValues: {
 			email: account.email,
 			full_name: account.full_name,
-			phone_number: account.phone_number,
+			phone_number: account.phone_number
 		}
 	})
 
+	const setAccount = useAuthStore((state) => state.setAccount)
 
-	const setAccount = useAuthStore(state => state.setAccount)
-
-	const [detailAddress, setDetailAddress] = useState(JSON.parse(account.address).detail)
-	const [citySelected, setCitySelected] = useState(JSON.parse(account.address).city)
-	const [districtSelected, setDistrictSelected] = useState(
-		JSON.parse(account.address).district
+	const [detailAddress, setDetailAddress] = useState(
+		JSON.parse(account.address)?.detail
 	)
-	const [wardSelected, setWardSelected] = useState(JSON.parse(account.address).ward)
+	const [citySelected, setCitySelected] = useState(
+		JSON.parse(account.address)?.city
+	)
+	const [districtSelected, setDistrictSelected] = useState(
+		JSON.parse(account.address)?.district
+	)
+	const [wardSelected, setWardSelected] = useState(
+		JSON.parse(account.address)?.ward
+	)
 
 	const handleUpdate = async (formData) => {
 		if (detailAddress && !citySelected) {
-			toast.warn('Select city');
+			toast.warn('Select city')
 			return
-		}
-		else if (citySelected && !districtSelected) {
+		} else if (citySelected && !districtSelected) {
 			toast.warn('Select warn')
 			return
-		}
-		else if (districtSelected && !wardSelected) {
+		} else if (districtSelected && !wardSelected) {
 			toast.warn('Select district')
 			return
 		}
@@ -94,22 +97,29 @@ export default function AccountInformation({ account }) {
 		const toastId = toast.loading('Please wait...')
 
 		try {
-			const response = await fetch(`${environment.BACKEND_URL}/auth/change-profile`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(detailAddress ? {
-					...formData,
-					address: JSON.stringify({
-						detail: detailAddress,
-						city: citySelected,
-						district: districtSelected,
-						ward: wardSelected
-					})
-				} : { ...formData }),
-				credentials: 'include'
-			})
+			const response = await fetch(
+				`${environment.BACKEND_URL}/auth/change-profile`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(
+						detailAddress
+							? {
+									...formData,
+									address: JSON.stringify({
+										detail: detailAddress,
+										city: citySelected,
+										district: districtSelected,
+										ward: wardSelected
+									})
+							  }
+							: {...formData}
+					),
+					credentials: 'include'
+				}
+			)
 
 			const data = await response.json()
 
@@ -185,7 +195,9 @@ export default function AccountInformation({ account }) {
 								{...register('phone_number')}
 								className='border border-gray-300 text-sm px-3 py-1.5 rounded-lg focus:outline-none'
 								type='text'
-								placeholder={`${account.phoneNumber ? account.phoneNumber : ''}`}
+								placeholder={`${
+									account.phoneNumber ? account.phoneNumber : ''
+								}`}
 							/>
 						</div>
 					</div>
@@ -193,10 +205,10 @@ export default function AccountInformation({ account }) {
 
 				{/* Address */}
 				<div>
-					<h6 className='font-bold mb-2'>Address</h6>
+					<h6 className='text-sm text-gray-500 font-semibold mt-4'>Address</h6>
 					<input
 						value={detailAddress}
-						onChange={e => setDetailAddress(e.target.value)}
+						onChange={(e) => setDetailAddress(e.target.value)}
 						className='border border-gray-300 text-sm px-3 w-full py-1.5 rounded-lg focus:outline-none mb-4'
 						type='text'
 						placeholder={account.address?.detail}
@@ -217,9 +229,7 @@ export default function AccountInformation({ account }) {
 								}}
 								value={citySelected}
 							>
-								<option value=''>
-									Please select
-								</option>
+								<option value=''>Please select</option>
 								{cities?.map((city, index) => {
 									return (
 										<option key={index} value={city.name}>
@@ -237,8 +247,9 @@ export default function AccountInformation({ account }) {
 								disabled={!citySelected}
 								name=''
 								id=''
-								className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${!citySelected && 'bg-lightGray'
-									}`}
+								className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${
+									!citySelected && 'bg-lightGray'
+								}`}
 								onChange={(e) => {
 									setDistrictSelected(e.target.value)
 									setWardSelected('')
@@ -265,8 +276,9 @@ export default function AccountInformation({ account }) {
 								disabled={!districtSelected}
 								name=''
 								id=''
-								className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${!districtSelected && 'bg-lightGray'
-									}`}
+								className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${
+									!districtSelected && 'bg-lightGray'
+								}`}
 								onChange={(e) => {
 									setWardSelected(e.target.value)
 								}}
@@ -290,7 +302,7 @@ export default function AccountInformation({ account }) {
 					</div>
 				</div>
 
-				<div className='flex justify-end'>
+				<div className='flex justify-end mt-4'>
 					<button className='bg-primary text-white px-16 py-2 rounded-lg transition-all hover:brightness-125 cursor-pointer'>
 						Update
 					</button>
