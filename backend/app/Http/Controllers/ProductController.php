@@ -258,4 +258,28 @@ class ProductController extends Controller
             return response()->json(['error' => 'Failed to delete product.'], 500);
         }
     }
+
+    public function filter(Request $request)
+    {
+        $filters = $request->only(['category_id', 'publisher', 'min_price', 'max_price']);
+
+        $products = Product::when($filters['category_id'] ?? null, fn($q, $categoryId) => $q->where('category_id', $categoryId))
+            ->when($filters['publisher'] ?? null, fn($q, $publisher) => $q->where('publisher', $publisher))
+            ->when($filters['min_price'] ?? null, fn($q, $minPrice) => $q->where('price', '>=', $minPrice))
+            ->when($filters['max_price'] ?? null, fn($q, $maxPrice) => $q->where('price', '<=', $maxPrice))
+            ->with('image:id,product_id,image_name')
+            ->get();
+
+        if ($products->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No products found matching the provided filters.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $products,
+        ]);
+    }
 }
