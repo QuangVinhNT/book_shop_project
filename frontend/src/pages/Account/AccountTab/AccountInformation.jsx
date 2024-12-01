@@ -1,8 +1,8 @@
-import {useState} from 'react'
-import {useForm} from 'react-hook-form'
-import {toast} from 'react-toastify'
-import {useAuthStore} from '~/stores/authStore'
-import {environment} from '~/utils/environment'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import { useAuthStore } from '~/stores/authStore'
+import { environment } from '~/utils/environment'
 
 const cities = [
 	{
@@ -58,8 +58,8 @@ const cities = [
 	}
 ]
 
-export default function AccountInformation({account}) {
-	const {register, handleSubmit} = useForm({
+export default function AccountInformation({ account }) {
+	const { register, handleSubmit } = useForm({
 		defaultValues: {
 			email: account.email,
 			full_name: account.full_name,
@@ -82,15 +82,18 @@ export default function AccountInformation({account}) {
 		JSON.parse(account.address)?.ward
 	)
 
+	console.log(districtSelected)
+	console.log(wardSelected)
+
 	const handleUpdate = async (formData) => {
 		if (detailAddress && !citySelected) {
 			toast.warn('Select city')
 			return
 		} else if (citySelected && !districtSelected) {
-			toast.warn('Select warn')
+			toast.warn('Select district')
 			return
 		} else if (districtSelected && !wardSelected) {
-			toast.warn('Select district')
+			toast.warn('Select warn')
 			return
 		}
 		else if (citySelected && !detailAddress) {
@@ -111,15 +114,15 @@ export default function AccountInformation({account}) {
 					body: JSON.stringify(
 						detailAddress
 							? {
-									...formData,
-									address: JSON.stringify({
-										detail: detailAddress,
-										city: citySelected,
-										district: districtSelected,
-										ward: wardSelected
-									})
-							  }
-							: {...formData}
+								...formData,
+								address: JSON.stringify({
+									detail: detailAddress,
+									city: citySelected,
+									district: districtSelected,
+									ward: wardSelected
+								})
+							}
+							: { ...formData }
 					),
 					credentials: 'include'
 				}
@@ -199,9 +202,8 @@ export default function AccountInformation({account}) {
 								{...register('phone_number')}
 								className='border border-gray-300 text-sm px-3 py-1.5 rounded-lg focus:outline-none'
 								type='text'
-								placeholder={`${
-									account.phoneNumber ? account.phoneNumber : ''
-								}`}
+								placeholder={`${account.phoneNumber ? account.phoneNumber : ''
+									}`}
 							/>
 						</div>
 					</div>
@@ -251,15 +253,15 @@ export default function AccountInformation({account}) {
 								disabled={!citySelected}
 								name=''
 								id=''
-								className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${
-									!citySelected && 'bg-lightGray'
-								}`}
+								className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${!citySelected && 'bg-lightGray'
+									}`}
 								onChange={(e) => {
 									setDistrictSelected(e.target.value)
 									setWardSelected('')
 								}}
 								value={districtSelected}
 							>
+								<option value=''>Choose a district</option>
 								{citySelected &&
 									cities
 										?.filter((city) => city.name === citySelected)[0]
@@ -280,14 +282,14 @@ export default function AccountInformation({account}) {
 								disabled={!districtSelected}
 								name=''
 								id=''
-								className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${
-									!districtSelected && 'bg-lightGray'
-								}`}
+								className={`focus:outline-none border border-gray-300 rounded-lg py-3 pl-1 w-full cursor-pointer ${!districtSelected && 'bg-lightGray'
+									}`}
 								onChange={(e) => {
 									setWardSelected(e.target.value)
 								}}
 								value={wardSelected}
 							>
+								<option value=''>Choose a ward</option>
 								{districtSelected &&
 									cities
 										?.filter((city) => city.name === citySelected)[0]

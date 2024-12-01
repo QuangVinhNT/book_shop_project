@@ -167,6 +167,12 @@ export const useCartStore = create((set) => ({
     } catch (error) {
       toast.update(toastId, { render: 'Internal server error', type: 'error', autoClose: 3000, isLoading: false, })
     }
-  }
+  },
 
+  getProductIdsAndQuantity: () => {
+    return useCartStore.getState().cartItems.reduce((res, item) => [...res, {
+      productId: item.product_id,
+      quantity: item.quantity
+    }], [])
+  }
 }))

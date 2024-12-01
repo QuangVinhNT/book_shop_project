@@ -8,16 +8,12 @@ import { useCartStore } from '~/stores/cartStore'
 import { useAuthStore } from '~/stores/authStore'
 import { useForm } from 'react-hook-form'
 
-export default function Bill({handleCheckout}) {
-
+export default function Bill({ handleCheckout }) {
 
 	const cartItems = useCartStore(state => state.cartItems)
 	const [checkoutStatus, setCheckoutStatus] = useState(true)
 	const [checkoutNoti, setCheckoutNoti] = useState(false)
 	const navigate = useNavigate()
-
-	console.log(cartItems)
-
 
 	return (
 		<>
@@ -31,7 +27,7 @@ export default function Bill({handleCheckout}) {
 					<div className='bg-light text-xs flex flex-col gap-2 p-5 rounded-lg'>
 						<div className='flex justify-between text-primary'>
 							<span>Subtotal</span>
-							<span className='font-semibold'>$ {cartItems.reduce((total, item) => item.quantity * item.product.price, 0)}</span>
+							<span className='font-semibold'>$ {cartItems.reduce((total, item) => total + item.quantity * item.product.price, 0)}</span>
 						</div>
 						<div className='flex justify-between text-primary'>
 							<span>Discount</span>
@@ -45,7 +41,7 @@ export default function Bill({handleCheckout}) {
 						<div className='flex justify-between items-center py-5 mt-5'>
 							<div className='flex flex-col'>
 								<span className='text-xs text-cap'>Total</span>
-								<span className='text-xl text-primary font-semibold'>$ {cartItems.reduce((total, item) => item.quantity * item.product.price, 0)}</span>
+								<span className='text-xl text-primary font-semibold'>$ {cartItems.reduce((total, item) => total + item.quantity * item.product.price, 0)}</span>
 							</div>
 							<IoDocumentTextSharp className='text-5xl text-primary' />
 						</div>

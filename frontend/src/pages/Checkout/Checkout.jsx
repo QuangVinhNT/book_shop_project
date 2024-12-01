@@ -4,9 +4,13 @@ import Bill from './Bill/Bill'
 import { useRef, useState } from 'react'
 import { useAuthStore } from '~/stores/authStore'
 import { toast } from 'react-toastify'
+import { environment } from '~/utils/environment'
+import { useCartStore } from '~/stores/cartStore'
 
 export default function Checkout() {
 	const account = useAuthStore(state => state.account)
+	const getProductIdsAndQuantity = useCartStore(state => state.getProductIdsAndQuantity)
+	const cartItems = useCartStore(state => state.cartItems)
 
 	const [full_name, setFullName] = useState(account.full_name)
 	const [email, setEmail] = useState(account.email)
@@ -20,25 +24,60 @@ export default function Checkout() {
 	const [districtSelected, setDistrictSelected] = useState(JSON.parse(account.address)?.district)
 	const [wardSelected, setWardSelected] = useState(JSON.parse(account.address)?.ward)
 
-	const handleCheckout = () => {
+	const handleCheckout = async () => {
 		// Kiểm tra các trường bắt buộc
 		if (!full_name || !email || !phone_number || !detail || !citySelected || !districtSelected || !wardSelected) {
 			toast.error('Please fill in all information before payment!');
 			return;
 		}
 		const checkoutData = {
-			full_name,
-			email,
-			phone_number,
-			note, // note không bắt buộc
-			paymentMethod,
-			address: {
+			account_id: account.id,
+			time: new Date(),
+			order_status: 'PENDING',
+			payment_status: 'UNPAID ',
+			receiver_name: full_name,
+			address: JSON.stringify({
 				detail,
 				city: citySelected,
 				district: districtSelected,
 				ward: wardSelected,
-			},
-		};
+			}),
+			phone_number,
+			note,
+			payment_method: paymentMethod,
+			details: getProductIdsAndQuantity(),
+			totalAmount: cartItems.reduce((total, item) => total + item.quantity * item.product.price, 0)
+		}
+
+		const toastId = toast.loading('Please wait...')
+
+		try {
+			// Gửi yêu cầu đến backend
+			const response = await fetch(`${environment.BACKEND_URL}/payment`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include',
+				body: JSON.stringify(checkoutData),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				if (data.payment_url) {
+					// Chuyển hướng đến VNPAY
+					window.location.href = data.payment_url;
+				}
+			} else {
+				const error = await response.json();
+				toast.error(error.message || 'Checkout failed. Please try again.');
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			toast.error('An error occurred while processing your payment.');
+		} finally {
+			toast.dismiss(toastId)
+		}
 	}
 
 	return (

@@ -100,7 +100,6 @@ function Login() {
 			const data = await response.json()
 
 			if (response.ok) {
-				await getQuantityCart()
 				toast.update(toastId, {
 					render: data.message || 'Login success.',
 					type: 'success',
@@ -109,6 +108,7 @@ function Login() {
 				})
 				
 				setAccount(data.account)
+				await getQuantityCart()
 				navigate('/')
 			} else {
 				toast.update(toastId, {
