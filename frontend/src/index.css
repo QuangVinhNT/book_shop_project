@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.coverClipPath {
+	clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+
+.activePagination {
+	background-color: #8d27ae;
+	color: white;
+}
+
+.processingStatus {
+	background-color: #fdf1e8;
+	color: #e46a11;
+}
+
+.shippedStatus {
+	background-color: #e8f8fd;
+	color: #20b6e6;
+}
+
+.deliveredStatus {
+	background-color: #e7f4ee;
+	color: #0d894f;
+}
+
+.cancelledStatus {
+	background-color: #feedec;
+	color: #f04438;
+}
+
+.filterActive {
+	color: #4543ae;
+	background-color: #dedefa;
+}
+
+.blockedStatus {
+	background-color: #feedec;
+	color: #f04438;
+}
+
+.activeStatus {
+	background-color: #e7f4ee;
+	color: #0d894f;
+}
