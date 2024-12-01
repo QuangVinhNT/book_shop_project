@@ -11,6 +11,7 @@ import bookThumbnails1 from '~/assets/images/book_thumbnails_1.png'
 import bookThumbnails2 from '~/assets/images/book_thumbnails_2.png'
 import bookThumbnails3 from '~/assets/images/book_thumbnails_3.png'
 import bookThumbnails4 from '~/assets/images/book_thumbnails_4.png'
+import { useBookStore } from '~/stores/bookStore'
 
 const book = {
 	name: "Howl's Mooving Castle",
@@ -37,13 +38,15 @@ As Sophie unravels the mysteries of Howl's heart and the true nature of the Witc
 }
 
 export default function BookDetail() {
+	const book = useBookStore(state => state.book)
+
 	return (
 		<div>
 			<BookInformation book={book} />
 			<div className='flex gap-10 px-14'>
 				<div className='flex flex-col mt-16 w-3/4'>
 					<Details book={book} />
-					<CustomerReviews customerRating={book.rating} />
+					<CustomerReviews customerRating={4.5} />
 				</div>
 				<RelatedBooks />
 			</div>

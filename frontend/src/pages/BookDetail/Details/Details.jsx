@@ -1,11 +1,14 @@
 export default function Details({book}) {
+
+	console.log(book)
+
 	const detailContent = {
 		'Book Title': book.name,
 		Author: book.author,
-		Categories: book.categories,
+		Categories: book.category.name,
 		Language: book.language,
 		'Book Format': book.format,
-		'Date Published': book.datePublished,
+		'Date Published': book.date_published,
 		Publisher: book.publisher
 	}
 	return (

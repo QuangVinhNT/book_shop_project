@@ -2,17 +2,22 @@ import {FaStar} from 'react-icons/fa'
 import {BsDot} from 'react-icons/bs'
 import {CiShare2} from 'react-icons/ci'
 import {IoCartOutline} from 'react-icons/io5'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useCartStore } from '~/stores/cartStore'
+import { useBookStore } from '~/stores/bookStore'
 
 export default function BookCard({book}) {
-
+	const navigate = useNavigate()
+	const setBook = useBookStore(state => state.setBook)
 	const addToCart = useCartStore(state => state.addToCart)
 
 	return (
 		<div className='w-fit relative mb-10 lg:w-[200px] lg:h-[480px] 2xl:w-[250px] 2xl:h-[530px]'>
 			<div className='group/image relative cursor-pointer overflow-hidden'>
-				<Link to={book.link}>
+				<Link onClick={() => {
+					setBook(book)
+					navigate(`/books/${book.id}`)
+				}}>
 					<div className='absolute w-full h-full bg-primary group-hover/image:opacity-50 opacity-0 rounded-2xl z-10 transition-all'></div>
 				</Link>
 				<div className='absolute -bottom-24 group-hover/image:bottom-8 right-4 flex flex-col gap-3 text-lg text-primary transition-all z-30'>
