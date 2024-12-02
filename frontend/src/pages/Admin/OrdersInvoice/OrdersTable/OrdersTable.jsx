@@ -1,11 +1,13 @@
+import { useEffect, useState } from 'react'
 import {
 	FaAngleDown,
 	FaChevronLeft,
 	FaChevronRight,
 	FaEye
 } from 'react-icons/fa6'
-import {IoMdOptions} from 'react-icons/io'
-import {LuPencil} from 'react-icons/lu'
+import { IoMdOptions } from 'react-icons/io'
+import { LuPencil } from 'react-icons/lu'
+import { environment } from '~/utils/environment'
 
 const recentOrders = [
 	{
@@ -101,6 +103,28 @@ const recentOrders = [
 ]
 
 export default function OrdersTable() {
+	const [orders, setOrders] = useState([])
+
+	const getOrders = async () => {
+		const response = await fetch(`${environment.BACKEND_URL}/orders`, {
+			method: 'GET',
+			credentials: 'include'
+		})
+
+		const data = await response.json()
+
+		if (response.ok) {
+			setOrders(data.data)
+		}
+		else { setOrders([]) }
+	}
+
+	console.log(orders)
+
+	useEffect(() => {
+		getOrders()
+	}, [])
+
 	return (
 		<div>
 			<table className='w-full'>
@@ -123,12 +147,12 @@ export default function OrdersTable() {
 								<FaAngleDown />
 							</div>
 						</th>
-						<th className='bg-lightGray text-left'>
+						{/* <th className='bg-lightGray text-left'>
 							<div className='flex items-center gap-5 font-medium text-cap p-4'>
 								<span>Product</span>
 								<FaAngleDown />
 							</div>
-						</th>
+						</th> */}
 						<th className='bg-lightGray font-medium text-cap p-4 text-left'>
 							Customer
 						</th>
@@ -153,40 +177,40 @@ export default function OrdersTable() {
 					</tr>
 				</thead>
 				<tbody className='text-sm'>
-					{recentOrders.map((recentOrder, index) => {
+					{orders.map((item, index) => {
 						return (
 							<tr key={index}>
 								<td className='p-4 flex items-center justify-center border-t border-gray-300'>
 									<input type='checkbox' className='size-5 cursor-pointer' />
 								</td>
 								<td className='border-t border-gray-300 px-4 text-primary font-medium'>
-									{recentOrder.orderId}
+									{item.id}
 								</td>
 								<td className='border-t border-gray-300 px-4'>
-									{recentOrder.product}
+									{item.details.map(el => <div key={el.product_id}>{el.product.name}</div>)}
 								</td>
-								<td className='border-t border-gray-300 px-4'>
+								{/* <td className='border-t border-gray-300 px-4'>
 									{recentOrder.date}
-								</td>
+								</td> */}
 								<td className='border-t border-gray-300 px-4'>
 									<div className=''>
 										<span className='block font-medium'>
-											{recentOrder.customer[0]}
+											{item.account.full_name}
 										</span>
-										<span className='block'>{recentOrder.customer[1]}</span>
+										{/* <span className='block'>{recentOrder.customer[1]}</span> */}
 									</div>
 								</td>
 								<td className='border-t border-gray-300 px-4'>
-									${recentOrder.total.toFixed(2)}
+									{item.details.reduce((total, el) => total + el.product.price * el.quantity, 0)}
 								</td>
 								<td className='border-t border-gray-300 px-4'>
-									{recentOrder.payment}
+									{item.payment_method}
 								</td>
 								<td className='border-t border-gray-300 px-4'>
 									<div
-										className={`${recentOrder.status.toLowerCase()}Status w-fit px-3 py-1 font-medium rounded-full`}
+										className={`${item.payment_method.toLowerCase()}Status w-fit px-3 py-1 font-medium rounded-full`}
 									>
-										<span>{recentOrder.status}</span>
+										<span>{item.payment_status}</span>
 									</div>
 								</td>
 								<td className='border-t border-gray-300 px-4'>

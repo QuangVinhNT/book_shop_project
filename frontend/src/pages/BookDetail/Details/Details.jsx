@@ -1,7 +1,5 @@
 export default function Details({book}) {
 
-	console.log(book)
-
 	const detailContent = {
 		'Book Title': book.name,
 		Author: book.author,

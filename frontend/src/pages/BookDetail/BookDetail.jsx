@@ -12,6 +12,9 @@ import bookThumbnails2 from '~/assets/images/book_thumbnails_2.png'
 import bookThumbnails3 from '~/assets/images/book_thumbnails_3.png'
 import bookThumbnails4 from '~/assets/images/book_thumbnails_4.png'
 import { useBookStore } from '~/stores/bookStore'
+import { useParams } from 'react-router-dom'
+import { environment } from '~/utils/environment'
+import { useEffect, useState } from 'react'
 
 const book = {
 	name: "Howl's Mooving Castle",
@@ -38,7 +41,31 @@ As Sophie unravels the mysteries of Howl's heart and the true nature of the Witc
 }
 
 export default function BookDetail() {
-	const book = useBookStore(state => state.book)
+
+	const [book, setBook] = useState(null)
+
+	const { id } = useParams()
+
+	const getBook = async () => {
+		const response = await fetch(`${environment.BACKEND_URL}/product/${id}`, { credentials: 'include' })
+
+		const data = await response.json()
+
+		if(response.ok) {
+			setBook(data.product)
+		}
+		else {
+			setBook(null)
+		}
+	}
+
+	useEffect(() => {
+		getBook()
+	}, [])
+
+	if(!book) {
+		return <div className='text-2xl text-red-500 text-center'>Loading....</div>
+	}
 
 	return (
 		<div>

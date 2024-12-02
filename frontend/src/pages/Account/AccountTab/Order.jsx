@@ -1,44 +1,73 @@
-import {useState} from 'react';
+import { useEffect, useState } from 'react';
 import OrderCard from './OrderCard/OrderCard';
+import { environment } from '~/utils/environment';
 
-export default function Order({orders}) {
-  const [tabSelect, setTabSelect] = useState ('All');
+export default function Order({ account }) {
+  const [tabSelect, setTabSelect] = useState('All');
+  const [orders, setOrders] = useState([])
+
+  const getOrders = async () => {
+    const response = await fetch(`${environment.BACKEND_URL}/orders/account/${account.id}`, {
+      method: 'GET',
+      credentials: 'include'
+    })
+
+    const data = await response.json()
+
+    if (response.ok) {
+      setOrders(data.data)
+    }
+    else { setOrders([]) }
+  }
+
+  console.log(orders)
+
+
+  useEffect(() => {
+    getOrders()
+  }, [])
+
   return (
     <div className="bg-lightGray p-10 rounded-xl">
       <div className="flex justify-between text-sm font-semibold">
         <span
           className={`${tabSelect === 'All' ? 'text-primary cursor-default' : 'transition-all hover:text-primary cursor-pointer'}`}
-          onClick={() => setTabSelect ('All')}
+          onClick={() => setTabSelect('All')}
         >
           All
         </span>
         <span
           className={`${tabSelect === 'Processing' ? 'text-primary cursor-default' : 'transition-all hover:text-primary cursor-pointer'}`}
-          onClick={() => setTabSelect ('Processing')}
+          onClick={() => setTabSelect('Processing')}
         >
           Processing
         </span>
         <span
           className={`${tabSelect === 'Shipping' ? 'text-primary cursor-default' : 'transition-all hover:text-primary cursor-pointer'}`}
-          onClick={() => setTabSelect ('Shipping')}
+          onClick={() => setTabSelect('Shipping')}
         >
           Shipping
         </span>
         <span
           className={`${tabSelect === 'Delivered' ? 'text-primary cursor-default' : 'transition-all hover:text-primary cursor-pointer'}`}
-          onClick={() => setTabSelect ('Delivered')}
+          onClick={() => setTabSelect('Delivered')}
         >
           Delivered
         </span>
         <span
           className={`${tabSelect === 'Cancelled' ? 'text-primary cursor-default' : 'transition-all hover:text-primary cursor-pointer'}`}
-          onClick={() => setTabSelect ('Cancelled')}
+          onClick={() => setTabSelect('Cancelled')}
         >
           Cancelled
         </span>
       </div>
       <div>
-        {tabSelect === 'All'
+        {orders.map(order => <OrderCard key={order.id}
+            orderId={order.id}
+            orderItems={order.details}
+        />)}
+
+        {/* {tabSelect === 'All'
           ? orders.map ((order, index) => {
               const orderItems = [
                 ...order.processing.map (item => ({
@@ -86,7 +115,7 @@ export default function Order({orders}) {
                   orderPrice={orderPrice}
                 />
               );
-            })}
+            })} */}
       </div>
       <div className="flex justify-end mt-10">
         <button className="text-sm font-medium bg-lessDark text-white px-16 py-2 rounded-lg transition-all hover:brightness-125 cursor-pointer">

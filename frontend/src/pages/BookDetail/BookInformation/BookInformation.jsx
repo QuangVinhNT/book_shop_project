@@ -3,8 +3,10 @@ import { IoCartOutline } from 'react-icons/io5'
 import { FaPlus } from 'react-icons/fa6'
 import { FaMinus } from 'react-icons/fa6'
 import { useState } from 'react'
-
+import { useCartStore } from '~/stores/cartStore'
 export default function BookInformation({ book }) {
+
+	const addToCart = useCartStore(state => state.addToCart) 
 
 	const stars = rating(4.5)
 	const [quantity, setQuantity] = useState(1)
@@ -28,18 +30,18 @@ export default function BookInformation({ book }) {
 				</p>
 				<div className='flex items-center justify-between'>
 					<span className='text-primary text-3xl font-semibold tracking-wider'>
-						$ {(book.price - book.price * book.reduced_price).toFixed(2)}
+						$ {(book.price - book.price * book.reduced_price / 100).toFixed(2)}
 					</span>
 					<div>
 						<span className='text-gray-500 font-semibold line-through'>
 							$ {book.price.toFixed(2)}
 						</span>
 						<span className='bg-customYellow text-sm text-primary font-medium px-2.5 py-1.5 rounded-md inline-block ml-2'>
-							-{book.reduced_price * 100}%
+							-{book.reduced_price}%
 						</span>
 					</div>
 				</div>
-				<div className='flex justify-between'>
+				<div className='flex justify-between gap-3'>
 					<div className='border-2 border-gray-200 rounded-md flex items-center'>
 						<button
 							className='px-4 h-full transition-all hover:bg-gray-100'
@@ -59,7 +61,7 @@ export default function BookInformation({ book }) {
 							<FaMinus className='text-sm' />
 						</button>
 					</div>
-					<button className='flex items-center gap-2 bg-primary text-white px-16 rounded-lg transition-all hover:brightness-125'>
+					<button onClick={addToCart} className='flex items-center gap-2 bg-primary text-white px-16 rounded-lg transition-all hover:brightness-125'>
 						<IoCartOutline className='text-xl' />
 						<span>Buy</span>
 					</button>

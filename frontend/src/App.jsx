@@ -37,6 +37,7 @@ import OrdersInvoice from './pages/Admin/OrdersInvoice/OrdersInvoice';
 import Categories from './pages/Admin/Categories/Categories';
 import Customers from './pages/Admin/Customers/Customers';
 import PaymentResultPage from './pages/Checkout/PaymentResult';
+import ChatApp from './pages/Chat/Chat';
 
 const router = createBrowserRouter ([
   {
@@ -71,6 +72,10 @@ const router = createBrowserRouter ([
         path: '/vnpay-return',
         element: <PaymentResultPage />,
       },
+      {
+        path: '/chat',
+        element: <ChatApp />
+      }
     ],
   },
   {

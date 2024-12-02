@@ -4,20 +4,10 @@ import {FaAngleUp} from 'react-icons/fa6';
 import {FaAngleDown} from 'react-icons/fa6';
 import {LuShoppingCart} from 'react-icons/lu';
 import {BsPeople} from 'react-icons/bs';
-import {FiHeadphones} from 'react-icons/fi';
 import {IoSettingsOutline} from 'react-icons/io5';
 import {useEffect, useState} from 'react';
 import {Link, useLocation} from 'react-router-dom';
-import {RxDashboard} from 'react-icons/rx';
-import {MdContentPaste, MdLogout} from 'react-icons/md';
-import {FaAngleUp} from 'react-icons/fa6';
-import {FaAngleDown} from 'react-icons/fa6';
-import {LuShoppingCart} from 'react-icons/lu';
-import {BsPeople} from 'react-icons/bs';
-import {FiHeadphones} from 'react-icons/fi';
-import {IoSettingsOutline} from 'react-icons/io5';
-import {useEffect, useState} from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import logo from '~/assets/luxana_book_store_logo.png'
 
 export default function Sidebar () {
   const location = useLocation ();
@@ -51,7 +41,7 @@ export default function Sidebar () {
     <div className="w-[250px] border-r border-gray-300">
       <div className="flex items-center gap-3 h-[70px] justify-center">
         <img
-          src="./images/luxana_book_store_logo.png"
+          src={logo}
           alt="Logo"
           className="size-9 rounded-full p-2 border border-primary"
         />

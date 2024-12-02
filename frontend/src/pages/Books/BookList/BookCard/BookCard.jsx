@@ -7,6 +7,9 @@ import { useCartStore } from '~/stores/cartStore'
 import { useBookStore } from '~/stores/bookStore'
 
 export default function BookCard({book}) {
+
+	console.log(book)
+
 	const navigate = useNavigate()
 	const setBook = useBookStore(state => state.setBook)
 	const addToCart = useCartStore(state => state.addToCart)
