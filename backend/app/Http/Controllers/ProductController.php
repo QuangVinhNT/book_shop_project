@@ -109,7 +109,7 @@ class ProductController extends Controller
      */
     public function getProductById($id)
     {
-        $product = Product::with('image')->find($id);
+        $product = Product::with(['image', 'category:id,name'])->find($id);
 
         if (!$product) {
             return response()->json([
@@ -261,14 +261,14 @@ class ProductController extends Controller
 
     public function filter(Request $request)
     {
-        $filters = $request->only(['category_id', 'publisher', 'min_price', 'max_price']);
+        $filters = $request->only(['category_id', 'publisher', 'sort_price']);
+        $perPage = $request->get('per_page', 3); 
 
         $products = Product::when($filters['category_id'] ?? null, fn($q, $categoryId) => $q->where('category_id', $categoryId))
             ->when($filters['publisher'] ?? null, fn($q, $publisher) => $q->where('publisher', $publisher))
-            ->when($filters['min_price'] ?? null, fn($q, $minPrice) => $q->where('price', '>=', $minPrice))
-            ->when($filters['max_price'] ?? null, fn($q, $maxPrice) => $q->where('price', '<=', $maxPrice))
-            ->with('image:id,product_id,image_name')
-            ->get();
+            ->when($filters['sort_price'] ?? null, fn($q, $sortPrice) => $q->orderBy('price', $sortPrice)) // Sắp xếp theo giá
+            ->with(['image:id,product_id,image_name', 'category:id,name'])
+            ->paginate($perPage); // Phân trang
 
         if ($products->isEmpty()) {
             return response()->json([

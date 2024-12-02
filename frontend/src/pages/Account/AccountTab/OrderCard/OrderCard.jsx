@@ -1,4 +1,4 @@
-export default function OrderCard({orderId, orderItems, orderPrice}) {
+export default function OrderCard({ orderId, orderItems, orderPrice }) {
 	return (
 		<div className='flex flex-col py-10 gap-1'>
 			<span className='text-sm text-primary font-semibold'>
@@ -7,13 +7,12 @@ export default function OrderCard({orderId, orderItems, orderPrice}) {
 			<div className='flex justify-between items-center'>
 				<span className='text-sm font-semibold'>
 					{orderItems
-						.map((item) => item.quantity)
-						.reduce((prev, cur) => prev + cur, 0)}{' '}
+						.reduce((prev, cur) => prev + cur.quantity, 0)}{' '}
 					items
 				</span>
 				<div className='flex gap-3'>
 					<span className='font-semibold text-cap'>Total</span>
-					<span className='font-semibold'>$ {orderPrice}</span>
+					<span className='font-semibold'>$ {orderItems.reduce((prev, cur) => prev + cur.product.price * cur.quantity, 0)}</span>
 				</div>
 			</div>
 			<div className='flex items-center gap-5 mt-3'>
@@ -21,7 +20,7 @@ export default function OrderCard({orderId, orderItems, orderPrice}) {
 					return (
 						<div key={index} className='relative'>
 							<img
-								src={item.image}
+								src={item.product.image[0].image_name}
 								alt=''
 								className='w-[120px] h-[170px] object-cover rounded-xl'
 							/>

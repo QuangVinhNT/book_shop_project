@@ -122,7 +122,7 @@ export default function Account() {
 			</div>
 			<div className='w-3/4'>
 				{tabSelect === 'Account information' && <AccountInformation account={account} />}
-				{tabSelect === 'Order' && <Order orders={user.orders} />}
+				{tabSelect === 'Order' && <Order account={account} orders={user.orders} />}
 				{tabSelect === 'Change password' && <ChangePassword />}
 			</div>
 		</div>

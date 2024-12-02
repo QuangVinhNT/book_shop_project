@@ -82,9 +82,6 @@ export default function AccountInformation({ account }) {
 		JSON.parse(account.address)?.ward
 	)
 
-	console.log(districtSelected)
-	console.log(wardSelected)
-
 	const handleUpdate = async (formData) => {
 		if (detailAddress && !citySelected) {
 			toast.warn('Select city')

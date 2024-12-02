@@ -6,6 +6,7 @@ import {toast} from 'react-toastify'
 import {useAuthStore} from '~/stores/authStore'
 import {useCartStore} from '~/stores/cartStore'
 import {environment} from '~/utils/environment'
+import logo from '~/assets/luxana_book_store_logo.png'
 export default function Header() {
 	const navigate = useNavigate()
 	const [showDropdown, setShowDropdown] = useState(false)
@@ -57,7 +58,7 @@ export default function Header() {
 			{/* logo */}
 			<Link className='flex items-center cursor-pointer' to={'/'}>
 				<img
-					src='./images/luxana_book_store_logo.png'
+					src={logo}
 					alt='Logo'
 					className='w-[90px] p-[10px]'
 				/>
