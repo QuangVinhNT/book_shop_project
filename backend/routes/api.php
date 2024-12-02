@@ -8,7 +8,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\VnPayController;
+use App\Http\Controllers\VNPayController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,8 +66,8 @@ Route::prefix('cart')->group(function () {
 Route::post('/uploads-with-product-id', [ImageController::class, 'uploadImagesWithProductId']);
 Route::post('/upload', [ImageController::class, 'uploadImage']);
 
-Route::post('/payment', [VnPayController::class, 'createOrder']);
-Route::post('/vnpay-return', [VnPayController::class, 'paymentReturn']);
+Route::post('/payment', [VNPayController::class, 'createOrder']);
+Route::post('/vnpay-return', [VNPayController::class, 'paymentReturn']);
 
 Route::get('/orders/account/{accountId}', [OrderController::class, 'getAllOrdersByAccount']);
 Route::get('/orders', [OrderController::class, 'getAllOrders']);
