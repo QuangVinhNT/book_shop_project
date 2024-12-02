@@ -61,7 +61,7 @@ export default function BookInformation({ book }) {
 							<FaMinus className='text-sm' />
 						</button>
 					</div>
-					<button onClick={addToCart} className='flex items-center gap-2 bg-primary text-white px-16 rounded-lg transition-all hover:brightness-125'>
+					<button onClick={() => addToCart(book.id)} className='flex items-center gap-2 bg-primary text-white px-16 rounded-lg transition-all hover:brightness-125'>
 						<IoCartOutline className='text-xl' />
 						<span>Buy</span>
 					</button>
