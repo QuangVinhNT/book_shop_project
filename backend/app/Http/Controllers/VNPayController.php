@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderDetail;
 
-class VnPayController extends Controller
+class VNPayController extends Controller
 {
   public function createOrder(Request $request)
   {
@@ -165,7 +165,7 @@ class VnPayController extends Controller
         if ($order) {
           // Cập nhật trạng thái đơn hàng và trạng thái thanh toán
           $accountId = $order->account_id; // Lấy account_id từ đơn hàng
-          
+
           Cart::where('account_id', $accountId)->delete();
 
           $order->update([
