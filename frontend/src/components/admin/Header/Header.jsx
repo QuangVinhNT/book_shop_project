@@ -5,6 +5,7 @@ import {FaRegBell} from 'react-icons/fa'
 import {FaRegEnvelope} from 'react-icons/fa'
 import {FaAngleDown} from 'react-icons/fa6'
 import { useAuthStore } from '~/stores/authStore'
+import viteImg from '~/assets/vite.svg'
 export default function Header() {
 
 	const account = useAuthStore(state => state.account)
@@ -32,7 +33,7 @@ export default function Header() {
 				<div className='flex items-center gap-3 px-3 ml-3 -mr-3 transition-all hover:bg-gray-300 cursor-pointer rounded-xl'>
 					<div className='relative'>
 						<img
-							src={account.image ? account.image : './vite.svg'}
+							src={account.image ? account.image : viteImg}
 							alt=''
 							className='size-8 rounded-full bg-gray-300'
 						/>

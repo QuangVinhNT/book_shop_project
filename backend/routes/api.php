@@ -67,6 +67,7 @@ Route::post('/uploads-with-product-id', [ImageController::class, 'uploadImagesWi
 Route::post('/upload', [ImageController::class, 'uploadImage']);
 
 Route::post('/payment', [VNPayController::class, 'createOrder']);
+Route::post('/payment-cod', [VNPayController::class, 'paymentCOD']);
 Route::post('/vnpay-return', [VNPayController::class, 'paymentReturn']);
 
 Route::get('/orders/account/{accountId}', [OrderController::class, 'getAllOrdersByAccount']);

@@ -31,17 +31,17 @@ export default function ProductAddition() {
 		getValues
 	} = useForm({
 		defaultValues: {
-			name: 'Sample Book',
-			category_id: 1,
-			price: 10.0,
-			reduced_price: 8.0,
-			quantity: 1,
-			author: 'John Doe',
-			language: 'English',
-			format: 'Paperback',
-			date_published: '2023-01-01',
-			publisher: 'Default Publisher',
-			description: 'This is a default description for the product.'
+			name: '',
+			category_id: '',
+			price: '',
+			reduced_price: '',
+			quantity: '',
+			author: '',
+			language: '',
+			format: '',
+			date_published: '',
+			publisher: '',
+			description: ''
 		},
 		mode: 'onTouched'
 	})
@@ -463,7 +463,7 @@ export default function ProductAddition() {
 								className='text-sm bg-lightGray w-full px-3 py-2 mt-1 border border-gray-300 rounded-md cursor-pointer focus:outline-none'
 								onChange={(e) => setCateSelected(e.target.value)}
 							>
-								{cateSelected ?? <option>Select a category</option>}
+								{cateSelected ?? <option value=''>Select a category</option>}
 								{categories.map((category) => (
 									<option key={category.id} value={category.id}>
 										{category.name}

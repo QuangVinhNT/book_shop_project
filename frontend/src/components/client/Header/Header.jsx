@@ -1,11 +1,11 @@
-import {useState} from 'react'
-import {CiSearch} from 'react-icons/ci'
-import {IoCartOutline} from 'react-icons/io5'
-import {Link, useNavigate} from 'react-router-dom'
-import {toast} from 'react-toastify'
-import {useAuthStore} from '~/stores/authStore'
-import {useCartStore} from '~/stores/cartStore'
-import {environment} from '~/utils/environment'
+import { useState } from 'react'
+import { CiSearch } from 'react-icons/ci'
+import { IoCartOutline } from 'react-icons/io5'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { useAuthStore } from '~/stores/authStore'
+import { useCartStore } from '~/stores/cartStore'
+import { environment } from '~/utils/environment'
 import logo from '~/assets/luxana_book_store_logo.png'
 export default function Header() {
 	const navigate = useNavigate()
@@ -33,7 +33,7 @@ export default function Header() {
 					autoClose: 3000
 				})
 				navigate('/')
-				
+
 			} else {
 				const data = await response.json()
 				toast.update(toastId, {
@@ -112,6 +112,14 @@ export default function Header() {
 							className='py-2 text-sm text-gray-700 dark:text-gray-200'
 							aria-labelledby='dropdownDividerButton'
 						>
+							{account.role === 'ADMIN' && <li>
+								<Link
+									to='/admin'
+									className='block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
+								>
+									Admin
+								</Link>
+							</li>}
 							<li>
 								<Link
 									to='/account'
