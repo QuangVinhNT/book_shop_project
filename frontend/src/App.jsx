@@ -1,6 +1,6 @@
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import {useEffect, useState} from 'react';
-import {ToastContainer} from 'react-toastify';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,8 +14,8 @@ import EmailVerificationRoute
   from './pages/ProtectedRoutes/EmailVerificationRoute';
 import Client from './pages/Client';
 
-import {useAuthStore} from './stores/authStore';
-import {environment} from './utils/environment';
+import { useAuthStore } from './stores/authStore';
+import { environment } from './utils/environment';
 import Books from './pages/Books/Books';
 import BookDetail from './pages/BookDetail/BookDetail';
 import Cart from './pages/Cart/Cart';
@@ -30,7 +30,7 @@ import ViewProduct from './pages/Admin/ProductList/ProductDetail/ViewProduct';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 import ProductAddition
   from './pages/Admin/ProductList/ProductAddition/ProductAddtion';
-import {useCartStore} from './stores/cartStore';
+import { useCartStore } from './stores/cartStore';
 import Loading from './components/notification/Loading/Loading';
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
 import OrdersInvoice from './pages/Admin/OrdersInvoice/OrdersInvoice';
@@ -38,8 +38,9 @@ import Categories from './pages/Admin/Categories/Categories';
 import Customers from './pages/Admin/Customers/Customers';
 import PaymentResultPage from './pages/Checkout/PaymentResult';
 import ChatApp from './pages/Chat/Chat';
+import AdminRoute from './pages/ProtectedRoutes/AdminRoute';
 
-const router = createBrowserRouter ([
+const router = createBrowserRouter([
   {
     path: '/',
     element: <Client />,
@@ -80,7 +81,9 @@ const router = createBrowserRouter ([
   },
   {
     path: '/admin',
-    element: <Admin />,
+    element: <AdminRoute>
+      <Admin />
+    </AdminRoute>,
     children: [
       {
         path: '/admin',
@@ -150,35 +153,35 @@ const router = createBrowserRouter ([
   },
 ]);
 
-function App () {
-  const [loading, setLoading] = useState (true);
-  const setAccount = useAuthStore (state => state.setAccount);
-  const getQuantityCart = useCartStore (state => state.getQuantityCart);
-  const getCartItems = useCartStore (state => state.getCartItems);
+function App() {
+  const [loading, setLoading] = useState(true);
+  const setAccount = useAuthStore(state => state.setAccount);
+  const getQuantityCart = useCartStore(state => state.getQuantityCart);
+  const getCartItems = useCartStore(state => state.getCartItems);
 
   const getAccount = async () => {
-    setLoading (true);
+    setLoading(true);
     try {
-      const response = await fetch (`${environment.BACKEND_URL}/auth/account`, {
+      const response = await fetch(`${environment.BACKEND_URL}/auth/account`, {
         method: 'GET',
         credentials: 'include',
       });
 
       if (response.ok) {
-        const data = await response.json ();
-        setAccount (data.account);
-        await getQuantityCart ();
-        await getCartItems ();
+        const data = await response.json();
+        setAccount(data.account);
+        await getQuantityCart();
+        await getCartItems();
       } else {
-        setAccount (null);
+        setAccount(null);
       }
     } finally {
-      setLoading (false);
+      setLoading(false);
     }
   };
 
-  useEffect (() => {
-    getAccount ();
+  useEffect(() => {
+    getAccount();
   }, []);
 
   if (loading) {

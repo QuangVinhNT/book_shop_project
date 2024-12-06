@@ -28,7 +28,9 @@ class OrderController extends Controller
 
   public function getAllOrders()
   {
-    $orders = Order::with(['details.product', 'account'])->get();
+    $orders = Order::with(['details.product', 'account'])
+      ->orderBy('id', 'desc') // Sắp xếp theo id mới nhất
+      ->get();
 
     return response()->json([
       'success' => true,

@@ -9,6 +9,67 @@ use App\Models\OrderDetail;
 
 class VNPayController extends Controller
 {
+
+  public function paymentCOD(Request $request)
+  {
+    try {
+      // Validate dữ liệu từ frontend
+      $validated = $request->validate([
+        'account_id' => 'required|integer',
+        'order_status' => 'required|string',
+        'payment_status' => 'required|string',
+        'receiver_name' => 'required|string|max:255',
+        'phone_number' => 'required|string|max:13',
+        'address' => 'required|string',
+        'note' => 'nullable|string',
+        'payment_method' => 'required|string',
+        'discount_code_id' => 'nullable|integer',
+        'details' => 'required|array',
+      ]);
+
+      // Xử lý trạng thái thanh toán khi dùng COD
+      if ($validated['payment_method'] === 'COD') {
+        $validated['payment_status'] = 'PENDING'; // Đặt trạng thái thanh toán là 'pending' cho COD
+        $validated['order_status'] = 'PROCESSING'; // Đơn hàng đang chờ xử lý
+      }
+
+      // Lưu đơn hàng
+      $order = Order::create([
+        'account_id' => $validated['account_id'],
+        'time' => now(),
+        'order_status' => $validated['order_status'],
+        'payment_status' => $validated['payment_status'],
+        'receiver_name' => $validated['receiver_name'],
+        'phone_number' => $validated['phone_number'],
+        'address' => $validated['address'],
+        'note' => $validated['note'],
+        'payment_method' => $validated['payment_method'],
+      ]);
+
+      // Lưu chi tiết đơn hàng
+      foreach ($validated['details'] as $detail) {
+        OrderDetail::create([
+          'order_id' => $order->id,
+          'product_id' => $detail['productId'],
+          'quantity' => $detail['quantity'],
+        ]);
+      }
+
+      // Trả về phản hồi thành công
+      return response()->json([
+        'success' => true,
+        'message' => 'Order created succfully',
+        'data' => $order,
+      ]);
+    } catch (\Exception $e) {
+      // Trả về phản hồi lỗi
+      return response()->json([
+        'success' => false,
+        'message' => 'Unable to create order: ' . $e->getMessage(),
+      ], 500);
+    }
+  }
+
   public function createOrder(Request $request)
   {
     try {
