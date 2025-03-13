@@ -2,33 +2,20 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
-    |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-    |
-    */
+    'paths' => ['api/*', 'sanctum/csrf-cookie'], // Áp dụng CORS cho các route bắt đầu bằng 'api/' và route của Sanctum
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'allowed_methods' => ['*'], // Cho phép tất cả HTTP methods (GET, POST, PUT, DELETE, ...)
 
-    'allowed_methods' => ['*'],
+    'allowed_origins' => ['http://localhost:3000'], // Thêm origin của frontend (chỉ định rõ ràng, không dùng '*')
 
-    'allowed_origins' => ['*'],
+    'allowed_origins_patterns' => [], // Không cần dùng pattern
 
-    'allowed_origins_patterns' => [],
+    'allowed_headers' => ['*'], // Cho phép tất cả các header (ví dụ: Content-Type, Authorization, ...)
 
-    'allowed_headers' => ['*'],
+    'exposed_headers' => [], // Không cần expose thêm headers nào cả
 
-    'exposed_headers' => [],
+    'max_age' => 0, // Không cache CORS response
 
-    'max_age' => 0,
-
-    'supports_credentials' => false,
-
+    'supports_credentials' => true, // Cho phép gửi credentials (cookie, session)
 ];
+
